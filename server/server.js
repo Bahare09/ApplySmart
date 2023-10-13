@@ -32,6 +32,9 @@ const storage = multer.diskStorage({
   },
 });
 const upload = multer({ storage });
+app.get("/", (req, res) => {
+  res.send("Server is running."); // Return a simple message for the root path
+});
 
 app.post("/upload-file", upload.single("file"), async (req, res) => {
   const { file } = req;
@@ -95,6 +98,7 @@ app.post("/submit-text", (req, res) => {
     return res.status(400).json({ error: "Invalid text type" });
   }
 });
+
 app.listen(port, () => {
   console.log(`Server is running on port ${port}`);
 });
