@@ -1,57 +1,76 @@
+import UploadFile from "./components/UploadFile";
 import SubmitText from "./components/SubmitText";
-import UploadFile from "./components/UploadFile ";
 
 function App() {
-  const handleFileUpload = async (file) => {
-    if (file) {
+  const handleFileUpload = async (file, fileType) => {
+    if (file && fileType) {
       try {
-        // Send a POST request to the backend with the CV file
+        // Send a POST request to the backend with the file and type
         const formData = new FormData();
-        formData.append("cv", file);
+        formData.append("file", file);
+        formData.append("type", fileType); // Set the type field
 
-        const response = await fetch("http://localhost:4000/upload-cv ", {
+        const response = await fetch("http://localhost:3100/upload-file", {
           method: "POST",
           body: formData,
         });
 
         // Check if the response is successful
         if (response.ok) {
-          alert("CV uploaded successfully!");
+          alert(
+            `${
+              fileType === "cv" ? "CV" : "Job Description"
+            } uploaded successfully!`
+          );
         } else {
-          alert("CV upload failed.");
+          alert(
+            `${fileType === "cv" ? "CV" : "Job Description"} upload failed.`
+          );
         }
       } catch (error) {
         console.error("An error occurred:", error);
       }
     } else {
-      alert("Please select a CV file to upload.");
+      alert(
+        `Please select a ${
+          fileType === "cv" ? "CV" : "Job Description"
+        } file to upload.`
+      );
     }
   };
-  const handleTextSubmit = async (text) => {
-    if (text) {
+
+  const handleTextSubmit = async (text, type) => {
+    if (text && type) {
       try {
-        // Send a POST request to the backend with the text data
+        // Send a POST request to the backend with the text data and type
         const response = await fetch("http://localhost:3100/submit-text", {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
           },
-          body: JSON.stringify({ text }),
+          body: JSON.stringify({ text, type }), // Include the type
         });
 
         // Check if the response is successful
         if (response.ok) {
-          alert("Text submitted successfully!");
+          alert(
+            `${
+              type === "cv" ? "CV" : "Job Description"
+            } submitted successfully!`
+          );
         } else {
-          alert("Text submission failed.");
+          alert(
+            `${type === "cv" ? "CV" : "Job Description"} submission failed.`
+          );
         }
       } catch (error) {
         console.error("An error occurred:", error);
       }
     } else {
-      alert("Please enter text to submit.");
+      alert("Please enter text and select a type to submit.");
     }
   };
+
   return (
     <div className="App">
       <UploadFile onFileUpload={handleFileUpload} fileType="cv" />
