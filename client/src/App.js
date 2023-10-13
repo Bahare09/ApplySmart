@@ -1,5 +1,5 @@
-import CVSubmitText from "./components/CVSubmitText";
-import CVUploadFile from "./components/CVUploadFile ";
+import SubmitText from "./components/SubmitText";
+import UploadFile from "./components/UploadFile ";
 
 function App() {
   const handleTextSubmit = async (text) => {
@@ -30,8 +30,8 @@ function App() {
 
   return (
     <div className="App">
-      <CVUploadFile />
-      <CVSubmitText onTextSubmit={handleTextSubmit} />
+      <UploadFile />
+      <SubmitText onTextSubmit={handleTextSubmit} />
     </div>
   );
 }

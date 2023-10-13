@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 
-function CVSubmitText({ onTextSubmit }) {
+function SubmitText({ onTextSubmit }) {
   const [text, setText] = useState("");
 
   const handleTextChange = (e) => {
@@ -26,4 +26,4 @@ function CVSubmitText({ onTextSubmit }) {
   );
 }
 
-export default CVSubmitText;
+export default SubmitText;

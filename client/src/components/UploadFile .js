@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 
-function CVUploadFile() {
+function UploadFile() {
   // State to hold the selected CV file
   const [selectedCV, setSelectedCV] = useState(null);
 
@@ -56,4 +56,4 @@ function CVUploadFile() {
   );
 }
 
-export default CVUploadFile;
+export default UploadFile;
