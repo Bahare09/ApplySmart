@@ -33,38 +33,68 @@ const storage = multer.diskStorage({
 });
 const upload = multer({ storage });
 
-app.post("/upload-cv", upload.single("cv"), async (req, res) => {
-  if (!req.file) {
-    return res.status(400).json({ error: "No CV file provided" });
+app.post("/upload-file", upload.single("file"), async (req, res) => {
+  const { file } = req;
+  const fileType = req.body.type; // Access the type field (cv or job)
+
+  if (!file) {
+    return res.status(400).json({ error: "No file provided" });
   }
 
-  const { path } = req.file;
+  // Access the uploaded file details via req.file
+  const { path } = file;
 
   try {
-    const cvText = await readPdfFileContent(path);
-    console.log("PDF Text:", cvText);
-    res.json({
-      message: "File uploaded and parsed successfully.",
-      pdfText: cvText,
-    });
+    // Determine if it's a CV or job description based on the fileType
+    if (fileType === "cv") {
+      // Handle CV processing
+      const cvText = await readPdfFileContent(path);
+      console.log("CV Text:", cvText);
+
+      return res.json({
+        message: "CV uploaded and processed successfully.",
+        text: cvText,
+      });
+    } else if (fileType === "job") {
+      // Handle job description processing
+      const jobText = await readPdfFileContent(path);
+      console.log("Job Text:", jobText);
+
+      // Continue with job description processing or any other desired logic
+
+      return res.json({
+        message: "Job description uploaded and processed successfully.",
+        text: jobText,
+      });
+    } else {
+      return res.status(400).json({ error: "Invalid file type" });
+    }
   } catch (error) {
-    console.error("PDF parsing error:", error);
-    res.status(500).json({ message: "Error parsing the PDF file." });
+    console.error("Error processing file:", error);
+    res
+      .status(500)
+      .json({ error: "An error occurred while processing the request." });
   }
 });
+
 // Route for handling text submissions
 app.post("/submit-text", (req, res) => {
-  const { text } = req.body; // Access the submitted text
+  const { text, type } = req.body; // Access the submitted text and type (cv or job)
 
-  if (!text) {
-    return res.status(400).json({ error: "No text provided" });
+  if (!text || !type) {
+    return res.status(400).json({ error: "Invalid text or type" });
   }
 
-  // You can process the text as needed (e.g., analyze it)
-
-  return res.json({ message: "Text submitted successfully!" });
+  if (type === "cv") {
+    return res.json({ message: "CV text submitted successfully!" });
+  } else if (type === "job") {
+    return res.json({
+      message: "Job description text submitted successfully!",
+    });
+  } else {
+    return res.status(400).json({ error: "Invalid text type" });
+  }
 });
-
 app.listen(port, () => {
   console.log(`Server is running on port ${port}`);
 });

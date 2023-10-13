@@ -1,5 +1,5 @@
-import UploadFile from "./components/UploadFile";
 import SubmitText from "./components/SubmitText";
+import UploadFile from "./components/UploadFile";
 
 function App() {
   const handleFileUpload = async (file, fileType) => {
@@ -10,7 +10,7 @@ function App() {
         formData.append("file", file);
         formData.append("type", fileType); // Set the type field
 
-        const response = await fetch("http://localhost:3100/upload-file", {
+        const response = await fetch("http://localhost:4000/upload-file", {
           method: "POST",
           body: formData,
         });
@@ -43,7 +43,7 @@ function App() {
     if (text && type) {
       try {
         // Send a POST request to the backend with the text data and type
-        const response = await fetch("http://localhost:3100/submit-text", {
+        const response = await fetch("http://localhost:4000/submit-text", {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
