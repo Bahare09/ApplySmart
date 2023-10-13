@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 
-function SubmitText({ onTextSubmit }) {
+function SubmitText({ onTextSubmit, fileType }) {
   const [text, setText] = useState("");
 
   const handleTextChange = (e) => {
@@ -9,8 +9,9 @@ function SubmitText({ onTextSubmit }) {
 
   const handleSubmitText = () => {
     if (text) {
-      onTextSubmit(text);
-      // clear the text input after submission
+      // Pass the text and type to the callback
+      onTextSubmit(text, fileType);
+      // Clear the text input after submission
       setText("");
     } else {
       alert("Please enter text to submit.");
@@ -19,7 +20,7 @@ function SubmitText({ onTextSubmit }) {
 
   return (
     <div>
-      <h2>Submit Text</h2>
+      <h2>Submit {fileType === "cv" ? "CV" : "Job Description"} (Text)</h2>
       <textarea rows="4" cols="50" value={text} onChange={handleTextChange} />
       <button onClick={handleSubmitText}>Submit Text</button>
     </div>

@@ -31,7 +31,7 @@ function App() {
     if (text) {
       try {
         // Send a POST request to the backend with the text data
-        const response = await fetch("http://localhost:4000/submit-text", {
+        const response = await fetch("http://localhost:3100/submit-text", {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
@@ -52,12 +52,12 @@ function App() {
       alert("Please enter text to submit.");
     }
   };
-
   return (
     <div className="App">
       <UploadFile onFileUpload={handleFileUpload} fileType="cv" />
       <SubmitText onTextSubmit={handleTextSubmit} fileType="cv" />
       <UploadFile onFileUpload={handleFileUpload} fileType="job" />
+      <SubmitText onTextSubmit={handleTextSubmit} fileType="job" />
     </div>
   );
 }
