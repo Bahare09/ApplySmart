@@ -52,3 +52,19 @@ app.post("/upload-cv", upload.single("cv"), async (req, res) => {
     res.status(500).json({ message: "Error parsing the PDF file." });
   }
 });
+// Route for handling text submissions
+app.post("/submit-text", (req, res) => {
+  const { text } = req.body; // Access the submitted text
+
+  if (!text) {
+    return res.status(400).json({ error: "No text provided" });
+  }
+
+  // You can process the text as needed (e.g., analyze it)
+
+  return res.json({ message: "Text submitted successfully!" });
+});
+
+app.listen(port, () => {
+  console.log(`Server is running on port ${port}`);
+});
