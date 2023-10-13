@@ -1,4 +1,4 @@
-const port = 3100;
+const port = 4000;
 const express = require("express");
 const multer = require("multer");
 const cors = require("cors");
@@ -33,29 +33,37 @@ const storage = multer.diskStorage({
 });
 const upload = multer({ storage });
 
-app.post(
-  "/upload-cv",
-  upload.single("cv"),
-  async (req, res) => {
-    if (!req.file) {
-      return res.status(400).json({ error: "No CV file provided" });
-    }
-
-    const { path } = req.file;
-
-    try {
-      const cvText = await readPdfFileContent(path);
-      console.log("PDF Text:", cvText);
-      res.json({
-        message: "File uploaded and parsed successfully.",
-        pdfText: cvText,
-      });
-    } catch (error) {
-      console.error("PDF parsing error:", error);
-      res.status(500).json({ message: "Error parsing the PDF file." });
-    }
+app.post("/upload-cv", upload.single("cv"), async (req, res) => {
+  if (!req.file) {
+    return res.status(400).json({ error: "No CV file provided" });
   }
-);
+
+  const { path } = req.file;
+
+  try {
+    const cvText = await readPdfFileContent(path);
+    console.log("PDF Text:", cvText);
+    res.json({
+      message: "File uploaded and parsed successfully.",
+      pdfText: cvText,
+    });
+  } catch (error) {
+    console.error("PDF parsing error:", error);
+    res.status(500).json({ message: "Error parsing the PDF file." });
+  }
+});
+// Route for handling text submissions
+app.post("/submit-text", (req, res) => {
+  const { text } = req.body; // Access the submitted text
+
+  if (!text) {
+    return res.status(400).json({ error: "No text provided" });
+  }
+
+  // You can process the text as needed (e.g., analyze it)
+
+  return res.json({ message: "Text submitted successfully!" });
+});
 
 app.listen(port, () => {
   console.log(`Server is running on port ${port}`);
