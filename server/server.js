@@ -1,39 +1,62 @@
+const port = 3100;
 const express = require("express");
 const multer = require("multer");
 const cors = require("cors");
 const fs = require("fs");
 const pdf = require("pdf-parse");
+const bodyParser = require("body-parser");
+const path = require("path");
 const app = express();
-const port = 3100;
-
-const storage = multer.memoryStorage();
-const upload = multer({ storage: storage });
-
 app.use(express.json());
 app.use(cors());
-app.post("/upload-cv", upload.single("cv"), (req, res) => {
-  const cvFile = req.file;
+app.use(bodyParser.json());
 
-  if (!cvFile) {
-    return res.status(400).json({ error: "No CV file provided" });
-  }
-
-  return res.json({ message: "CV uploaded successfully!" });
-});
-
-async function readCvFileContent(cvFile) {
+async function readPdfFileContent(filePath) {
   try {
-    const dataBuffer = fs.readFileSync(cvFile.path);
-    const dataString = dataBuffer.toString();
-    const pdfData = await pdf(dataString);
-    const pdfText = pdfData.text;
-    console.log(pdfText)
-    return pdfText;
+    const dataBuffer = fs.readFileSync(filePath);
+    const data = await pdf(dataBuffer);
+    return data.text;
   } catch (error) {
     console.error("Error reading PDF file:", error);
     throw error;
   }
 }
+
+const storage = multer.diskStorage({
+  destination: function (req, file, cb) {
+    cb(null, "uploads");
+  },
+  filename: function (req, file, cb) {
+    const extension = path.extname(file.originalname);
+    cb(null, `${Date.now()}${extension}`);
+  },
+});
+const upload = multer({ storage });
+
+app.post(
+  "/upload-cv",
+  upload.single("cv"),
+  async (req, res) => {
+    if (!req.file) {
+      return res.status(400).json({ error: "No CV file provided" });
+    }
+
+    const { path } = req.file;
+
+    try {
+      const cvText = await readPdfFileContent(path);
+      console.log("PDF Text:", cvText);
+      res.json({
+        message: "File uploaded and parsed successfully.",
+        pdfText: cvText,
+      });
+    } catch (error) {
+      console.error("PDF parsing error:", error);
+      res.status(500).json({ message: "Error parsing the PDF file." });
+    }
+  }
+);
+
 app.listen(port, () => {
   console.log(`Server is running on port ${port}`);
 });
