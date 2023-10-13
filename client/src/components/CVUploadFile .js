@@ -18,7 +18,7 @@ function CVUploadFile() {
 
         try {
             // Send a POST request to the backend with the CV file
-            const response = await fetch("/upload-cv", {
+            const response = await fetch("http://localhost:3100/upload-cv ", {
                 method: "POST",
                 body: formData,
             });
@@ -27,7 +27,7 @@ function CVUploadFile() {
             if (response.ok) {
                 alert("CV uploaded successfully!");
                 // Clear the selectedCV state after successful upload
-                setSelectedCV(null);
+                setSelectedCV();
             } else {
                 alert("CV upload failed.");
             }
