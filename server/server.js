@@ -7,9 +7,20 @@ const pdf = require("pdf-parse");
 const bodyParser = require("body-parser");
 const path = require("path");
 const app = express();
+const { Pool } = require("pg")
+
 app.use(express.json());
 app.use(cors());
 app.use(bodyParser.json());
+
+const db = new Pool({
+  user: process.env.DB_USERNAME,
+  host: process.env.DB_HOST,
+  database: process.env.DB_DATABASE,
+  password: process.env.DB_PASSWORD,
+  port: process.env.DB_PORT,
+});
+
 
 async function readPdfFileContent(filePath) {
   try {
