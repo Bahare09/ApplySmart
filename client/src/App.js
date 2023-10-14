@@ -10,7 +10,7 @@ function App() {
         formData.append("file", file);
         formData.append("type", fileType); // Set the type field
 
-        const response = await fetch("http://localhost:4000/upload-file", {
+        const response = await fetch("https://applysmart.onrender.com/upload-file", {
           method: "POST",
           body: formData,
         });
@@ -43,7 +43,7 @@ function App() {
     if (text && type) {
       try {
         // Send a POST request to the backend with the text data and type
-        const response = await fetch("http://localhost:4000/submit-text", {
+        const response = await fetch("https://applysmart.onrender.com/submit-text", {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
