@@ -95,7 +95,7 @@ app.post("/upload-file", upload.single("file"), async (req, res) => {
 });
 
 // Route for handling text submissions
-app.post("/submit-text", (req, res) => {
+app.post("/submit-text", async (req, res) => {
   const { text, type } = req.body; // Access the submitted text and type (cv or job)
 
   if (!text || !type) {
@@ -103,6 +103,9 @@ app.post("/submit-text", (req, res) => {
   }
 
   if (type === "cv") {
+    const cvInsertQuery =
+      "INSERT INTO cv (cv_text) VALUES ($1) RETURNING cv_id";
+    const cvInsertResult = await db.query(cvInsertQuery, [text]);
     return res.json({ message: "CV text submitted successfully!" });
   } else if (type === "job") {
     return res.json({
