@@ -6,12 +6,14 @@ const fs = require("fs");
 const pdf = require("pdf-parse");
 const bodyParser = require("body-parser");
 const path = require("path");
+const dotenv = require("dotenv");
 const app = express();
 const { Pool } = require("pg")
 
 app.use(express.json());
 app.use(cors());
 app.use(bodyParser.json());
+dotenv.config();
 
 const db = new Pool({
   user: process.env.DB_USERNAME,
@@ -20,7 +22,6 @@ const db = new Pool({
   password: process.env.DB_PASSWORD,
   port: process.env.DB_PORT,
 });
-
 
 async function readPdfFileContent(filePath) {
   try {
@@ -42,9 +43,10 @@ const storage = multer.diskStorage({
     cb(null, `${Date.now()}${extension}`);
   },
 });
+
 const upload = multer({ storage });
 app.get("/", (req, res) => {
-  res.send("Server is running."); // Return a simple message for the root path
+  res.send("Server is running.");
 });
 
 app.post("/upload-file", upload.single("file"), async (req, res) => {
@@ -55,7 +57,6 @@ app.post("/upload-file", upload.single("file"), async (req, res) => {
     return res.status(400).json({ error: "No file provided" });
   }
 
-  // Access the uploaded file details via req.file
   const { path } = file;
 
   try {
@@ -64,6 +65,8 @@ app.post("/upload-file", upload.single("file"), async (req, res) => {
       // Handle CV processing
       const cvText = await readPdfFileContent(path);
       console.log("CV Text:", cvText);
+      const cvInsertQuery = "INSERT INTO cv (cv_text) VALUES ($1)";
+      const cvInsertResult = await db.query(cvInsertQuery, [cvText]);
 
       return res.json({
         message: "CV uploaded and processed successfully.",
@@ -73,8 +76,6 @@ app.post("/upload-file", upload.single("file"), async (req, res) => {
       // Handle job description processing
       const jobText = await readPdfFileContent(path);
       console.log("Job Text:", jobText);
-
-      // Continue with job description processing or any other desired logic
 
       return res.json({
         message: "Job description uploaded and processed successfully.",
