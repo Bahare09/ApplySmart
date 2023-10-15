@@ -77,7 +77,8 @@ app.post("/upload-file", upload.single("file"), async (req, res) => {
     } else if (fileType === "job") {
       // Handle job description processing
       const jobText = await readPdfFileContent(path);
-      console.log("Job Text:", jobText);
+      const jobInsertQuery = "INSERT INTO job_description (job_text, cv_id) VALUES ($1, $2)";
+      await db.query(jobInsertQuery, [jobText, cvId]);
 
       return res.json({
         message: "Job description uploaded and processed successfully.",
@@ -106,6 +107,7 @@ app.post("/submit-text", async (req, res) => {
     const cvInsertQuery =
       "INSERT INTO cv (cv_text) VALUES ($1) RETURNING cv_id";
     const cvInsertResult = await db.query(cvInsertQuery, [text]);
+    cvId = cvInsertResult.rows[0].cv_id;
     return res.json({ message: "CV text submitted successfully!" });
   } else if (type === "job") {
     return res.json({
