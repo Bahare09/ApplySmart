@@ -48,6 +48,7 @@ app.get("/", (req, res) => {
   res.send("Server is running.");
 });
 
+let cvId = null;
 app.post("/upload-file", upload.single("file"), async (req, res) => {
   const { file } = req;
   const fileType = req.body.type; // Access the type field (cv or job)
@@ -64,13 +65,15 @@ app.post("/upload-file", upload.single("file"), async (req, res) => {
       // Handle CV processing
       const cvText = await readPdfFileContent(path);
       console.log("CV Text:", cvText);
-      const cvInsertQuery = "INSERT INTO cv (cv_text) VALUES ($1)";
+      const cvInsertQuery = "INSERT INTO cv (cv_text) VALUES ($1) RETURNING cv_id";
       const cvInsertResult = await db.query(cvInsertQuery, [cvText]);
+      cvId = cvInsertResult.rows[0].cv_id;
 
       return res.json({
         message: "CV uploaded and processed successfully.",
         text: cvText,
       });
+
     } else if (fileType === "job") {
       // Handle job description processing
       const jobText = await readPdfFileContent(path);
