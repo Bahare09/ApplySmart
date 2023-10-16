@@ -8,7 +8,8 @@ const bodyParser = require("body-parser");
 const path = require("path");
 const dotenv = require("dotenv");
 const app = express();
-const { Pool } = require("pg")
+const { Pool } = require("pg");
+const OpenAI = require("openai");
 
 app.use(express.json());
 app.use(cors());
@@ -21,6 +22,31 @@ const db = new Pool({
     rejectUnauthorized: false,
   },
 });
+
+const openai = new OpenAI({ apiKey: process.env.OPEN_AI_SECRET_KEY });
+async function extractSkillsFromCV(cvText) {
+  try {
+    const response = await openai.chat.completions.create({
+      model: "gpt-3.5-turbo",
+      messages: [
+        {
+          role: "user",
+          content: `take the following CV and extract the list of key skills.${cvText}`,
+        },
+      ],
+    });
+    console.log(response);
+    if (!response || !response.choices || response.choices.length === 0) {
+      throw new Error("API response is invalid");
+    }
+    const extractedSkills = response.choices[0].message.content.trim();
+    const extractedSkillsArray = extractedSkills.split("\n");
+    console.log(extractedSkillsArray);
+  } catch (error) {
+    console.error("API request error:", error);
+    throw error;
+  }
+}
 
 async function readPdfFileContent(filePath) {
   try {
@@ -65,7 +91,10 @@ app.post("/upload-file", upload.single("file"), async (req, res) => {
       // Handle CV processing
       const cvText = await readPdfFileContent(path);
       console.log("CV Text:", cvText);
-      const cvInsertQuery = "INSERT INTO cv (cv_text) VALUES ($1) RETURNING cv_id";
+      const skills = await extractSkillsFromCV(cvText);
+      console.log(skills);
+      const cvInsertQuery =
+        "INSERT INTO cv (cv_text) VALUES ($1) RETURNING cv_id";
       const cvInsertResult = await db.query(cvInsertQuery, [cvText]);
       cvId = cvInsertResult.rows[0].cv_id;
 
@@ -73,11 +102,11 @@ app.post("/upload-file", upload.single("file"), async (req, res) => {
         message: "CV uploaded and processed successfully.",
         text: cvText,
       });
-
     } else if (fileType === "job") {
       // Handle job description processing
       const jobText = await readPdfFileContent(path);
-      const jobInsertQuery = "INSERT INTO job_description (job_text, cv_id) VALUES ($1, $2)";
+      const jobInsertQuery =
+        "INSERT INTO job_description (job_text, cv_id) VALUES ($1, $2)";
       await db.query(jobInsertQuery, [jobText, cvId]);
 
       return res.json({
@@ -104,13 +133,16 @@ app.post("/submit-text", async (req, res) => {
   }
 
   if (type === "cv") {
+    const skills = await extractSkillsFromCV(text);
+    console.log(skills);
     const cvInsertQuery =
       "INSERT INTO cv (cv_text) VALUES ($1) RETURNING cv_id";
     const cvInsertResult = await db.query(cvInsertQuery, [text]);
     cvId = cvInsertResult.rows[0].cv_id;
     return res.json({ message: "CV text submitted successfully!" });
   } else if (type === "job") {
-    const jobInsertQuery = "INSERT INTO job_description (job_text, cv_id) VALUES ($1, $2)";
+    const jobInsertQuery =
+      "INSERT INTO job_description (job_text, cv_id) VALUES ($1, $2)";
     await db.query(jobInsertQuery, [jobText, cvId]);
     return res.json({
       message: "Job description text submitted successfully!",
