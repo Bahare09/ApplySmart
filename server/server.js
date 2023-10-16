@@ -5,7 +5,6 @@ const cors = require("cors");
 const fs = require("fs");
 const pdf = require("pdf-parse");
 const bodyParser = require("body-parser");
-const path = require("path");
 const dotenv = require("dotenv");
 const app = express();
 const { Pool } = require("pg")
@@ -22,10 +21,10 @@ const db = new Pool({
   },
 });
 
-async function readPdfFileContent(filePath) {
+async function readPdfFileContent(file) {
   try {
-    const dataBuffer = fs.readFileSync(filePath);
-    const data = await pdf(dataBuffer);
+    const buffer = file.buffer;
+    const data = await pdf(buffer);
     return data.text;
   } catch (error) {
     console.error("Error reading PDF file:", error);
@@ -33,21 +32,10 @@ async function readPdfFileContent(filePath) {
   }
 }
 
-const storage = multer.diskStorage({
-  destination: function (req, file, cb) {
-    cb(null, "uploads");
-  },
-  filename: function (req, file, cb) {
-    const extension = path.extname(file.originalname);
-    cb(null, `${Date.now()}${extension}`);
-  },
-});
-
-const upload = multer({ storage });
 app.get("/", (req, res) => {
   res.send("Server is running.");
 });
-
+const upload = multer();
 let cvId = null;
 app.post("/upload-file", upload.single("file"), async (req, res) => {
   const { file } = req;
@@ -57,13 +45,11 @@ app.post("/upload-file", upload.single("file"), async (req, res) => {
     return res.status(400).json({ error: "No file provided" });
   }
 
-  const { path } = file;
-
   try {
     // Determine if it's a CV or job description based on the fileType
     if (fileType === "cv") {
       // Handle CV processing
-      const cvText = await readPdfFileContent(path);
+      const cvText = await readPdfFileContent(file);
       console.log("CV Text:", cvText);
       const cvInsertQuery = "INSERT INTO cv (cv_text) VALUES ($1) RETURNING cv_id";
       const cvInsertResult = await db.query(cvInsertQuery, [cvText]);
@@ -76,7 +62,7 @@ app.post("/upload-file", upload.single("file"), async (req, res) => {
 
     } else if (fileType === "job") {
       // Handle job description processing
-      const jobText = await readPdfFileContent(path);
+      const jobText = await readPdfFileContent(file);
       const jobInsertQuery = "INSERT INTO job_description (job_text, cv_id) VALUES ($1, $2)";
       await db.query(jobInsertQuery, [jobText, cvId]);
 
@@ -111,7 +97,7 @@ app.post("/submit-text", async (req, res) => {
     return res.json({ message: "CV text submitted successfully!" });
   } else if (type === "job") {
     const jobInsertQuery = "INSERT INTO job_description (job_text, cv_id) VALUES ($1, $2)";
-    await db.query(jobInsertQuery, [jobText, cvId]);
+    await db.query(jobInsertQuery, [text, cvId]);
     return res.json({
       message: "Job description text submitted successfully!",
     });
