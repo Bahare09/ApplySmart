@@ -97,7 +97,7 @@ app.post("/submit-text", async (req, res) => {
     return res.json({ message: "CV text submitted successfully!" });
   } else if (type === "job") {
     const jobInsertQuery = "INSERT INTO job_description (job_text, cv_id) VALUES ($1, $2)";
-    await db.query(jobInsertQuery, [jobText, cvId]);
+    await db.query(jobInsertQuery, [text, cvId]);
     return res.json({
       message: "Job description text submitted successfully!",
     });
