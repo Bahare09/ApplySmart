@@ -21,10 +21,10 @@ const db = new Pool({
   },
 });
 
-async function readPdfFileContent(filePath) {
+async function readPdfFileContent(file) {
   try {
-    const dataBuffer = fs.readFileSync(filePath);
-    const data = await pdf(dataBuffer);
+    const buffer = file.buffer;
+    const data = await pdf(buffer);
     return data.text;
   } catch (error) {
     console.error("Error reading PDF file:", error);
@@ -49,7 +49,7 @@ app.post("/upload-file", upload.single("file"), async (req, res) => {
     // Determine if it's a CV or job description based on the fileType
     if (fileType === "cv") {
       // Handle CV processing
-      const cvText = await readPdfFileContent(path);
+      const cvText = await readPdfFileContent(file);
       console.log("CV Text:", cvText);
       const cvInsertQuery = "INSERT INTO cv (cv_text) VALUES ($1) RETURNING cv_id";
       const cvInsertResult = await db.query(cvInsertQuery, [cvText]);
@@ -62,7 +62,7 @@ app.post("/upload-file", upload.single("file"), async (req, res) => {
 
     } else if (fileType === "job") {
       // Handle job description processing
-      const jobText = await readPdfFileContent(path);
+      const jobText = await readPdfFileContent(file);
       const jobInsertQuery = "INSERT INTO job_description (job_text, cv_id) VALUES ($1, $2)";
       await db.query(jobInsertQuery, [jobText, cvId]);
 
