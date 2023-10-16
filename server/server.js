@@ -5,7 +5,6 @@ const cors = require("cors");
 const fs = require("fs");
 const pdf = require("pdf-parse");
 const bodyParser = require("body-parser");
-const path = require("path");
 const dotenv = require("dotenv");
 const app = express();
 const { Pool } = require("pg")
@@ -33,21 +32,10 @@ async function readPdfFileContent(filePath) {
   }
 }
 
-const storage = multer.diskStorage({
-  destination: function (req, file, cb) {
-    cb(null, "uploads");
-  },
-  filename: function (req, file, cb) {
-    const extension = path.extname(file.originalname);
-    cb(null, `${Date.now()}${extension}`);
-  },
-});
-
-const upload = multer({ storage });
 app.get("/", (req, res) => {
   res.send("Server is running.");
 });
-
+const upload = multer();
 let cvId = null;
 app.post("/upload-file", upload.single("file"), async (req, res) => {
   const { file } = req;
@@ -56,8 +44,6 @@ app.post("/upload-file", upload.single("file"), async (req, res) => {
   if (!file) {
     return res.status(400).json({ error: "No file provided" });
   }
-
-  const { path } = file;
 
   try {
     // Determine if it's a CV or job description based on the fileType
