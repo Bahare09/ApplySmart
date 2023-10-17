@@ -101,7 +101,7 @@ function App() {
     if (jobDescription) {
       try {
         const response = await fetch(
-          "http://localhost:3100/save-job-description",
+          "https://applysmart.onrender.com/save-job-description",
           {
             method: "POST",
             headers: {
