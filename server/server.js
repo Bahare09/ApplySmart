@@ -2,7 +2,6 @@ const port = 4000;
 const express = require("express");
 const multer = require("multer");
 const cors = require("cors");
-const fs = require("fs");
 const pdf = require("pdf-parse");
 const bodyParser = require("body-parser");
 const dotenv = require("dotenv");
