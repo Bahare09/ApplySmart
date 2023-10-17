@@ -163,6 +163,31 @@ app.get("/generate-job-list", async (req, res) => {
     res.status(500).json({ error: "Internal server error" });
   }
 });
+app.post("/save-job-description", async (req, res) => {
+  const { description } = req.body;
+
+  if (!uploadedCvId) {
+    return res.status(400).json({ error: "No CV uploaded yet." });
+  }
+
+  if (!description) {
+    return res.status(400).json({ error: "Invalid job description." });
+  }
+
+  try {
+    // Insert job description into the database and associate it with the uploaded CV using cv_id
+    const jobInsertQuery =
+      "INSERT INTO job_description (job_text, cv_id) VALUES ($1, $2)";
+    await db.query(jobInsertQuery, [description, uploadedCvId]);
+
+    return res.json({
+      message: "Job description saved successfully!",
+    });
+  } catch (error) {
+    console.error("Error saving job description:", error);
+    res.status(500).json({ error: "Internal server error" });
+  }
+});
 
 app.listen(port, () => {
   console.log(`Server is running on port ${port}`);
