@@ -1,9 +1,10 @@
 import React, { useState } from "react";
+import PdfViewer from "./PdfViewer"; // Import the PdfViewer component
 
 export const CreateNewcvAndCl = () => {
     const [isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState(null);
-    const [pdfData, setPdfData] = useState(null);
+    const [pdfData, setPdfData] = useState(null); // State to store PDF data
 
     const generateNewCv = async () => {
         setIsLoading(true);
@@ -17,9 +18,12 @@ export const CreateNewcvAndCl = () => {
             }
 
             const data = await response.json();
-            setPdfData(data)
             console.log(data);
-            console.log(pdfData)
+
+            // Set the PDF data when it's received
+            setPdfData(data
+            );
+
             console.log("New CV generated successfully!");
         } catch (err) {
             setError("An error occurred while generating the CV. Please try again.");
@@ -35,6 +39,7 @@ export const CreateNewcvAndCl = () => {
                 {isLoading ? "Generating..." : "Generate New CV"}
             </button>
             {error && <p>{error}</p>}
+            {pdfData && <PdfViewer pdfData={pdfData} />} {/* Render PdfViewer when pdfData is available */}
         </div>
     );
 };
