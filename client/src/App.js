@@ -82,7 +82,9 @@ function App() {
   };
   const generateJobList = async () => {
     try {
-      const response = await fetch("http://localhost:4000/generate-job-list");
+      const response = await fetch(
+        "https://applysmart.onrender.com/generate-job-list"
+      );
 
       if (response.ok) {
         const data = await response.json();
