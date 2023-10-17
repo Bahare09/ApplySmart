@@ -34,13 +34,13 @@ async function extractSkillsFromCV(cvText) {
         },
       ],
     });
-    console.log("response====>", response);
+    console.log(response);
     if (!response || !response.choices || response.choices.length === 0) {
       throw new Error("API response is invalid");
     }
     const extractedSkills = response.choices[0].message.content.trim();
     const extractedSkillsArray = extractedSkills.split("\n");
-    console.log("extractedSkillsArray====>", extractedSkillsArray);
+    console.log(extractedSkillsArray);
   } catch (error) {
     console.error("API request error:", error);
     throw error;
@@ -158,9 +158,8 @@ app.post("/upload-file", upload.single("file"), async (req, res) => {
     if (fileType === "cv") {
       // Handle CV processing
       const cvText = await readPdfFileContent(file);
-      console.log("upload CV Text:====>", cvText);
       const skills = await extractSkillsFromCV(cvText);
-      console.log("upload skills====>", skills);
+      console.log(skills);
       const cvInsertQuery =
         "INSERT INTO cv (cv_text) VALUES ($1) RETURNING cv_id";
       const cvInsertResult = await db.query(cvInsertQuery, [cvText]);
@@ -202,7 +201,7 @@ app.post("/submit-text", async (req, res) => {
 
   if (type === "cv") {
     const skills = await extractSkillsFromCV(text);
-    console.log(" text skills====>", skills);
+    console.log(skills);
     const cvInsertQuery =
       "INSERT INTO cv (cv_text) VALUES ($1) RETURNING cv_id";
     const cvInsertResult = await db.query(cvInsertQuery, [text]);
@@ -240,7 +239,7 @@ app.get("/generate-job-list", async (req, res) => {
     const data = await response.json();
     const jobList = data.results;
     res.json({ jobList });
-    console.log("jobList====>", jobList);
+    console.log(jobList);
   } catch (error) {
     console.error("Error generating job list:", error);
     res.status(500).json({ error: "Internal server error" });
@@ -289,16 +288,21 @@ app.get("/generate-cv-coverLetter", async (req, res) => {
     const cvText = cvResult.rows[0].cv_text;
     const jobText = jobResult.rows[0].job_text;
     const newCv = await tailorCv(cvText, jobText)
-    const coverLetter = await createCoverLetter(cvText, jobText);
-    console.log("coverLetter===>", coverLetter)
-    console.log("newCv====>", newCv)
-
+    const cvDynamicContent = `${newCv}\n`;
+    const cvPdfBytes = await createPdfFromText(cvDynamicContent);
+    const coverLetter = await createCoverLetter(cvText, jobText)
+    const coverLetterDynamicContent = `${coverLetter}\n`;
+    const coverLetterPdfBytes = await createPdfFromText(coverLetterDynamicContent);
+    res.setHeader('Content-Type', 'application/pdf');
+    res.setHeader('Content-Disposition', 'inline; filename=multi-page.pdf');
 
     return res.json({
       message: "CV text retrieved successfully!",
       text: cvText,
       newCv: newCv,
       coverLetter: coverLetter,
+      pdfBytes: cvPdfBytes,
+      coverpdfBytes: coverLetterPdfBytes
     });
   } catch (error) {
     console.error("Error retrieving CV text:", error);
