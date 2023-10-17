@@ -8,6 +8,7 @@ const dotenv = require("dotenv");
 const app = express();
 const { Pool } = require("pg");
 const OpenAI = require("openai");
+const { PDFDocument, rgb } = require('pdf-lib');
 
 app.use(express.json());
 app.use(cors());
@@ -101,6 +102,42 @@ async function readPdfFileContent(file) {
     console.error("Error reading PDF file:", error);
     throw error;
   }
+}
+
+async function createPdfFromText(cvText) {
+  const pdfDoc = await PDFDocument.create();
+  const pageWidth = 600;
+  const pageHeight = 800;
+  const font = await pdfDoc.embedFont('Helvetica');
+
+  const pages = [];
+  const contentLines = cvText.split('\n');
+
+  let currentPage = pdfDoc.addPage([pageWidth, pageHeight]);
+  let currentY = pageHeight - 50;
+  let currentPageIndex = 0;
+
+  for (const line of contentLines) {
+    if (currentY - 12 < 50) {
+      currentPageIndex++;
+      currentPage = pdfDoc.addPage([pageWidth, pageHeight]);
+      currentY = pageHeight - 50;
+    }
+
+    currentPage.drawText(line, {
+      x: 50,
+      y: currentY,
+      size: 12,
+      font,
+      color: rgb(0, 0, 0),
+    });
+
+    currentY -= 12;
+    pages[currentPageIndex] = pages[currentPageIndex] || [];
+    pages[currentPageIndex].push(line);
+  }
+  const pdfBytes = await pdfDoc.save();
+  return pdfBytes;
 }
 
 app.get("/", (req, res) => {
