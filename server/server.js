@@ -8,10 +8,15 @@ const dotenv = require("dotenv");
 const app = express();
 const { Pool } = require("pg");
 const OpenAI = require("openai");
-const { PDFDocument, rgb } = require('pdf-lib');
+const { PDFDocument, rgb } = require("pdf-lib");
 
 app.use(express.json());
-app.use(cors());
+// Allow requests from your frontend domain
+app.use(
+  cors({
+    origin: "https://applysmartc.onrender.com",
+  })
+);
 app.use(bodyParser.json());
 dotenv.config();
 
@@ -66,7 +71,9 @@ async function tailorCv(cvText, jobText) {
     return tailoredCv;
   } catch (error) {
     console.error("Error in tailorCvAndCreateCoverLetter:", error);
-    res.status(500).json({ error: "An error occurred while processing the request." });
+    res
+      .status(500)
+      .json({ error: "An error occurred while processing the request." });
   }
 }
 
@@ -86,10 +93,12 @@ async function createCoverLetter(cvText, jobText) {
       throw new Error("API response is invalid");
     }
     const newCvandCoverLetter = response.choices[0].message.content.trim();
-    return newCvandCoverLetter
+    return newCvandCoverLetter;
   } catch (error) {
     console.error("Error in tailorCvAndCreateCoverLetter:", error);
-    res.status(500).json({ error: "An error occurred while processing the request." });
+    res
+      .status(500)
+      .json({ error: "An error occurred while processing the request." });
   }
 }
 
@@ -108,10 +117,10 @@ async function createPdfFromText(cvText) {
   const pdfDoc = await PDFDocument.create();
   const pageWidth = 600;
   const pageHeight = 800;
-  const font = await pdfDoc.embedFont('Helvetica');
+  const font = await pdfDoc.embedFont("Helvetica");
 
   const pages = [];
-  const contentLines = cvText.split('\n');
+  const contentLines = cvText.split("\n");
 
   let currentPage = pdfDoc.addPage([pageWidth, pageHeight]);
   let currentY = pageHeight - 50;
@@ -287,14 +296,16 @@ app.get("/generate-cv-coverLetter", async (req, res) => {
 
     const cvText = cvResult.rows[0].cv_text;
     const jobText = jobResult.rows[0].job_text;
-    const newCv = await tailorCv(cvText, jobText)
+    const newCv = await tailorCv(cvText, jobText);
     const cvDynamicContent = `${newCv}\n`;
     const cvPdfBytes = await createPdfFromText(cvDynamicContent);
-    const coverLetter = await createCoverLetter(cvText, jobText)
+    const coverLetter = await createCoverLetter(cvText, jobText);
     const coverLetterDynamicContent = `${coverLetter}\n`;
-    const coverLetterPdfBytes = await createPdfFromText(coverLetterDynamicContent);
-    res.setHeader('Content-Type', 'application/pdf');
-    res.setHeader('Content-Disposition', 'inline; filename=multi-page.pdf');
+    const coverLetterPdfBytes = await createPdfFromText(
+      coverLetterDynamicContent
+    );
+    res.setHeader("Content-Type", "application/pdf");
+    res.setHeader("Content-Disposition", "inline; filename=multi-page.pdf");
 
     return res.json({
       message: "CV text retrieved successfully!",
@@ -302,7 +313,7 @@ app.get("/generate-cv-coverLetter", async (req, res) => {
       newCv: newCv,
       coverLetter: coverLetter,
       pdfBytes: cvPdfBytes,
-      coverpdfBytes: coverLetterPdfBytes
+      coverpdfBytes: coverLetterPdfBytes,
     });
   } catch (error) {
     console.error("Error retrieving CV text:", error);
