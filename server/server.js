@@ -91,7 +91,8 @@ app.post("/upload-file", upload.single("file"), async (req, res) => {
     } else if (fileType === "job") {
       // Handle job description processing
       const jobText = await readPdfFileContent(file);
-      const jobInsertQuery = "INSERT INTO job_description (job_text, cv_id) VALUES ($1, $2)";
+      const jobInsertQuery =
+        "INSERT INTO job_description (job_text, cv_id) VALUES ($1, $2)";
       await db.query(jobInsertQuery, [jobText, cvId]);
 
       return res.json({
@@ -126,13 +127,41 @@ app.post("/submit-text", async (req, res) => {
     cvId = cvInsertResult.rows[0].cv_id;
     return res.json({ message: "CV text submitted successfully!" });
   } else if (type === "job") {
-    const jobInsertQuery = "INSERT INTO job_description (job_text, cv_id) VALUES ($1, $2)";
+    const jobInsertQuery =
+      "INSERT INTO job_description (job_text, cv_id) VALUES ($1, $2)";
     await db.query(jobInsertQuery, [text, cvId]);
     return res.json({
       message: "Job description text submitted successfully!",
     });
   } else {
     return res.status(400).json({ error: "Invalid text type" });
+  }
+});
+// Endpoint to generate job list
+app.get("/generate-job-list", async (req, res) => {
+  try {
+    const adzunaAppId = process.env.ADZUNA_APP_ID;
+    const adzunaAppKey = process.env.ADZUNA_APP_KEY;
+
+    const adzunaApiUrl = `https://api.adzuna.com/v1/api/jobs/gb/search/1?app_id=${adzunaAppId}&app_key=${adzunaAppKey}&results_per_page=5&what_and=javascript%20css`;
+
+    // Fetch job listings from the Adzuna Api
+    const response = await fetch(adzunaApiUrl);
+
+    if (!response.ok) {
+      console.error("API request failed with status:", response.status);
+      const text = await response.text();
+      console.error("API response text:", text);
+      throw new Error("Failed to fetch job listings");
+    }
+
+    const data = await response.json();
+    const jobList = data.results;
+    res.json({ jobList });
+    console.log(jobList);
+  } catch (error) {
+    console.error("Error generating job list:", error);
+    res.status(500).json({ error: "Internal server error" });
   }
 });
 
