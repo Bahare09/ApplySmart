@@ -11,7 +11,7 @@ export const CreateNewcvAndCl = () => {
         setError(null);
 
         try {
-            const response = await fetch("http://localhost:4000/generate-cv-coverLetter");
+            const response = await fetch("http://applysmart.onrender.com/generate-cv-coverLetter");
 
             if (!response.ok) {
                 throw new Error(`HTTP Error: ${response.status}`);
