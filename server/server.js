@@ -33,13 +33,13 @@ async function extractSkillsFromCV(cvText) {
         },
       ],
     });
-    console.log(response);
+    console.log("response====>", response);
     if (!response || !response.choices || response.choices.length === 0) {
       throw new Error("API response is invalid");
     }
     const extractedSkills = response.choices[0].message.content.trim();
     const extractedSkillsArray = extractedSkills.split("\n");
-    console.log(extractedSkillsArray);
+    console.log("extractedSkillsArray====>", extractedSkillsArray);
   } catch (error) {
     console.error("API request error:", error);
     throw error;
@@ -110,7 +110,6 @@ const upload = multer();
 let cvId = null;
 app.post("/upload-file", upload.single("file"), async (req, res) => {
   const { file } = req;
-  console.log("first")
   const fileType = req.body.type; // Access the type field (cv or job)
 
   if (!file) {
@@ -122,9 +121,9 @@ app.post("/upload-file", upload.single("file"), async (req, res) => {
     if (fileType === "cv") {
       // Handle CV processing
       const cvText = await readPdfFileContent(file);
-      console.log("CV Text:", cvText);
+      console.log("upload CV Text:====>", cvText);
       const skills = await extractSkillsFromCV(cvText);
-      console.log(skills);
+      console.log("upload skills====>", skills);
       const cvInsertQuery =
         "INSERT INTO cv (cv_text) VALUES ($1) RETURNING cv_id";
       const cvInsertResult = await db.query(cvInsertQuery, [cvText]);
@@ -166,7 +165,7 @@ app.post("/submit-text", async (req, res) => {
 
   if (type === "cv") {
     const skills = await extractSkillsFromCV(text);
-    console.log(skills);
+    console.log(" text skills====>", skills);
     const cvInsertQuery =
       "INSERT INTO cv (cv_text) VALUES ($1) RETURNING cv_id";
     const cvInsertResult = await db.query(cvInsertQuery, [text]);
@@ -204,7 +203,7 @@ app.get("/generate-job-list", async (req, res) => {
     const data = await response.json();
     const jobList = data.results;
     res.json({ jobList });
-    console.log(jobList);
+    console.log("jobList====>", jobList);
   } catch (error) {
     console.error("Error generating job list:", error);
     res.status(500).json({ error: "Internal server error" });
@@ -254,10 +253,12 @@ app.get("/generate-cv-coverLetter", async (req, res) => {
     const jobText = jobResult.rows[0].job_text;
     const newCv = await tailorCv(cvText, jobText)
     const coverLetter = await createCoverLetter(cvText, jobText);
+    console.log("coverLetter===>", coverLetter)
+    console.log("newCv====>", newCv)
+    cvId = null
 
     return res.json({
       message: "CV text retrieved successfully!",
-      cv_id: cvId,
       text: cvText,
       newCv: newCv,
       coverLetter: coverLetter,
