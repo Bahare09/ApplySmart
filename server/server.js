@@ -292,7 +292,7 @@ app.get("/generate-cv-coverLetter", async (req, res) => {
     const coverLetter = await createCoverLetter(cvText, jobText);
     console.log("coverLetter===>", coverLetter)
     console.log("newCv====>", newCv)
-    cvId = null
+
 
     return res.json({
       message: "CV text retrieved successfully!",
