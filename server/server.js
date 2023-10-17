@@ -110,6 +110,7 @@ const upload = multer();
 let cvId = null;
 app.post("/upload-file", upload.single("file"), async (req, res) => {
   const { file } = req;
+  console.log("first")
   const fileType = req.body.type; // Access the type field (cv or job)
 
   if (!file) {
@@ -212,7 +213,7 @@ app.get("/generate-job-list", async (req, res) => {
 app.post("/save-job-description", async (req, res) => {
   const { description } = req.body;
 
-  if (!uploadedCvId) {
+  if (!cvId) {
     return res.status(400).json({ error: "No CV uploaded yet." });
   }
 
@@ -224,7 +225,7 @@ app.post("/save-job-description", async (req, res) => {
     // Insert job description into the database and associate it with the uploaded CV using cv_id
     const jobInsertQuery =
       "INSERT INTO job_description (job_text, cv_id) VALUES ($1, $2)";
-    await db.query(jobInsertQuery, [description, uploadedCvId]);
+    await db.query(jobInsertQuery, [description, cvId]);
 
     return res.json({
       message: "Job description saved successfully!",
@@ -232,6 +233,40 @@ app.post("/save-job-description", async (req, res) => {
   } catch (error) {
     console.error("Error saving job description:", error);
     res.status(500).json({ error: "Internal server error" });
+  }
+});
+
+app.get("/generate-cv-coverLetter", async (req, res) => {
+  if (!cvId) {
+    return res.status(400).json({ error: "No CV uploaded yet." });
+  }
+  try {
+    const cvQuery = "SELECT cv_text FROM cv WHERE cv_id = $1";
+    const cvResult = await db.query(cvQuery, [cvId]);
+    const jobDescQuery =
+      "SELECT job_text FROM job_description WHERE cv_id = $1";
+    const jobResult = await db.query(jobDescQuery, [cvId]);
+    if (cvResult.rows.length === 0) {
+      return res.status(404).json({ error: "CV not found." });
+    }
+
+    const cvText = cvResult.rows[0].cv_text;
+    const jobText = jobResult.rows[0].job_text;
+    const newCv = await tailorCv(cvText, jobText)
+    const coverLetter = await createCoverLetter(cvText, jobText);
+
+    return res.json({
+      message: "CV text retrieved successfully!",
+      cv_id: cvId,
+      text: cvText,
+      newCv: newCv,
+      coverLetter: coverLetter,
+    });
+  } catch (error) {
+    console.error("Error retrieving CV text:", error);
+    res
+      .status(500)
+      .json({ error: "An error occurred while processing the request." });
   }
 });
 
