@@ -8,6 +8,7 @@ const dotenv = require("dotenv");
 const app = express();
 const { Pool } = require("pg");
 const OpenAI = require("openai");
+const { PDFDocument, rgb } = require('pdf-lib');
 
 app.use(express.json());
 app.use(cors());
@@ -103,6 +104,42 @@ async function readPdfFileContent(file) {
   }
 }
 
+async function createPdfFromText(cvText) {
+  const pdfDoc = await PDFDocument.create();
+  const pageWidth = 600;
+  const pageHeight = 800;
+  const font = await pdfDoc.embedFont('Helvetica');
+
+  const pages = [];
+  const contentLines = cvText.split('\n');
+
+  let currentPage = pdfDoc.addPage([pageWidth, pageHeight]);
+  let currentY = pageHeight - 50;
+  let currentPageIndex = 0;
+
+  for (const line of contentLines) {
+    if (currentY - 12 < 50) {
+      currentPageIndex++;
+      currentPage = pdfDoc.addPage([pageWidth, pageHeight]);
+      currentY = pageHeight - 50;
+    }
+
+    currentPage.drawText(line, {
+      x: 50,
+      y: currentY,
+      size: 12,
+      font,
+      color: rgb(0, 0, 0),
+    });
+
+    currentY -= 12;
+    pages[currentPageIndex] = pages[currentPageIndex] || [];
+    pages[currentPageIndex].push(line);
+  }
+  const pdfBytes = await pdfDoc.save();
+  return pdfBytes;
+}
+
 app.get("/", (req, res) => {
   res.send("Server is running.");
 });
@@ -121,7 +158,6 @@ app.post("/upload-file", upload.single("file"), async (req, res) => {
     if (fileType === "cv") {
       // Handle CV processing
       const cvText = await readPdfFileContent(file);
-      console.log("CV Text:", cvText);
       const skills = await extractSkillsFromCV(cvText);
       console.log(skills);
       const cvInsertQuery =
@@ -212,7 +248,7 @@ app.get("/generate-job-list", async (req, res) => {
 app.post("/save-job-description", async (req, res) => {
   const { description } = req.body;
 
-  if (!uploadedCvId) {
+  if (!cvId) {
     return res.status(400).json({ error: "No CV uploaded yet." });
   }
 
@@ -224,7 +260,7 @@ app.post("/save-job-description", async (req, res) => {
     // Insert job description into the database and associate it with the uploaded CV using cv_id
     const jobInsertQuery =
       "INSERT INTO job_description (job_text, cv_id) VALUES ($1, $2)";
-    await db.query(jobInsertQuery, [description, uploadedCvId]);
+    await db.query(jobInsertQuery, [description, cvId]);
 
     return res.json({
       message: "Job description saved successfully!",
@@ -232,6 +268,47 @@ app.post("/save-job-description", async (req, res) => {
   } catch (error) {
     console.error("Error saving job description:", error);
     res.status(500).json({ error: "Internal server error" });
+  }
+});
+
+app.get("/generate-cv-coverLetter", async (req, res) => {
+  if (!cvId) {
+    return res.status(400).json({ error: "No CV uploaded yet." });
+  }
+  try {
+    const cvQuery = "SELECT cv_text FROM cv WHERE cv_id = $1";
+    const cvResult = await db.query(cvQuery, [cvId]);
+    const jobDescQuery =
+      "SELECT job_text FROM job_description WHERE cv_id = $1";
+    const jobResult = await db.query(jobDescQuery, [cvId]);
+    if (cvResult.rows.length === 0) {
+      return res.status(404).json({ error: "CV not found." });
+    }
+
+    const cvText = cvResult.rows[0].cv_text;
+    const jobText = jobResult.rows[0].job_text;
+    const newCv = await tailorCv(cvText, jobText)
+    const cvDynamicContent = `${newCv}\n`;
+    const cvPdfBytes = await createPdfFromText(cvDynamicContent);
+    const coverLetter = await createCoverLetter(cvText, jobText)
+    const coverLetterDynamicContent = `${coverLetter}\n`;
+    const coverLetterPdfBytes = await createPdfFromText(coverLetterDynamicContent);
+    res.setHeader('Content-Type', 'application/pdf');
+    res.setHeader('Content-Disposition', 'inline; filename=multi-page.pdf');
+
+    return res.json({
+      message: "CV text retrieved successfully!",
+      text: cvText,
+      newCv: newCv,
+      coverLetter: coverLetter,
+      pdfBytes: cvPdfBytes,
+      coverpdfBytes: coverLetterPdfBytes
+    });
+  } catch (error) {
+    console.error("Error retrieving CV text:", error);
+    res
+      .status(500)
+      .json({ error: "An error occurred while processing the request." });
   }
 });
 

@@ -3,6 +3,7 @@ import SubmitText from "./components/SubmitText";
 import UploadFile from "./components/UploadFile";
 import GenerateJobButton from "./components/GenerateJobButton";
 import ChooseButton from "./components/ChooseButton";
+import CreateNewcvAndCl from "./components/CreateNewcvAndCl";
 
 function App() {
   const [jobList, setJobList] = useState([]);
@@ -16,7 +17,7 @@ function App() {
         formData.append("type", fileType); // Set the type field
 
         const response = await fetch(
-          "https://applysmart.onrender.com/upload-file",
+          "http://applysmart.onrender.com/upload-file",
           {
             method: "POST",
             body: formData,
@@ -26,8 +27,7 @@ function App() {
         // Check if the response is successful
         if (response.ok) {
           alert(
-            `${
-              fileType === "cv" ? "CV" : "Job Description"
+            `${fileType === "cv" ? "CV" : "Job Description"
             } uploaded successfully!`
           );
         } else {
@@ -40,8 +40,7 @@ function App() {
       }
     } else {
       alert(
-        `Please select a ${
-          fileType === "cv" ? "CV" : "Job Description"
+        `Please select a ${fileType === "cv" ? "CV" : "Job Description"
         } file to upload.`
       );
     }
@@ -52,7 +51,7 @@ function App() {
       try {
         // Send a POST request to the backend with the text data and type
         const response = await fetch(
-          "https://applysmart.onrender.com/submit-text",
+          "http://applysmart.onrender.com/submit-text",
           {
             method: "POST",
             headers: {
@@ -65,8 +64,7 @@ function App() {
         // Check if the response is successful
         if (response.ok) {
           alert(
-            `${
-              type === "cv" ? "CV" : "Job Description"
+            `${type === "cv" ? "CV" : "Job Description"
             } submitted successfully!`
           );
         } else {
@@ -146,6 +144,7 @@ function App() {
           </li>
         ))}
       </ul>
+      <CreateNewcvAndCl />
     </div>
   );
 }
