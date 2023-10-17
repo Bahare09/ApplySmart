@@ -2,6 +2,7 @@ import { useState } from "react";
 import SubmitText from "./components/SubmitText";
 import UploadFile from "./components/UploadFile";
 import GenerateJobButton from "./components/GenerateJobButton";
+import ChooseButton from "./components/ChooseButton";
 
 function App() {
   const [jobList, setJobList] = useState([]);
@@ -96,6 +97,32 @@ function App() {
       console.error("Error fetching job list:", error);
     }
   };
+  const sendJobDescriptionToServer = async (jobDescription) => {
+    if (jobDescription) {
+      try {
+        const response = await fetch(
+          "http://localhost:3100/save-job-description",
+          {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({ description: jobDescription }),
+          }
+        );
+
+        if (response.ok) {
+          alert("Job description saved successfully!");
+        } else {
+          alert("Failed to save job description.");
+        }
+      } catch (error) {
+        console.error("An error occurred:", error);
+      }
+    } else {
+      alert("Please select a job and enter a job description.");
+    }
+  };
 
   return (
     <div className="App">
@@ -111,6 +138,11 @@ function App() {
             <h2>{job.title}</h2>
             <h4>salary: {job.salary_min}</h4>
             <p>{job.description}</p>
+            <ChooseButton
+              onClick={() => {
+                sendJobDescriptionToServer(job.description);
+              }}
+            />
           </li>
         ))}
       </ul>
