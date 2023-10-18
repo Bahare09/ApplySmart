@@ -1,4 +1,4 @@
-DROP TABLE IF EXISTS newcv;
+
 CREATE TABLE cv (
     cv_id SERIAL PRIMARY KEY,
     cv_text TEXT NOT NULL,
