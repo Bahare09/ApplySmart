@@ -336,29 +336,32 @@ app.get("/generate-cv-coverLetter", async (req, res) => {
   if (!cvId) {
     return res.status(400).json({ error: "No CV uploaded yet." });
   }
+
   try {
-    const cvQuery = "SELECT cv_text FROM cv WHERE cv_id = $1";
-    const cvResult = await db.query(cvQuery, [cvId]);
-    const jobDescQuery =
-      "SELECT job_text FROM job_description WHERE cv_id = $1";
-    const jobResult = await db.query(jobDescQuery, [cvId]);
+    const [cvResult, jobResult] = await Promise.all([
+      db.query("SELECT cv_text FROM cv WHERE cv_id = $1", [cvId]),
+      db.query("SELECT job_text FROM job_description WHERE cv_id = $1", [cvId]),
+    ]);
+
     if (cvResult.rows.length === 0) {
       return res.status(404).json({ error: "CV not found." });
     }
 
     const cvText = cvResult.rows[0].cv_text;
     const jobText = jobResult.rows[0].job_text;
-    const newCv = await tailorCv(cvText, jobText);
-    const cvDynamicContent = `${newCv}\n`;
-    const cvPdfBytes = await createPdfFromText(cvDynamicContent);
-    const coverLetter = await createCoverLetter(cvText, jobText);
-    const coverLetterDynamicContent = `${coverLetter}\n`;
-    const coverLetterPdfBytes = await createPdfFromText(
-      coverLetterDynamicContent
-    );
+
+    const [newCv, coverLetter] = await Promise.all([
+      tailorCv(cvText, jobText),
+      createCoverLetter(cvText, jobText),
+    ]);
+
+    const [cvPdfBytes, coverLetterPdfBytes] = await Promise.all([
+      createPdfFromText(`${newCv}\n`),
+      createPdfFromText(`${coverLetter}\n`),
+    ]);
+
     res.setHeader("Content-Type", "application/pdf");
     res.setHeader("Content-Disposition", "inline; filename=multi-page.pdf");
-
     return res.json({
       message: "CV text retrieved successfully!",
       text: cvText,
@@ -369,11 +372,10 @@ app.get("/generate-cv-coverLetter", async (req, res) => {
     });
   } catch (error) {
     console.error("Error retrieving CV text:", error);
-    res
-      .status(500)
-      .json({ error: "An error occurred while processing the request." });
+    res.status(500).json({ error: "An error occurred while processing the request." });
   }
 });
+
 
 app.listen(port, () => {
   console.log(`Server is running on port ${port}`);
