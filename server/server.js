@@ -28,6 +28,7 @@ const db = new Pool({
 });
 
 const openai = new OpenAI({ apiKey: process.env.OPEN_AI_SECRET_KEY });
+
 async function extractSkillsFromCV(cvText) {
   try {
     const response = await openai.chat.completions.create({
@@ -35,17 +36,28 @@ async function extractSkillsFromCV(cvText) {
       messages: [
         {
           role: "user",
-          content: `take the following CV and extract the list of key skills.${cvText}`,
+          content: `take the following CV and extract the list of exactly 4 individual key word skills.${cvText}`,
         },
       ],
     });
-    console.log(response);
+
     if (!response || !response.choices || response.choices.length === 0) {
       throw new Error("API response is invalid");
     }
-    const extractedSkills = response.choices[0].message.content.trim();
-    const extractedSkillsArray = extractedSkills.split("\n");
-    console.log(extractedSkillsArray);
+
+    // Extracted skills are separated by line breaks, so split the content by line breaks
+    const extractedSkills = response.choices[0].message.content
+      .trim()
+      .split("\n")
+      .slice(2) // Skip the first two lines
+      .filter((skill) => skill.trim()) // Filter out empty lines
+      .map((skill) => skill.replace(/^\d+\.\s*/, "")); // Remove numbering
+
+    // Extract the first 3 skills
+    const keywords = extractedSkills.slice(0, 3);
+
+    console.log(keywords);
+    return keywords;
   } catch (error) {
     console.error("API request error:", error);
     throw error;
@@ -154,6 +166,7 @@ app.get("/", (req, res) => {
 });
 const upload = multer();
 let cvId = null;
+
 app.post("/upload-file", upload.single("file"), async (req, res) => {
   const { file } = req;
   const fileType = req.body.type; // Access the type field (cv or job)
@@ -167,11 +180,12 @@ app.post("/upload-file", upload.single("file"), async (req, res) => {
     if (fileType === "cv") {
       // Handle CV processing
       const cvText = await readPdfFileContent(file);
-      const skills = await extractSkillsFromCV(cvText);
-      console.log(skills);
+      const skills = await extractSkillsFromCV(cvText); // Extract skills from the CV
+
+      // Insert CV into the database and store the skills
       const cvInsertQuery =
-        "INSERT INTO cv (cv_text) VALUES ($1) RETURNING cv_id";
-      const cvInsertResult = await db.query(cvInsertQuery, [cvText]);
+        "INSERT INTO cv (cv_text, skill_words) VALUES ($1, $2) RETURNING cv_id";
+      const cvInsertResult = await db.query(cvInsertQuery, [cvText, skills]);
       cvId = cvInsertResult.rows[0].cv_id;
 
       return res.json({
@@ -181,6 +195,8 @@ app.post("/upload-file", upload.single("file"), async (req, res) => {
     } else if (fileType === "job") {
       // Handle job description processing
       const jobText = await readPdfFileContent(file);
+
+      // Insert job description into the database
       const jobInsertQuery =
         "INSERT INTO job_description (job_text, cv_id) VALUES ($1, $2)";
       await db.query(jobInsertQuery, [jobText, cvId]);
@@ -208,25 +224,39 @@ app.post("/submit-text", async (req, res) => {
     return res.status(400).json({ error: "Invalid text or type" });
   }
 
-  if (type === "cv") {
-    const skills = await extractSkillsFromCV(text);
-    console.log(skills);
-    const cvInsertQuery =
-      "INSERT INTO cv (cv_text) VALUES ($1) RETURNING cv_id";
-    const cvInsertResult = await db.query(cvInsertQuery, [text]);
-    cvId = cvInsertResult.rows[0].cv_id;
-    return res.json({ message: "CV text submitted successfully!" });
-  } else if (type === "job") {
-    const jobInsertQuery =
-      "INSERT INTO job_description (job_text, cv_id) VALUES ($1, $2)";
-    await db.query(jobInsertQuery, [text, cvId]);
-    return res.json({
-      message: "Job description text submitted successfully!",
-    });
-  } else {
-    return res.status(400).json({ error: "Invalid text type" });
+  try {
+    if (type === "cv") {
+      const skills = await extractSkillsFromCV(text); // Extract skills from the text
+
+      // Insert CV text into the database and store the skills
+      const cvInsertQuery =
+        "INSERT INTO cv (cv_text, skill_words) VALUES ($1, $2) RETURNING cv_id";
+      const cvInsertResult = await db.query(cvInsertQuery, [text, skills]);
+      cvId = cvInsertResult.rows[0].cv_id;
+      return res.json({
+        message: "CV text submitted successfully!",
+      });
+    } else if (type === "job") {
+      // Handle job description processing
+
+      // Insert job description into the database without skills
+      const jobInsertQuery =
+        "INSERT INTO job_description (job_text, cv_id) VALUES ($1, $2)";
+      await db.query(jobInsertQuery, [text, cvId]);
+      return res.json({
+        message: "Job description text submitted successfully!",
+      });
+    } else {
+      return res.status(400).json({ error: "Invalid text type" });
+    }
+  } catch (error) {
+    console.error("Error processing text submission:", error);
+    res
+      .status(500)
+      .json({ error: "An error occurred while processing the request." });
   }
 });
+
 // Endpoint to generate job list
 app.get("/generate-job-list", async (req, res) => {
   try {
