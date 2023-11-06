@@ -1,9 +1,7 @@
 import { useState } from "react";
-import SubmitText from "./components/SubmitText";
-import UploadFile from "./components/UploadFile";
-import GenerateJobButton from "./components/GenerateJobButton";
-import ChooseButton from "./components/ChooseButton";
-import CreateNewcvAndCl from "./components/CreateNewcvAndCl";
+import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
+import CVPage from "./pages/CVPage";
+import JobDescriptionPage from "./pages/JobDescriptionPage";
 
 function App() {
   const [jobList, setJobList] = useState([]);
@@ -127,27 +125,31 @@ function App() {
 
   return (
     <div className="App">
-      <UploadFile onFileUpload={handleFileUpload} fileType="cv" />
-      <SubmitText onTextSubmit={handleTextSubmit} fileType="cv" />
-      <UploadFile onFileUpload={handleFileUpload} fileType="job" />
-      <SubmitText onTextSubmit={handleTextSubmit} fileType="job" />
-      <h1>Generate Job List</h1>
-      <GenerateJobButton onClick={generateJobList} />
-      <ul>
-        {jobList.map((job, index) => (
-          <li key={index}>
-            <h2>{job.title}</h2>
-            <h4>salary: {job.salary_min}</h4>
-            <p>{job.description}</p>
-            <ChooseButton
-              onClick={() => {
-                sendJobDescriptionToServer(job.description);
-              }}
-            />
-          </li>
-        ))}
-      </ul>
-      <CreateNewcvAndCl />
+      <Router>
+        <Routes>
+          <Route
+            path="/"
+            element={
+              <CVPage
+                handleFileUpload={handleFileUpload}
+                handleTextSubmit={handleTextSubmit}
+              />
+            }
+          />
+          <Route
+            path="/job-description"
+            element={
+              <JobDescriptionPage
+                handleFileUpload={handleFileUpload}
+                handleTextSubmit={handleTextSubmit}
+                generateJobList={generateJobList}
+                sendJobDescriptionToServer={sendJobDescriptionToServer}
+                jobList={jobList} // Pass the jobList as a prop
+              />
+            }
+          />
+        </Routes>
+      </Router>
     </div>
   );
 }
