@@ -1,10 +1,12 @@
 import { useState } from "react";
-import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
+import { Route, Routes, useNavigate } from "react-router-dom";
+
 import CVPage from "./pages/CVPage";
 import JobDescriptionPage from "./pages/JobDescriptionPage";
 
 function App() {
   const [jobList, setJobList] = useState([]);
+  const navigate = useNavigate();
 
   const handleFileUpload = async (file, fileType) => {
     if (file && fileType) {
@@ -29,6 +31,7 @@ function App() {
               fileType === "cv" ? "CV" : "Job Description"
             } uploaded successfully!`
           );
+          navigate("/job-description");
         } else {
           alert(
             `${fileType === "cv" ? "CV" : "Job Description"} upload failed.`
@@ -43,6 +46,7 @@ function App() {
           fileType === "cv" ? "CV" : "Job Description"
         } file to upload.`
       );
+      navigate("/");
     }
   };
 
@@ -68,10 +72,12 @@ function App() {
               type === "cv" ? "CV" : "Job Description"
             } submitted successfully!`
           );
+          navigate("/job-description");
         } else {
           alert(
             `${type === "cv" ? "CV" : "Job Description"} submission failed.`
           );
+          navigate("/");
         }
       } catch (error) {
         console.error("An error occurred:", error);
@@ -125,31 +131,29 @@ function App() {
 
   return (
     <div className="App">
-      <Router>
-        <Routes>
-          <Route
-            path="/"
-            element={
-              <CVPage
-                handleFileUpload={handleFileUpload}
-                handleTextSubmit={handleTextSubmit}
-              />
-            }
-          />
-          <Route
-            path="/job-description"
-            element={
-              <JobDescriptionPage
-                handleFileUpload={handleFileUpload}
-                handleTextSubmit={handleTextSubmit}
-                generateJobList={generateJobList}
-                sendJobDescriptionToServer={sendJobDescriptionToServer}
-                jobList={jobList} // Pass the jobList as a prop
-              />
-            }
-          />
-        </Routes>
-      </Router>
+      <Routes>
+        <Route
+          path="/"
+          element={
+            <CVPage
+              handleFileUpload={handleFileUpload}
+              handleTextSubmit={handleTextSubmit}
+            />
+          }
+        />
+        <Route
+          path="/job-description"
+          element={
+            <JobDescriptionPage
+              handleFileUpload={handleFileUpload}
+              handleTextSubmit={handleTextSubmit}
+              generateJobList={generateJobList}
+              sendJobDescriptionToServer={sendJobDescriptionToServer}
+              jobList={jobList} // Pass the jobList as a prop
+            />
+          }
+        />
+      </Routes>
     </div>
   );
 }

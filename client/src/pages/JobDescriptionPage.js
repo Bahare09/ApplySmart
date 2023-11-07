@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import UploadFile from "../components/UploadFile";
 import SubmitText from "../components/SubmitText";
 import GenerateJobButton from "../components/GenerateJobButton";
