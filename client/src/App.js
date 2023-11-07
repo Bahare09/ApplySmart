@@ -3,6 +3,7 @@ import { Route, Routes, useNavigate } from "react-router-dom";
 
 import CVPage from "./pages/CVPage";
 import JobDescriptionPage from "./pages/JobDescriptionPage";
+import Result from "./pages/Result";
 
 function App() {
   const [jobList, setJobList] = useState([]);
@@ -153,6 +154,7 @@ function App() {
             />
           }
         />
+        <Route path="/result" element={<Result />} />
       </Routes>
     </div>
   );
