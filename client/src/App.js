@@ -16,10 +16,13 @@ function App() {
         formData.append("file", file);
         formData.append("type", fileType); // Set the type field
 
-        const response = await fetch("http://localhost:4000/upload-file", {
-          method: "POST",
-          body: formData,
-        });
+        const response = await fetch(
+          "https://applysmart.onrender.com/upload-file",
+          {
+            method: "POST",
+            body: formData,
+          }
+        );
 
         // Check if the response is successful
         if (response.ok) {
@@ -69,10 +72,12 @@ function App() {
               type === "cv" ? "CV" : "Job Description"
             } submitted successfully!`
           );
+          navigate("/job-description");
         } else {
           alert(
             `${type === "cv" ? "CV" : "Job Description"} submission failed.`
           );
+          navigate("/");
         }
       } catch (error) {
         console.error("An error occurred:", error);
