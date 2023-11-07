@@ -1,10 +1,12 @@
 import { useState } from "react";
-import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
+import { Route, Routes, useNavigate } from "react-router-dom";
+
 import CVPage from "./pages/CVPage";
 import JobDescriptionPage from "./pages/JobDescriptionPage";
 
 function App() {
   const [jobList, setJobList] = useState([]);
+  const navigate = useNavigate();
 
   const handleFileUpload = async (file, fileType) => {
     if (file && fileType) {
@@ -14,13 +16,10 @@ function App() {
         formData.append("file", file);
         formData.append("type", fileType); // Set the type field
 
-        const response = await fetch(
-          "https://applysmart.onrender.com/upload-file",
-          {
-            method: "POST",
-            body: formData,
-          }
-        );
+        const response = await fetch("http://localhost:4000/upload-file", {
+          method: "POST",
+          body: formData,
+        });
 
         // Check if the response is successful
         if (response.ok) {
@@ -29,6 +28,7 @@ function App() {
               fileType === "cv" ? "CV" : "Job Description"
             } uploaded successfully!`
           );
+          navigate("/job-description");
         } else {
           alert(
             `${fileType === "cv" ? "CV" : "Job Description"} upload failed.`
@@ -43,6 +43,7 @@ function App() {
           fileType === "cv" ? "CV" : "Job Description"
         } file to upload.`
       );
+      navigate("/");
     }
   };
 
@@ -125,31 +126,29 @@ function App() {
 
   return (
     <div className="App">
-      <Router>
-        <Routes>
-          <Route
-            path="/"
-            element={
-              <CVPage
-                handleFileUpload={handleFileUpload}
-                handleTextSubmit={handleTextSubmit}
-              />
-            }
-          />
-          <Route
-            path="/job-description"
-            element={
-              <JobDescriptionPage
-                handleFileUpload={handleFileUpload}
-                handleTextSubmit={handleTextSubmit}
-                generateJobList={generateJobList}
-                sendJobDescriptionToServer={sendJobDescriptionToServer}
-                jobList={jobList} // Pass the jobList as a prop
-              />
-            }
-          />
-        </Routes>
-      </Router>
+      <Routes>
+        <Route
+          path="/"
+          element={
+            <CVPage
+              handleFileUpload={handleFileUpload}
+              handleTextSubmit={handleTextSubmit}
+            />
+          }
+        />
+        <Route
+          path="/job-description"
+          element={
+            <JobDescriptionPage
+              handleFileUpload={handleFileUpload}
+              handleTextSubmit={handleTextSubmit}
+              generateJobList={generateJobList}
+              sendJobDescriptionToServer={sendJobDescriptionToServer}
+              jobList={jobList} // Pass the jobList as a prop
+            />
+          }
+        />
+      </Routes>
     </div>
   );
 }
