@@ -3,6 +3,7 @@ import { Route, Routes, useNavigate } from "react-router-dom";
 
 import CVPage from "./pages/CVPage";
 import JobDescriptionPage from "./pages/JobDescriptionPage";
+import Result from "./pages/Result";
 
 function App() {
   const [jobList, setJobList] = useState([]);
@@ -31,7 +32,13 @@ function App() {
               fileType === "cv" ? "CV" : "Job Description"
             } uploaded successfully!`
           );
-          navigate("/job-description");
+
+          // Navigate based on the fileType
+          if (fileType === "cv") {
+            navigate("/job-description");
+          } else {
+            navigate("/result");
+          }
         } else {
           alert(
             `${fileType === "cv" ? "CV" : "Job Description"} upload failed.`
@@ -68,16 +75,17 @@ function App() {
         // Check if the response is successful
         if (response.ok) {
           alert(
-            `${
-              type === "cv" ? "CV" : "Job Description"
-            } submitted successfully!`
+            `${type === "cv" ? "CV" : "Job Description"} uploaded successfully!`
           );
-          navigate("/job-description");
+
+          // Navigate based on the fileType
+          if (type === "cv") {
+            navigate("/job-description");
+          } else {
+            navigate("/result");
+          }
         } else {
-          alert(
-            `${type === "cv" ? "CV" : "Job Description"} submission failed.`
-          );
-          navigate("/");
+          alert(`${type === "cv" ? "CV" : "Job Description"} upload failed.`);
         }
       } catch (error) {
         console.error("An error occurred:", error);
@@ -153,6 +161,7 @@ function App() {
             />
           }
         />
+        <Route path="/result" element={<Result />} />
       </Routes>
     </div>
   );
