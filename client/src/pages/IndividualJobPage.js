@@ -1,7 +1,7 @@
 import React from "react";
 import CreateNewcvAndCl from "../components/CreateNewcvAndCl";
 
-function Result() {
+function IndividualJobPage() {
   return (
     <div>
       <CreateNewcvAndCl />
@@ -9,4 +9,4 @@ function Result() {
   );
 }
 
-export default Result;
+export default IndividualJobPage;

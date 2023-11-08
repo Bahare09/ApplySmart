@@ -1,9 +1,9 @@
 import { useState } from "react";
 import { Route, Routes, useNavigate } from "react-router-dom";
 
-import CVPage from "./pages/CVPage";
-import JobDescriptionPage from "./pages/JobDescriptionPage";
-import Result from "./pages/Result";
+import HomePage from "./pages/HomePage";
+import JobListingPage from "./pages/JobListingPage";
+import IndividualJobPage from "./pages/IndividualJobPage";
 
 function App() {
   const [jobList, setJobList] = useState([]);
@@ -144,16 +144,16 @@ function App() {
         <Route
           path="/"
           element={
-            <CVPage
+            <HomePage
               handleFileUpload={handleFileUpload}
               handleTextSubmit={handleTextSubmit}
             />
           }
         />
         <Route
-          path="/job-description"
+          path="/jobListing"
           element={
-            <JobDescriptionPage
+            <JobListingPage
               handleFileUpload={handleFileUpload}
               handleTextSubmit={handleTextSubmit}
               generateJobList={generateJobList}
@@ -162,7 +162,7 @@ function App() {
             />
           }
         />
-        <Route path="/result" element={<Result />} />
+        <Route path="/individualJob" element={<IndividualJobPage />} />
       </Routes>
     </div>
   );

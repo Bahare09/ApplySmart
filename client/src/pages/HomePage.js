@@ -2,7 +2,7 @@ import React from "react";
 import SubmitText from "../components/SubmitText";
 import UploadFile from "../components/UploadFile";
 
-function CVPage({ handleFileUpload, handleTextSubmit }) {
+function HomePage({ handleFileUpload, handleTextSubmit }) {
   return (
     <div>
       <UploadFile onFileUpload={handleFileUpload} fileType="cv" />
@@ -11,4 +11,4 @@ function CVPage({ handleFileUpload, handleTextSubmit }) {
   );
 }
 
-export default CVPage;
+export default HomePage;

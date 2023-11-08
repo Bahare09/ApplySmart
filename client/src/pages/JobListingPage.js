@@ -4,7 +4,7 @@ import SubmitText from "../components/SubmitText";
 import GenerateJobButton from "../components/GenerateJobButton";
 import ChooseButton from "../components/ChooseButton";
 
-function JobDescriptionPage({
+function JobListingPage({
   handleFileUpload,
   handleTextSubmit,
   generateJobList,
@@ -47,4 +47,4 @@ function JobDescriptionPage({
   );
 }
 
-export default JobDescriptionPage;
+export default JobListingPage;
