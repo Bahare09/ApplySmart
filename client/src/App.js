@@ -126,6 +126,7 @@ function App() {
 
         if (response.ok) {
           alert("Job description saved successfully!");
+          navigate("/result");
         } else {
           alert("Failed to save job description.");
         }
