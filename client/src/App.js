@@ -81,7 +81,7 @@ function App() {
           // Navigate based on the fileType
           if (type === "cv") {
             navigate("/job-description");
-          } else if (type === "job-description") {
+          } else {
             navigate("/result");
           }
         } else {
