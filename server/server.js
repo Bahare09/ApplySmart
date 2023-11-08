@@ -16,7 +16,7 @@ app.use(express.json());
 // Allow requests from your frontend domain
 app.use(
   cors({
-
+    origin: "https://applysmartc.onrender.com",
   })
 );
 
