@@ -1,19 +1,18 @@
-name: Render
+name: My workflow
 on: 
     push:
         branches:
             - '**'
 jobs:
-  deploy:
-    name: Wait for Deploy
-    runs-on: ubuntu-latest
-    steps:
-      - name: Wait for Render Deployment
-        uses: bounceapp/render-action@0.6.0
-        with:
-          render-token: ${{ secrets.RENDER_TOKEN }}
-          github-token: ${{ secrets.GITHUB_TOKEN }}
-          service-id: srv-xxxxxxxxxxxxxxxxxxxx
-          retries: 20
-          wait: 16000
-          sleep: 30000
+    job1:
+        name: first job in workflow
+        runs-on: ubuntu-latest
+        steps:
+            - name: first thing
+              run: "echo hello world"
+    job2:
+        name: first job in workflow
+        runs-on: ubuntu-latest
+        steps:
+            - name: second thing
+              run: "echo hello world again"
