@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import UploadFile from "../components/UploadFile";
 import SubmitText from "../components/SubmitText";
@@ -28,6 +28,9 @@ function JobListingPage({
         return null;
     }
   };
+  useEffect(() => {
+    generateJobList();
+  }, [generateJobList]);
 
   return (
     <div>
