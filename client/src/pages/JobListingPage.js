@@ -1,4 +1,5 @@
 import React from "react";
+import { Link } from "react-router-dom";
 import UploadFile from "../components/UploadFile";
 import SubmitText from "../components/SubmitText";
 import GenerateJobButton from "../components/GenerateJobButton";
@@ -14,6 +15,9 @@ function JobListingPage({
   return (
     <div>
       <h1>Job Description Page</h1>
+      <Link to="/">
+        <button>Upload New CV</button>
+      </Link>
       <UploadFile onFileUpload={handleFileUpload} fileType="job" />
       <SubmitText onTextSubmit={handleTextSubmit} fileType="job" />
       <GenerateJobButton
