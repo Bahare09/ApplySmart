@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import UploadFile from "../components/UploadFile";
 import SubmitText from "../components/SubmitText";
@@ -12,14 +12,45 @@ function JobListingPage({
   sendJobDescriptionToServer,
   jobList,
 }) {
+  const [uploadOption, setUploadOption] = useState(null);
+
+  const handleUploadOptionChange = (option) => {
+    setUploadOption(option);
+  };
+
+  const renderUploadForm = () => {
+    switch (uploadOption) {
+      case "file":
+        return <UploadFile onFileUpload={handleFileUpload} fileType="job" />;
+      case "text":
+        return <SubmitText onTextSubmit={handleTextSubmit} fileType="job" />;
+      default:
+        return null;
+    }
+  };
+
   return (
     <div>
       <h1>Job Description Page</h1>
       <Link to="/">
         <button>Upload New CV</button>
       </Link>
-      <UploadFile onFileUpload={handleFileUpload} fileType="job" />
-      <SubmitText onTextSubmit={handleTextSubmit} fileType="job" />
+
+      {/* Select dropdown for choosing upload option */}
+      <label htmlFor="uploadOption">Choose Upload Option:</label>
+      <select
+        id="uploadOption"
+        onChange={(e) => handleUploadOptionChange(e.target.value)}
+        value={uploadOption || ""}
+      >
+        <option value="">Select...</option>
+        <option value="file">Upload File</option>
+        <option value="text">Submit Text</option>
+      </select>
+
+      {/* Render the selected upload form */}
+      {renderUploadForm()}
+
       <GenerateJobButton
         onClick={() => {
           generateJobList();
