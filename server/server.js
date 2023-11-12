@@ -9,8 +9,9 @@ const { Pool } = require("pg");
 const { uploadCv } = require("./functions/uploadCv");
 const { SubmitText } = require("./functions/submitText");
 const { jobsList } = require("./functions/jobsList");
-const { saveJobs } = require("./functions/saveJobs");
-const { result } = require("./functions/result");
+// const { saveJobs } = require("./functions/saveJobs");
+// const { result } = require("./functions/result");
+const { individualJob } = require("./functions/individualJob")
 
 app.use(express.json());
 // Allow requests from your frontend domain
@@ -44,9 +45,11 @@ app.post("/submit-text", async (req, res) => SubmitText(req, res, db));
 // Endpoint to generate job list
 app.get("/generate-job-list", async (req, res) => jobsList(req, res, db));
 
-app.post("/save-job-description", async (req, res) => saveJobs(req, res, db));
+// app.post("/save-job-description", async (req, res) => saveJobs(req, res, db));
 
-app.get("/generate-cv-coverLetter", async (req, res) => result(req, res, db));
+// app.get("/generate-cv-coverLetter", async (req, res) => result(req, res, db));
+
+app.post("/individualJob", async (req, res) => individualJob(req, res, db));
 
 app.listen(port, () => {
   console.log(`Server is running on port ${port}`);
