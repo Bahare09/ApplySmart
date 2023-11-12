@@ -1,9 +1,10 @@
 import React from "react";
+import CreateNewcvAndCl from "../components/CreateNewcvAndCl";
 
-function IndividualJobPage({ resultData }) {
+function IndividualJobPage() {
   return (
     <div>
-      <p>individual job page</p>
+      <CreateNewcvAndCl />
     </div>
   );
 }
