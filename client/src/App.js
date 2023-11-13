@@ -7,6 +7,7 @@ import IndividualJobPage from "./pages/IndividualJobPage";
 
 function App() {
   const [jobList, setJobList] = useState([]);
+  const [resultData, setResultData] = useState([])
   const navigate = useNavigate();
 
   const handleFileUpload = async (file, fileType) => {
@@ -28,16 +29,15 @@ function App() {
         // Check if the response is successful
         if (response.ok) {
           alert(
-            `${
-              fileType === "cv" ? "CV" : "Job Description"
+            `${fileType === "cv" ? "CV" : "Job Description"
             } uploaded successfully!`
           );
 
           // Navigate based on the fileType
           if (fileType === "cv") {
-            navigate("/job-description");
+            navigate("/jobListing");
           } else {
-            navigate("/result");
+            navigate("/individualJob");
           }
         } else {
           alert(
@@ -49,8 +49,7 @@ function App() {
       }
     } else {
       alert(
-        `Please select a ${
-          fileType === "cv" ? "CV" : "Job Description"
+        `Please select a ${fileType === "cv" ? "CV" : "Job Description"
         } file to upload.`
       );
       navigate("/");
@@ -80,9 +79,9 @@ function App() {
 
           // Navigate based on the fileType
           if (type === "cv") {
-            navigate("/job-description");
+            navigate("/jobListing");
           } else {
-            navigate("/result");
+            navigate("/individualJob");
           }
         } else {
           alert(`${type === "cv" ? "CV" : "Job Description"} upload failed.`);
@@ -114,7 +113,7 @@ function App() {
     if (jobDescription) {
       try {
         const response = await fetch(
-          "https://applysmart.onrender.com/save-job-description",
+          "https://applysmart.onrender.com/individualJob",
           {
             method: "POST",
             headers: {
@@ -125,16 +124,19 @@ function App() {
         );
 
         if (response.ok) {
-          alert("Job description saved successfully!");
-          navigate("/result");
+          const data = await response.json();
+          setResultData(data)
+          alert("Job selected successfully!");
+          navigate("/individualJob");
+
         } else {
-          alert("Failed to save job description.");
+          alert("Failed to select job.");
         }
       } catch (error) {
         console.error("An error occurred:", error);
       }
     } else {
-      alert("Please select a job and enter a job description.");
+      alert("Please select a job or enter a job description.");
     }
   };
 
@@ -162,7 +164,7 @@ function App() {
             />
           }
         />
-        <Route path="/individualJob" element={<IndividualJobPage />} />
+        <Route path="/individualJob" element={<IndividualJobPage resultData={resultData} />} />
       </Routes>
     </div>
   );
