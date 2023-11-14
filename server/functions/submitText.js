@@ -1,4 +1,5 @@
-const { extractSkillsFromCV } = require("./openai")
+const { extractSkillsFromCV } = require("./openai");
+const { processDataForJob } = require("./processDataForJob");
 
 const SubmitText = async (req, res, db) => {
     const { text, type } = req.body; // Access the submitted text and type (cv or job)
@@ -22,13 +23,8 @@ const SubmitText = async (req, res, db) => {
         } else if (type === "job") {
             // Handle job description processing
 
-            // Insert job description into the database without skills
-            const jobInsertQuery =
-                "INSERT INTO job_description (job_text, cv_id) VALUES ($1, $2)";
-            await db.query(jobInsertQuery, [text, cvId]);
-            return res.json({
-                message: "Job description text submitted successfully!",
-            });
+            // creating all required Data for individual job page based on cv and job desc
+            await processDataForJob(cvId, text, db, res);
         } else {
             return res.status(400).json({ error: "Invalid text type" });
         }
