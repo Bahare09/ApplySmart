@@ -6,7 +6,7 @@ const bodyParser = require("body-parser");
 const dotenv = require("dotenv");
 const app = express();
 const { Pool } = require("pg");
-const { uploadCv } = require("./functions/uploadCv");
+const { uploadFile } = require("./functions/uploadFile");
 const { SubmitText } = require("./functions/submitText");
 const { jobsList } = require("./functions/jobsList");
 // const { saveJobs } = require("./functions/saveJobs");
@@ -37,7 +37,7 @@ app.get("/", (req, res) => {
 const upload = multer();
 let cvId = null;
 
-app.post("/upload-file", upload.single("file"), (req, res) => uploadCv(req, res, db));
+app.post("/upload-file", upload.single("file"), (req, res) => uploadFile(req, res, db));
 
 // Route for handling text submissions
 app.post("/submit-text", async (req, res) => SubmitText(req, res, db));

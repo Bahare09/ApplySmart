@@ -1,7 +1,7 @@
 const { readPdfFileContent } = require("./pdf");
 const { extractSkillsFromCV } = require("./openai");
 const { processDataForJob } = require("./processDataForJob");
-const uploadCv = async (req, res, db) => {
+const uploadFile = async (req, res, db) => {
     const { file } = req;
     const fileType = req.body.type; // Access the type field (cv or job)
 
@@ -44,5 +44,5 @@ const uploadCv = async (req, res, db) => {
 }
 
 module.exports = {
-    uploadCv,
+    uploadFile,
 };

@@ -37,6 +37,8 @@ function App() {
           if (fileType === "cv") {
             navigate("/jobListing");
           } else {
+            const data = await response.json();
+            setResultData(data)
             navigate("/individualJob");
           }
         } else {
@@ -81,6 +83,8 @@ function App() {
           if (type === "cv") {
             navigate("/jobListing");
           } else {
+            const data = await response.json();
+            setResultData(data)
             navigate("/individualJob");
           }
         } else {
