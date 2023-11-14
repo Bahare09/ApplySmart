@@ -1,5 +1,6 @@
 const { readPdfFileContent } = require("./pdf");
-const { extractSkillsFromCV } = require("./openai")
+const { extractSkillsFromCV } = require("./openai");
+const { processDataForJob } = require("./processDataForJob");
 const uploadCv = async (req, res, db) => {
     const { file } = req;
     const fileType = req.body.type; // Access the type field (cv or job)
@@ -28,16 +29,9 @@ const uploadCv = async (req, res, db) => {
         } else if (fileType === "job") {
             // Handle job description processing
             const jobText = await readPdfFileContent(file);
+            // creating all required Data for individual job page based on cv and job desc
+            await processDataForJob(cvId, jobText, db, res);
 
-            // Insert job description into the database
-            const jobInsertQuery =
-                "INSERT INTO job_description (job_text, cv_id) VALUES ($1, $2)";
-            await db.query(jobInsertQuery, [jobText, cvId]);
-
-            return res.json({
-                message: "Job description uploaded and processed successfully.",
-                text: jobText,
-            });
         } else {
             return res.status(400).json({ error: "Invalid file type" });
         }
