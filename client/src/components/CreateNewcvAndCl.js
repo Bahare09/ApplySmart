@@ -20,7 +20,7 @@ export const CreateNewcvAndCl = () => {
       }
 
       const data = await response.json();
-      console.log(data);
+      // console.log(data);
 
       // Set the PDF data when it's received
       setPdfData(data);
