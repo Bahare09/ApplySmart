@@ -81,7 +81,7 @@ function JobListingPage({
               </p>
 
               <ChooseButton
-                onClick={() => sendJobDescriptionToServer(job.description)}
+                onClick={() => sendJobDescriptionToServer(job.redirect_url)}
               />
             </li>
           ))}
