@@ -7,7 +7,7 @@ import IndividualJobPage from "./pages/IndividualJobPage";
 
 function App() {
   const [jobList, setJobList] = useState([]);
-  const [resultData, setResultData] = useState([])
+  const [resultData, setResultData] = useState([]);
   const navigate = useNavigate();
 
   const handleFileUpload = async (file, fileType) => {
@@ -29,7 +29,8 @@ function App() {
         // Check if the response is successful
         if (response.ok) {
           alert(
-            `${fileType === "cv" ? "CV" : "Job Description"
+            `${
+              fileType === "cv" ? "CV" : "Job Description"
             } uploaded successfully!`
           );
 
@@ -38,7 +39,7 @@ function App() {
             navigate("/jobListing");
           } else {
             const data = await response.json();
-            setResultData(data)
+            setResultData(data);
             navigate("/individualJob");
           }
         } else {
@@ -51,7 +52,8 @@ function App() {
       }
     } else {
       alert(
-        `Please select a ${fileType === "cv" ? "CV" : "Job Description"
+        `Please select a ${
+          fileType === "cv" ? "CV" : "Job Description"
         } file to upload.`
       );
       navigate("/");
@@ -84,7 +86,7 @@ function App() {
             navigate("/jobListing");
           } else {
             const data = await response.json();
-            setResultData(data)
+            setResultData(data);
             navigate("/individualJob");
           }
         } else {
@@ -113,8 +115,8 @@ function App() {
       console.error("Error fetching job list:", error);
     }
   };
-  const sendJobDescriptionToServer = async (jobDescription) => {
-    if (jobDescription) {
+  const sendJobDescriptionToServer = async (jobRedirectURL) => {
+    if (jobRedirectURL) {
       try {
         const response = await fetch(
           "https://applysmart.onrender.com/individualJob",
@@ -123,16 +125,15 @@ function App() {
             headers: {
               "Content-Type": "application/json",
             },
-            body: JSON.stringify({ description: jobDescription }),
+            body: JSON.stringify({ Url: jobRedirectURL }),
           }
         );
 
         if (response.ok) {
           const data = await response.json();
-          setResultData(data)
+          setResultData(data);
           alert("Job selected successfully!");
           navigate("/individualJob");
-
         } else {
           alert("Failed to select job.");
         }
@@ -168,7 +169,10 @@ function App() {
             />
           }
         />
-        <Route path="/individualJob" element={<IndividualJobPage resultData={resultData} />} />
+        <Route
+          path="/individualJob"
+          element={<IndividualJobPage resultData={resultData} />}
+        />
       </Routes>
     </div>
   );
