@@ -3,20 +3,22 @@ import { Link } from "react-router-dom";
 import UploadFile from "../components/UploadFile";
 import SubmitText from "../components/SubmitText";
 import ChooseButton from "../components/ChooseButton";
-
+import ViewButton from "../components/ViewButton";
+import JobModal from "../components/JobModal";
 function JobListingPage({
   handleFileUpload,
   handleTextSubmit,
   generateJobList,
   sendJobDescriptionToServer,
+  sendJobDForView,
   jobList,
+  fullJobDescription,
 }) {
   const [uploadOption, setUploadOption] = useState(null);
-
+  const [isModalOpen, setIsModalOpen] = useState(false);
   const handleUploadOptionChange = (option) => {
     setUploadOption(option);
   };
-
   const renderUploadForm = () => {
     switch (uploadOption) {
       case "file":
@@ -27,28 +29,32 @@ function JobListingPage({
         return null;
     }
   };
-
+  const openModal = () => {
+    setIsModalOpen(true);
+  };
+  const closeModal = () => {
+    setIsModalOpen(false);
+  };
+  const handleViewButtonClick = (redirectUrl) => {
+    sendJobDForView(redirectUrl);
+    openModal();
+  };
   useEffect(() => {
     const fetchData = async () => {
       try {
-        // console.log("Fetching job list...");
         await generateJobList();
-        // console.log("Job list fetched successfully");
       } catch (error) {
         console.error("Error fetching job data:", error);
       }
     };
-
     fetchData();
   }, []);
-
   return (
     <div>
       <h1>Job Description Page</h1>
       <Link to="/">
         <button>Upload New CV</button>
       </Link>
-
       {/* Select dropdown for choosing upload option */}
       <label htmlFor="uploadOption">Choose Upload Option:</label>
       <select
@@ -60,7 +66,6 @@ function JobListingPage({
         <option value="file">Upload File</option>
         <option value="text">Submit Text</option>
       </select>
-
       {/* Render the selected upload form */}
       {renderUploadForm()}
       {jobList.length > 0 ? (
@@ -79,9 +84,12 @@ function JobListingPage({
                   Redirect to {job.redirect_url}
                 </a>
               </p>
-
               <ChooseButton
                 onClick={() => sendJobDescriptionToServer(job.redirect_url)}
+              />
+              {/* Pass the handleViewButtonClick function to the ViewButton */}
+              <ViewButton
+                onClick={() => handleViewButtonClick(job.redirect_url)}
               />
             </li>
           ))}
@@ -89,8 +97,13 @@ function JobListingPage({
       ) : (
         <p>No jobs available.</p>
       )}
+      {/* Job Modal */}
+      <JobModal
+        isOpen={isModalOpen}
+        onClose={closeModal}
+        fullJobDescription={fullJobDescription}
+      />
     </div>
   );
 }
-
 export default JobListingPage;

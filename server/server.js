@@ -9,48 +9,35 @@ const { Pool } = require("pg");
 const { uploadFile } = require("./functions/uploadFile");
 const { SubmitText } = require("./functions/submitText");
 const { jobsList } = require("./functions/jobsList");
-// const { saveJobs } = require("./functions/saveJobs");
-// const { result } = require("./functions/result");
-const { individualJob } = require("./functions/individualJob")
-
+const { individualJob } = require("./functions/individualJob");
+const { sendJobDForView } = require("./functions/sendJobDForView");
 app.use(express.json());
-// Allow requests from your frontend domain
 app.use(
   cors({
-    origin: "https://applysmartc.onrender.com",
+    // origin: "https://applysmartc.onrender.com",
   })
 );
-
 app.use(bodyParser.json());
 dotenv.config();
-
 const db = new Pool({
   connectionString: process.env.DB_URL,
   ssl: {
     rejectUnauthorized: false,
   },
 });
-
 app.get("/", (req, res) => {
   res.send("Server is running.");
 });
 const upload = multer();
 let cvId = null;
-
-app.post("/upload-file", upload.single("file"), (req, res) => uploadFile(req, res, db));
-
-// Route for handling text submissions
+app.post("/upload-file", upload.single("file"), (req, res) =>
+  uploadFile(req, res, db)
+);
 app.post("/submit-text", async (req, res) => SubmitText(req, res, db));
-
-// Endpoint to generate job list
 app.get("/generate-job-list", async (req, res) => jobsList(req, res, db));
-
-// app.post("/save-job-description", async (req, res) => saveJobs(req, res, db));
-
-// app.get("/generate-cv-coverLetter", async (req, res) => result(req, res, db));
-
 app.post("/individualJob", async (req, res) => individualJob(req, res, db));
-
+// Corrected route registration
+app.post("/sendJobDForView", async (req, res) => sendJobDForView(req, res, db));
 app.listen(port, () => {
   console.log(`Server is running on port ${port}`);
 });
