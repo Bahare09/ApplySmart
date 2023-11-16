@@ -1,6 +1,6 @@
 const { tailorCv, createCoverLetter } = require("./openai");
 
-const processDataForJob = async (cvId, description, db, res) => {
+const processDataForJob = async (cvId, description, db, res, url) => {
   if (!cvId) {
     return res.status(400).json({ error: "No CV uploaded yet." });
   }
@@ -31,6 +31,8 @@ const processDataForJob = async (cvId, description, db, res) => {
       message: "CV text retrieved successfully!",
       newCv: newCv,
       coverLetter: coverLetter,
+      description: description,
+      url: url ? url : false
     });
   } catch (error) {
     console.error("Error retrieving CV text:", error);
