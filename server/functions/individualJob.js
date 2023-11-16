@@ -19,7 +19,7 @@ const individualJob = async (req, res, db) => {
     const Description = await extractJobDescriptionFromURL(Url);
 
     // Pass the extracted job description to the processDataForJob function
-    await processDataForJob(cvId, Description, db, res);
+    await processDataForJob(cvId, Description, db, res, Url);
   } catch (error) {
     console.error("An error occurred:", error);
     res.status(500).json({ error: "Internal server error" });
