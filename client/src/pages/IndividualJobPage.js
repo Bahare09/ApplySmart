@@ -10,7 +10,7 @@ function IndividualJobPage({ resultData }) {
       </Link>
       <div>
         <p>Job Description</p>
-        <div>{resultData.description.map(paragraph => <p>{paragraph}</p>)}</div>
+        <div>{resultData.description.split('\n\n').map(paragraph => <p>{paragraph}</p>)}</div>
       </div>
 
 
