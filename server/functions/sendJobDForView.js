@@ -13,7 +13,7 @@ const sendJobDForView = async (req, res, db) => {
   try {
     const fullJobDescription = await extractJobDescriptionFromURL(Url);
     console.log(fullJobDescription);
-    res.json({ fullJobDescription });
+    res.json({ fullJobDescription: fullJobDescription });
   } catch (error) {
     console.error("Error extracting job description:", error.message);
     res.status(500).json({ error: "Internal server error" });

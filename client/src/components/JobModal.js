@@ -6,8 +6,8 @@ function JobModal({ isOpen, onClose, fullJobDescription }) {
       return <p>No job description available.</p>;
     }
     // Convert the object to a JSON string with indentation for better readability
-    const jsonString = JSON.stringify(fullJobDescription, null, 20);
-    return <p>{jsonString}</p>;
+
+    return <div>{fullJobDescription.split('\n\n').map(paragraph => <p>{paragraph}</p>)}</div>
   };
   return (
     <div className={`modal ${isOpen ? "open" : "closed"}`}>

@@ -8,7 +8,7 @@ const extractJobDescriptionFromURL = async (redirectUrl) => {
     const html = await response.text();
     const $ = cheerio.load(html);
 
-    const fullJobDescriptionText = $("section.adp-body").text().split('\n\n');
+    const fullJobDescriptionText = $("section.adp-body").text();
 
     // console.log("Full Job Description Text:", fullJobDescriptionText);
 
