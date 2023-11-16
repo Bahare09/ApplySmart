@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import PdfViewer from "./PdfViewer"; // Import the PdfViewer component
+import apiUrl from "../api";
 
 export const CreateNewcvAndCl = () => {
   const [isLoading, setIsLoading] = useState(false);
@@ -11,9 +12,7 @@ export const CreateNewcvAndCl = () => {
     setError(null);
 
     try {
-      const response = await fetch(
-        "https://applysmart.onrender.com/generate-cv-coverLetter"
-      );
+      const response = await fetch(apiUrl + "/generate-cv-coverLetter");
 
       if (!response.ok) {
         throw new Error(`HTTP Error: ${response.status}`);
