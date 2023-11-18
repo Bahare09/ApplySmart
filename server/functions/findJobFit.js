@@ -2,7 +2,7 @@ const OpenAI = require("openai");
 
 const openai = new OpenAI({ apiKey: process.env.OPEN_AI_SECRET_KEY });
 const modelVersion =
-  process.env.NODE_ENV === "production" ? "gpt-4" : "pt-3.5-turbo";
+  process.env.NODE_ENV === "production" ? "gpt-4" : "gpt-3.5-turbo";
 
 const findJobFit = async (cvText, description) => {
   try {
