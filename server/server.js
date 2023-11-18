@@ -14,7 +14,7 @@ const { sendJobDForView } = require("./functions/sendJobDForView");
 app.use(express.json());
 app.use(
   cors({
-    origin: ["http://localhost:3000", "https://applysmartc.onrender.com"],
+    origin: "https://applysmartc.onrender.com",
   })
 );
 app.use(bodyParser.json());
