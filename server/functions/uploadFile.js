@@ -1,5 +1,5 @@
 const { readPdfFileContent } = require("./pdf");
-const { extractSkillsFromCV } = require("./openai");
+const { extractSkillsFromCV } = require("./extractSkillsFromCV");
 const { processDataForJob } = require("./processDataForJob");
 const uploadFile = async (req, res, db) => {
     const { file } = req;
