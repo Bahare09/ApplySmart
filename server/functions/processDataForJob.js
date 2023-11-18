@@ -33,7 +33,7 @@ const processDataForJob = async (cvId, description, db, res, url) => {
       findJobFit(cvText, description),
       findJobFit(newCv, description)
     ]);
-    console.log("jobFit", jobFit)
+
     return res.json({
       message: "CV text retrieved successfully!",
       newCv: newCv,
