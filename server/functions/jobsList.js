@@ -39,7 +39,6 @@ const jobsList = async (req, res, db) => {
 
     const data = await response.json();
     const allJobs = data.results;
-    console.log(data);
 
     // Filter jobs based on the redirect link format
     const matchingJobs = allJobs.filter(
