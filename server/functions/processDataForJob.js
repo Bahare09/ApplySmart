@@ -1,5 +1,6 @@
 const { findJobFit } = require("./findJobFit");
-const { tailorCv, createCoverLetter } = require("./openai");
+const { createCoverLetter } = require("./createCoverLetter");
+const { tailorCv } = require("./tailorCv");
 
 const processDataForJob = async (cvId, description, db, res, url) => {
   if (!cvId) {
