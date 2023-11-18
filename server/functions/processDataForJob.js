@@ -1,3 +1,4 @@
+const { findJobFit } = require("./findJobFit");
 const { tailorCv, createCoverLetter } = require("./openai");
 
 const processDataForJob = async (cvId, description, db, res, url) => {
@@ -22,9 +23,15 @@ const processDataForJob = async (cvId, description, db, res, url) => {
     const cvText = cvResult.rows[0].cv_text;
     const jobText = jobResult;
 
-    const [newCv, coverLetter] = await Promise.all([
+    const [newCv, coverLetter, jobFit] = await Promise.all([
       tailorCv(cvText, jobText),
       createCoverLetter(cvText, jobText),
+      findJobFit(cvText, description)
+    ]);
+
+    const [jobFitForOldCv, jobFitForTailoredCv] = await Promise.all([
+      findJobFit(cvText, description),
+      findJobFit(newCv, description)
     ]);
 
     return res.json({
@@ -32,7 +39,9 @@ const processDataForJob = async (cvId, description, db, res, url) => {
       newCv: newCv,
       coverLetter: coverLetter,
       description: description,
-      url: url ? url : false
+      url: url ? url : false,
+      jobFitForOldCv: jobFitForOldCv,
+      jobFitForTailoredCv: jobFitForTailoredCv
     });
   } catch (error) {
     console.error("Error retrieving CV text:", error);

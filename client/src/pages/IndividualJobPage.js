@@ -10,21 +10,19 @@ function IndividualJobPage({ resultData }) {
       </Link>
       <div>
         <p>Job Description</p>
-        <div>{resultData.description.split('\n\n').map(paragraph => <p>{paragraph}</p>)}</div>
+        <div>{resultData.description.split('\n\n').map((paragraph, index) => <p key={index}>{paragraph}</p>)}</div>
       </div>
-
-
-
       <div>
         <h2>cover Letter</h2>
-        <p>{resultData.coverLetter.split('\n\n').map(paragraph => <p>{paragraph}</p>)}</p>
+        <p>{resultData.coverLetter.split('\n\n').map((paragraph, index) => <p key={index}>{paragraph}</p>)}</p>
       </div>
       <div>
         <h2>Tailored CV</h2>
-        <p>{resultData.newCv.split('\n\n').map(paragraph => <p>{paragraph}</p>)}</p>
+        <p>{resultData.newCv.split('\n\n').map((paragraph, index) => <p key={index}>{paragraph}</p>)}</p>
       </div>
       <div>
         <h2>JobFit</h2>
+        <p>{resultData.jobFitForTailoredCv}</p>
       </div>
       {resultData.url && <button><a href={resultData.url} target="blank" alt="job link">Apply</a> </button>}
 
