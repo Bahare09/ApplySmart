@@ -2,7 +2,7 @@ const OpenAI = require("openai");
 require("dotenv").config();
 const openai = new OpenAI({ apiKey: process.env.OPEN_AI_SECRET_KEY });
 const modelVersion =
-  process.env.NODE_ENV === "production" ? "gpt-4" : "gpt-3.5-turbo";
+  process.env.NODE_ENV === "production" ? "gpt-3.5-turbo" : "gpt-3.5-turbo";
 
 const tailorCv = async (cvText, jobText) => {
   try {
