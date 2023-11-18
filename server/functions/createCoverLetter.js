@@ -2,7 +2,6 @@ const OpenAI = require("openai");
 const dotenv = require("dotenv");
 require('dotenv').config();
 
-
 const openai = new OpenAI({ apiKey: process.env.OPEN_AI_SECRET_KEY });
 
 const createCoverLetter = async (cvText, jobText) => {
