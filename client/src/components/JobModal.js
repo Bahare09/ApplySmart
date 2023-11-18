@@ -7,7 +7,7 @@ function JobModal({ isOpen, onClose, fullJobDescription }) {
     }
     // Convert the object to a JSON string with indentation for better readability
 
-    return <div>{fullJobDescription.split('\n\n').map(paragraph => <p>{paragraph}</p>)}</div>
+    return <div>{fullJobDescription.split('\n\n').map((paragraph, index) => <p key={index}>{paragraph}</p>)}</div>
   };
   return (
     <div className={`modal ${isOpen ? "open" : "closed"}`}>
