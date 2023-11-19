@@ -15,23 +15,25 @@ function JobListingPage({
   jobList,
   fullJobDescription,
 }) {
-  const [uploadOption, setUploadOption] = useState(null);
+  const [selectedOption, setSelectedOption] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(false); // Add loading state
+  const [isUploading, setIsUploading] = useState(false);
 
-  const handleUploadOptionChange = (option) => {
-    setUploadOption(option);
+  const handleOptionChange = (event) => {
+    setSelectedOption(event.target.value);
   };
 
-  const renderUploadForm = () => {
-    switch (uploadOption) {
-      case "file":
-        return <UploadFile onFileUpload={handleFileUpload} fileType="job" />;
-      case "text":
-        return <SubmitText onTextSubmit={handleTextSubmit} fileType="job" />;
-      default:
-        return null;
-    }
+  const handleFileUploadWrapper = async (file, fileType) => {
+    setIsUploading(true); // Set uploading to true before starting upload
+    await handleFileUpload(file, fileType);
+    setIsUploading(false); // Set uploading to false after upload completion
+  };
+
+  const handleTextSubmitWrapper = async (text, fileType) => {
+    setIsUploading(true); // Set uploading to true before starting text submit
+    await handleTextSubmit(text, fileType);
+    setIsUploading(false); // Set uploading to false after text submit completion
   };
 
   const openModal = () => {
@@ -68,19 +70,21 @@ function JobListingPage({
       <Link to="/">
         <button>Upload New CV</button>
       </Link>
-      {/* Select dropdown for choosing upload option */}
-      <label htmlFor="uploadOption">Choose Upload Option:</label>
-      <select
-        id="uploadOption"
-        onChange={(e) => handleUploadOptionChange(e.target.value)}
-        value={uploadOption || ""}
-      >
-        <option value="">Select...</option>
-        <option value="file">Upload File</option>
+      <select value={selectedOption} onChange={handleOptionChange}>
+        <option value="">Select an option</option>
         <option value="text">Submit Text</option>
+        <option value="file">Upload File</option>
       </select>
-      {/* Render the selected upload form */}
-      {renderUploadForm()}
+
+      {isUploading && <p>Loading...</p>}
+
+      {selectedOption === "text" && !isUploading && (
+        <SubmitText onTextSubmit={handleTextSubmitWrapper} fileType="job" />
+      )}
+
+      {selectedOption === "file" && !isUploading && (
+        <UploadFile onFileUpload={handleFileUploadWrapper} fileType="job" />
+      )}
       {isLoading ? (
         <p>Loading...</p>
       ) : jobList.length > 0 ? (
