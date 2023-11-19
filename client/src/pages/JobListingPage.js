@@ -5,6 +5,7 @@ import SubmitText from "../components/SubmitText";
 import ChooseButton from "../components/ChooseButton";
 import ViewButton from "../components/ViewButton";
 import JobModal from "../components/JobModal";
+
 function JobListingPage({
   handleFileUpload,
   handleTextSubmit,
@@ -16,9 +17,12 @@ function JobListingPage({
 }) {
   const [uploadOption, setUploadOption] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isLoading, setIsLoading] = useState(false); // Add loading state
+
   const handleUploadOptionChange = (option) => {
     setUploadOption(option);
   };
+
   const renderUploadForm = () => {
     switch (uploadOption) {
       case "file":
@@ -29,26 +33,35 @@ function JobListingPage({
         return null;
     }
   };
+
   const openModal = () => {
     setIsModalOpen(true);
   };
+
   const closeModal = () => {
     setIsModalOpen(false);
   };
+
   const handleViewButtonClick = (redirectUrl) => {
     sendJobDForView(redirectUrl);
     openModal();
   };
+
   useEffect(() => {
     const fetchData = async () => {
       try {
+        setIsLoading(true); // Set loading to true when fetching data
         await generateJobList();
       } catch (error) {
         console.error("Error fetching job data:", error);
+      } finally {
+        setIsLoading(false); // Set loading to false after fetching data
       }
     };
+
     fetchData();
   }, []);
+
   return (
     <div>
       <h1>Job Description Page</h1>
@@ -68,7 +81,9 @@ function JobListingPage({
       </select>
       {/* Render the selected upload form */}
       {renderUploadForm()}
-      {jobList.length > 0 ? (
+      {isLoading ? (
+        <p>Loading...</p>
+      ) : jobList.length > 0 ? (
         <ul>
           {jobList.map((job, index) => (
             <li key={index}>
@@ -97,4 +112,5 @@ function JobListingPage({
     </div>
   );
 }
+
 export default JobListingPage;
