@@ -8,11 +8,12 @@ function App() {
   const [jobList, setJobList] = useState([]);
   const [resultData, setResultData] = useState([]);
   const [fullJobDescription, setFullJobDescription] = useState("");
+  const [loading, setloading] = useState(false);
   const navigate = useNavigate();
   const handleFileUpload = async (file, fileType) => {
     if (file && fileType) {
       try {
-        // Send a POST request to the backend with the file and type
+        setloading(true)
         const formData = new FormData();
         formData.append("file", file);
         formData.append("type", fileType); // Set the type field
@@ -20,7 +21,6 @@ function App() {
           method: "POST",
           body: formData,
         });
-        // Check if the response is successful
         if (response.ok) {
           alert(
             `${fileType === "cv" ? "CV" : "Job Description"
@@ -41,6 +41,8 @@ function App() {
         }
       } catch (error) {
         console.error("An error occurred:", error);
+      } finally {
+        setloading(false)
       }
     } else {
       alert(
@@ -53,15 +55,15 @@ function App() {
   const handleTextSubmit = async (text, type) => {
     if (text && type) {
       try {
+        setloading(true)
         // Send a POST request to the backend with the text data and type
         const response = await fetch(apiUrl + "/submit-text", {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
           },
-          body: JSON.stringify({ text, type }), // Include the type
+          body: JSON.stringify({ text, type }),
         });
-        // Check if the response is successful
         if (response.ok) {
           alert(
             `${type === "cv" ? "CV" : "Job Description"} uploaded successfully!`
@@ -79,6 +81,8 @@ function App() {
         }
       } catch (error) {
         console.error("An error occurred:", error);
+      } finally {
+        setloading(false)
       }
     } else {
       alert("Please enter text and select a type to submit.");
@@ -100,6 +104,8 @@ function App() {
   const sendJobDescriptionToServer = async (jobRedirectURL) => {
     if (jobRedirectURL) {
       try {
+        setloading(true);
+        console.log(loading)
         const response = await fetch(apiUrl + "/individualJob", {
           method: "POST",
           headers: {
@@ -110,6 +116,7 @@ function App() {
         if (response.ok) {
           const data = await response.json();
           setResultData(data);
+
           alert("Job selected successfully!");
           navigate("/individualJob");
         } else {
@@ -117,6 +124,8 @@ function App() {
         }
       } catch (error) {
         console.error("An error occurred:", error);
+      } finally {
+        setloading(false)
       }
     } else {
       alert("Please select a job or enter a job description.");
@@ -124,6 +133,7 @@ function App() {
   };
   const sendJobDForView = async (redirectUrl) => {
     try {
+      setloading(true);
       const response = await fetch(apiUrl + "/sendJobDForView", {
         method: "POST",
         headers: {
@@ -139,6 +149,8 @@ function App() {
       }
     } catch (error) {
       console.error("Error sending request:", error);
+    } finally {
+      setloading(false)
     }
   };
   return (
@@ -150,6 +162,7 @@ function App() {
             <HomePage
               handleFileUpload={handleFileUpload}
               handleTextSubmit={handleTextSubmit}
+              loading={loading}
             />
           }
         />
@@ -161,9 +174,10 @@ function App() {
               handleTextSubmit={handleTextSubmit}
               generateJobList={generateJobList}
               sendJobDescriptionToServer={sendJobDescriptionToServer}
-              jobList={jobList} // Pass the jobList as a prop
+              jobList={jobList}
               sendJobDForView={sendJobDForView}
               fullJobDescription={fullJobDescription}
+              loading={loading}
             />
           }
         />
