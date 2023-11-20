@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import SubmitText from "../components/SubmitText";
 import UploadFile from "../components/UploadFile";
-import "./jobListingpage.css"
+import "./loadingCircle.css"
 
 function HomePage({ handleFileUpload, handleTextSubmit, loading }) {
   const [selectedOption, setSelectedOption] = useState(null);

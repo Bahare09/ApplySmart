@@ -5,7 +5,7 @@ import SubmitText from "../components/SubmitText";
 import ChooseButton from "../components/ChooseButton";
 import ViewButton from "../components/ViewButton";
 import JobModal from "../components/JobModal";
-import "./jobListingpage.css"
+import "./loadingCircle.css"
 
 function JobListingPage({
   handleFileUpload,
