@@ -1,4 +1,4 @@
-const { extractSkillsFromCV } = require("./openai");
+const { extractSkillsFromCV } = require("./extractSkillsFromCV");
 const { processDataForJob } = require("./processDataForJob");
 
 const SubmitText = async (req, res, db) => {

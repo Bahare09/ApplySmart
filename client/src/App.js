@@ -23,8 +23,7 @@ function App() {
         // Check if the response is successful
         if (response.ok) {
           alert(
-            `${
-              fileType === "cv" ? "CV" : "Job Description"
+            `${fileType === "cv" ? "CV" : "Job Description"
             } uploaded successfully!`
           );
           // Navigate based on the fileType
@@ -45,8 +44,7 @@ function App() {
       }
     } else {
       alert(
-        `Please select a ${
-          fileType === "cv" ? "CV" : "Job Description"
+        `Please select a ${fileType === "cv" ? "CV" : "Job Description"
         } file to upload.`
       );
       navigate("/");
@@ -135,7 +133,7 @@ function App() {
       });
       if (response.ok) {
         const data = await response.json();
-        setFullJobDescription(data);
+        setFullJobDescription(data.fullJobDescription)
       } else {
         console.error("Failed to fetch full job description");
       }
