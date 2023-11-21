@@ -5,6 +5,7 @@ import SubmitText from "../components/SubmitText";
 import ChooseButton from "../components/ChooseButton";
 import ViewButton from "../components/ViewButton";
 import JobModal from "../components/JobModal";
+import "./loadingCircle.css"
 
 function JobListingPage({
   handleFileUpload,
@@ -14,36 +15,30 @@ function JobListingPage({
   sendJobDForView,
   jobList,
   fullJobDescription,
+  loading,
 }) {
-  const [selectedOption, setSelectedOption] = useState(null);
+  const [uploadOption, setUploadOption] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [isLoading, setIsLoading] = useState(false); // Add loading state
-  const [isUploading, setIsUploading] = useState(false);
-
-  const handleOptionChange = (event) => {
-    setSelectedOption(event.target.value);
+  const [isLoading, setIsLoading] = useState(false);
+  const handleUploadOptionChange = (option) => {
+    setUploadOption(option);
   };
-
-  const handleFileUploadWrapper = async (file, fileType) => {
-    setIsUploading(true); // Set uploading to true before starting upload
-    await handleFileUpload(file, fileType);
-    setIsUploading(false); // Set uploading to false after upload completion
+  const renderUploadForm = () => {
+    switch (uploadOption) {
+      case "file":
+        return <UploadFile onFileUpload={handleFileUpload} fileType="job" />;
+      case "text":
+        return <SubmitText onTextSubmit={handleTextSubmit} fileType="job" />;
+      default:
+        return null;
+    }
   };
-
-  const handleTextSubmitWrapper = async (text, fileType) => {
-    setIsUploading(true); // Set uploading to true before starting text submit
-    await handleTextSubmit(text, fileType);
-    setIsUploading(false); // Set uploading to false after text submit completion
-  };
-
   const openModal = () => {
     setIsModalOpen(true);
   };
-
   const closeModal = () => {
     setIsModalOpen(false);
   };
-
   const handleViewButtonClick = (redirectUrl) => {
     sendJobDForView(redirectUrl);
     openModal();
@@ -52,12 +47,12 @@ function JobListingPage({
   useEffect(() => {
     const fetchData = async () => {
       try {
-        setIsLoading(true); // Set loading to true when fetching data
+        setIsLoading(true);
         await generateJobList();
       } catch (error) {
         console.error("Error fetching job data:", error);
       } finally {
-        setIsLoading(false); // Set loading to false after fetching data
+        setIsLoading(false);
       }
     };
 
@@ -65,55 +60,54 @@ function JobListingPage({
   }, []);
 
   return (
-    <div>
-      <h1>Job Description Page</h1>
-      <Link to="/">
-        <button>Upload New CV</button>
-      </Link>
-      <select value={selectedOption} onChange={handleOptionChange}>
-        <option value="">Select an option</option>
-        <option value="text">Submit Text</option>
-        <option value="file">Upload File</option>
-      </select>
-
-      {isUploading && <p>Loading...</p>}
-
-      {selectedOption === "text" && !isUploading && (
-        <SubmitText onTextSubmit={handleTextSubmitWrapper} fileType="job" />
-      )}
-
-      {selectedOption === "file" && !isUploading && (
-        <UploadFile onFileUpload={handleFileUploadWrapper} fileType="job" />
-      )}
-      {isLoading ? (
-        <p>Loading...</p>
-      ) : jobList.length > 0 ? (
-        <ul>
-          {jobList.map((job, index) => (
-            <li key={index}>
-              <h2>{job.title}</h2>
-              <h4>salary: {job.salary_min}</h4>
-              <p>{job.description}</p>
-              <ChooseButton
-                onClick={() => sendJobDescriptionToServer(job.redirect_url)}
-              />
-              {/* Pass the handleViewButtonClick function to the ViewButton */}
-              <ViewButton
-                onClick={() => handleViewButtonClick(job.redirect_url)}
-              />
-            </li>
-          ))}
-        </ul>
-      ) : (
-        <p>No jobs available.</p>
-      )}
-      {/* Job Modal */}
-      <JobModal
-        isOpen={isModalOpen}
-        onClose={closeModal}
-        fullJobDescription={fullJobDescription}
-      />
-    </div>
+    <div className="jobListingPage">
+      <div>
+        <h1>Job Description Page</h1>
+        <Link to="/">
+          <button>Upload New CV</button>
+        </Link>
+        {/* Select dropdown for choosing upload option */}
+        <label htmlFor="uploadOption">Choose Upload Option:</label>
+        <select
+          id="uploadOption"
+          onChange={(e) => handleUploadOptionChange(e.target.value)}
+          value={uploadOption || ""}
+        >
+          <option value="">Select...</option>
+          <option value="file">Upload File</option>
+          <option value="text">Submit Text</option>
+        </select>
+        {renderUploadForm()}
+        {isLoading ? (
+          <p>Loading...</p>
+        ) : jobList.length > 0 ? (
+          <ul>
+            {jobList.map((job, index) => (
+              <li key={index}>
+                <h2>{job.title}</h2>
+                <h4>salary: {job.salary_min}</h4>
+                <p>{job.description}</p>
+                <ChooseButton
+                  onClick={() => sendJobDescriptionToServer(job.redirect_url)}
+                />
+                {/* Pass the handleViewButtonClick function to the ViewButton */}
+                <ViewButton
+                  onClick={() => handleViewButtonClick(job.redirect_url)}
+                />
+              </li>
+            ))}
+          </ul>
+        ) : (
+          <p>No jobs available.</p>
+        )}
+        <JobModal
+          isOpen={isModalOpen}
+          onClose={closeModal}
+          fullJobDescription={fullJobDescription}
+        />
+      </div>
+      {loading ? <div className="loading"><p>Loading...</p></div> : ""}
+    </div >
   );
 }
 
