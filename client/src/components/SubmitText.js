@@ -1,4 +1,7 @@
 import React, { useState } from "react";
+import { Button, Input, Flex } from 'antd';
+
+const { TextArea } = Input;
 
 function SubmitText({ onTextSubmit, fileType }) {
   const [text, setText] = useState("");
@@ -20,9 +23,25 @@ function SubmitText({ onTextSubmit, fileType }) {
 
   return (
     <div>
-      <h2>Submit {fileType === "cv" ? "CV" : "Job Description"} (Text)</h2>
-      <textarea rows="4" cols="50" value={text} onChange={handleTextChange} />
-      <button onClick={handleSubmitText}>Submit Text</button>
+      <Flex align="center" gap='large' vertical>
+        <TextArea
+          style={{
+            borderRadius: '2px',
+            border: '1px solid var(--neutral-5, #D9D9D9)',
+            background: 'var(--neutral-1, #FFF)',
+            width: '100%',
+            minHeight: '300px'
+          }}
+          text="Please insert your CV here"
+          value={text}
+          onChange={handleTextChange}
+          size="medium"
+          state='normal'
+          filled='false' />
+        <Button title="Submit" onClick={handleSubmitText} type="primary" size="large" shape="normal" state  >Submit</Button>
+
+      </Flex>
+
     </div>
   );
 }
