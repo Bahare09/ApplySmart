@@ -1,12 +1,10 @@
 import React, { useState } from "react";
 import SubmitText from "../components/SubmitText";
 import UploadFile from "../components/UploadFile";
-// ... other imports
-
+import LoadingCircle from "../components/LoadingCircle"
+import Graphic from "../components/Graphic";
 import { Segmented } from 'antd';
-import { Image, Flex } from 'antd';
-import "./loadingCircle.css";
-import graphic from "./images/Graphic.jpg"
+import { Flex } from 'antd';
 
 function HomePage({ handleFileUpload, handleTextSubmit, loading }) {
   const [selectedOption, setSelectedOption] = useState('file');
@@ -16,15 +14,9 @@ function HomePage({ handleFileUpload, handleTextSubmit, loading }) {
   };
 
   return (
-    <Flex justify={"center"} align={"center"} gap={'small'} style={{ padding: '50px' }} flex={1}>
-      <div>
-        <Image
+    <Flex justify={"center"} align={"center"} gap={'small'} style={{ padding: '50px' }} >
+      <Graphic />
 
-          src={graphic}
-        />
-      </div>
-
-      {/* <Sider style={{ background: 'red' }}>Sider</Sider> */}
       <Flex justify={"center"} align={"center"} gap={'small'} vertical flex={1.5}>
         <div style={{ textAlign: 'center' }}>
           <h1>ApplySmart</h1>
@@ -53,14 +45,10 @@ function HomePage({ handleFileUpload, handleTextSubmit, loading }) {
           {selectedOption === "file" && (
             <UploadFile onFileUpload={handleFileUpload} fileType="cv" />
           )}
-          <div>
-            {loading ? <div className="loading"><p>Loading...</p></div> : ""}
-          </div>
+
+          {loading ? <LoadingCircle /> : ""}
+
         </Flex>
-
-
-
-
       </Flex>
     </Flex >
 

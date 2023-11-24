@@ -10,8 +10,6 @@ function UploadFile({ onFileUpload, fileType }) {
 
   const handleFileChange = (info) => {
     const fileList = [...info.fileList];
-
-    // Only allow one file to be uploaded
     const file = fileList.length > 0 ? fileList[0].originFileObj : null;
 
     setSelectedFile(file);
@@ -19,46 +17,44 @@ function UploadFile({ onFileUpload, fileType }) {
 
   const handleFileUpload = () => {
     if (selectedFile) {
-      onFileUpload(selectedFile, fileType); // Pass the selected file and type
+      onFileUpload(selectedFile, fileType);
     } else {
       alert("Please select a file to upload.");
     }
   };
 
   return (
-    <div>
-      <Flex gap='large' vertical  >
-        <Dragger
-          name="file"
-          multiple={false}
-          accept=".pdf"
-          onChange={handleFileChange}
-          beforeUpload={() => false}
-          style={{
-            borderRadius: '2px',
-            border: '1px solid var(--neutral-5, #D9D9D9)',
-            background: 'var(--neutral-1, #FFF)',
-            width: '100%',
-            minHeight: '300px'
-          }}
-        >
-          <p className="ant-upload-drag-icon">
-            <InboxOutlined />
-          </p>
-          <p className="ant-upload-text">
-            Click or drag file to this area to upload
-          </p>
-          <p className="ant-upload-hint">
-            Support for a single upload. Strictly prohibit from uploading company
-            data or other band files.
-          </p>
-        </Dragger>
-
-        {/* <input type="file" accept=".pdf" onChange={handleFileChange} /> */}
-
-        <Button title="Submit" onClick={handleFileUpload} type="primary" size="large" shape="normal" state  >Submit</Button>
+    <Flex gap='large' vertical  >
+      <Dragger
+        name="file"
+        multiple={false}
+        accept=".pdf"
+        onChange={handleFileChange}
+        beforeUpload={() => false}
+        style={{
+          borderRadius: '2px',
+          border: '1px solid var(--neutral-5, #D9D9D9)',
+          background: 'var(--neutral-1, #FFF)',
+          width: '100%',
+          minHeight: '300px'
+        }}
+      >
+        <p className="ant-upload-drag-icon">
+          <InboxOutlined />
+        </p>
+        <p className="ant-upload-text">
+          Click or drag file to this area to upload
+        </p>
+        <p className="ant-upload-hint">
+          Support for a single upload. Strictly prohibit from uploading<br /> company
+          data or other band files.
+        </p>
+      </Dragger>
+      <Flex align="flex-start" justify="end">
+        <Button title="Submit" onClick={handleFileUpload} type="primary" size="large" shape="normal" >Submit</Button>
       </Flex>
-    </div >
+
+    </Flex >
   );
 }
 
