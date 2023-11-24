@@ -5,6 +5,7 @@ import SubmitText from "../components/SubmitText";
 import ChooseButton from "../components/ChooseButton";
 import ViewButton from "../components/ViewButton";
 import JobModal from "../components/JobModal";
+import LoadingCircle from "../components/LoadingCircle";
 
 function JobListingPage({
   handleFileUpload,
@@ -105,7 +106,7 @@ function JobListingPage({
           fullJobDescription={fullJobDescription}
         />
       </div>
-      {loading ? <div className="loading"><p>Loading...</p></div> : ""}
+      {loading ? <LoadingCircle /> : ""}
     </div >
   );
 }

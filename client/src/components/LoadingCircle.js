@@ -1,6 +1,6 @@
 import "./loadingCircle.css";
 
-function HomePage() {
+function LoadingCircle() {
 
     return (
         <div className="loading"><p>Loading...</p></div>
@@ -8,4 +8,4 @@ function HomePage() {
 
 }
 
-export default HomePage;
+export default LoadingCircle;
