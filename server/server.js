@@ -11,6 +11,7 @@ const { SubmitText } = require("./functions/submitText");
 const { jobsList } = require("./functions/jobsList");
 const { individualJob } = require("./functions/individualJob");
 const { sendJobDForView } = require("./functions/sendJobDForView");
+dotenv.config();
 app.use(express.json());
 app.use(
   cors({
