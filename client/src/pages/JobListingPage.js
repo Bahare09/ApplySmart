@@ -26,6 +26,22 @@ function JobListingPage({
   const handleUploadOptionChange = (option) => {
     setUploadOption(option);
   };
+
+  const handleMenuClick = ({ key }) => {
+    handleUploadOptionChange(key);
+  };
+  const items = [
+    {
+      key: '1',
+      label: 'Upload a job description file ',
+      value: "file",
+    },
+    {
+      key: '2',
+      label: 'Submit the text for the job description',
+      value: "text",
+    }
+  ];
   const renderUploadForm = () => {
     switch (uploadOption) {
       case "file":
@@ -64,22 +80,47 @@ function JobListingPage({
 
   return (
     <div className="jobListingPage">
-      <Flex vertical>
-        <h1>Job Description Page</h1>
-        <Link to="/">
-          <button>Upload New CV</button>
-        </Link>
-        {/* Select dropdown for choosing upload option */}
-        <label htmlFor="uploadOption">Choose Upload Option:</label>
-        <select
-          id="uploadOption"
-          onChange={(e) => handleUploadOptionChange(e.target.value)}
-          value={uploadOption || ""}
-        >
-          <option value="">Select...</option>
-          <option value="file">Upload File</option>
-          <option value="text">Submit Text</option>
-        </select>
+      <Flex gap="56px" style={{ background: "var(--white, #FFF)", padding: "44px 68px", width: "Hug (1,340px)", height: "Hug (1,662px)" }} vertical>
+        <Flex justify="end" vertical>
+          <Flex justify="space-between">
+            <Title level={2} size={"medium"}>Tailor CV</Title>
+            <Space>
+              <Link to="/">
+                <Button type="link" size="medium" title="Update your CV">Update your CV</Button>
+              </Link>
+              <Dropdown
+                overlay={(
+                  <Menu onClick={handleMenuClick}>
+                    {items.map(item => (
+                      <Menu.Item key={item.value}>{item.label}</Menu.Item>
+                    ))}
+                  </Menu>)
+                }
+              >
+                <a>
+                  <Space>
+                    Tailor CV for a specific job
+                    <DownOutlined />
+                  </Space>
+                </a>
+              </Dropdown>
+            </Space>
+          </Flex>
+
+          <Paragraph disabled >Based on your CV, we’ve recommended the following job opportunities.<br /> Please select the one you’re interested in, then we will tailor your CV based for the job description</Paragraph>
+
+          {/* <select
+            id="uploadOption"
+            onChange={(e) => handleUploadOptionChange(e.target.value)}
+            value={uploadOption || ""}
+          >
+            <option value="">Select...</option>
+            <option value="file">Upload File</option>
+            <option value="text">Submit Text</option>
+          </select> */}
+        </Flex>
+
+
         {renderUploadForm()}
         {isLoading ? (
           <p>Loading...</p>
