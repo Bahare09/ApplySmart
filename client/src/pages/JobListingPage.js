@@ -4,7 +4,7 @@ import UploadFile from "../components/UploadFile";
 import SubmitText from "../components/SubmitText";
 import JobModal from "../components/JobModal";
 import LoadingCircle from "../components/LoadingCircle";
-import { Button, Dropdown, Space, Menu, Flex, List, Typography } from "antd";
+import { Button, Dropdown, Space, Flex, List, Typography } from "antd";
 import { DownOutlined } from '@ant-design/icons';
 import { Content } from "antd/es/layout/layout";
 const { Title, Paragraph, } = Typography;
@@ -23,25 +23,21 @@ function JobListingPage({
   const [uploadOption, setUploadOption] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
-  const handleUploadOptionChange = (option) => {
-    setUploadOption(option);
-  };
+  // const handleUploadOptionChange = (option) => {
+  //   setUploadOption(option);
+  // };
 
-  const handleMenuClick = ({ key }) => {
-    handleUploadOptionChange(key);
-  };
   const items = [
     {
-      key: '1',
-      label: 'Upload a job description file ',
-      value: "file",
+      label: <Button type="link" onClick={() => setUploadOption("file")}> Upload a job description file </Button>,
+      key: '0',
     },
     {
-      key: '2',
-      label: 'Submit the text for the job description',
-      value: "text",
-    }
+      label: <Button type="link" onClick={() => setUploadOption("text")}> Submit the text for the job description</Button>,
+      key: '1',
+    },
   ];
+
   const renderUploadForm = () => {
     switch (uploadOption) {
       case "file":
@@ -89,37 +85,22 @@ function JobListingPage({
                 <Button type="link" size="medium" title="Update your CV">Update your CV</Button>
               </Link>
               <Dropdown
-                overlay={(
-                  <Menu onClick={handleMenuClick}>
-                    {items.map(item => (
-                      <Menu.Item key={item.value}>{item.label}</Menu.Item>
-                    ))}
-                  </Menu>)
-                }
+                menu={{
+                  items,
+                }}
+                trigger={['click']}
               >
-                <a>
+                <Button type="link" onClick={(e) => setUploadOption(null)}>
                   <Space>
                     Tailor CV for a specific job
                     <DownOutlined />
                   </Space>
-                </a>
+                </Button>
               </Dropdown>
             </Space>
           </Flex>
-
           <Paragraph disabled >Based on your CV, we’ve recommended the following job opportunities.<br /> Please select the one you’re interested in, then we will tailor your CV based for the job description</Paragraph>
-
-          {/* <select
-            id="uploadOption"
-            onChange={(e) => handleUploadOptionChange(e.target.value)}
-            value={uploadOption || ""}
-          >
-            <option value="">Select...</option>
-            <option value="file">Upload File</option>
-            <option value="text">Submit Text</option>
-          </select> */}
         </Flex>
-
 
         {renderUploadForm()}
         {isLoading ? (
@@ -153,7 +134,6 @@ function JobListingPage({
                     </Flex>
                     <Title level={5}>Salary:{item.salary_min}</Title>
                     <Paragraph>{item.description}</Paragraph>
-
                   </Content>
                 </List.Item>
               )}
