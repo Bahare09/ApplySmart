@@ -3,7 +3,6 @@ const {
 } = require("./extractJobDescriptionFromURL");
 const sendJobDForView = async (req, res, db) => {
   const { Url } = req.body;
-  console.log(Url);
   // Check if Url is provided
   if (!Url) {
     return res
@@ -12,7 +11,6 @@ const sendJobDForView = async (req, res, db) => {
   }
   try {
     const fullJobDescription = await extractJobDescriptionFromURL(Url);
-    console.log(fullJobDescription);
     res.json({ fullJobDescription: fullJobDescription });
   } catch (error) {
     console.error("Error extracting job description:", error.message);
