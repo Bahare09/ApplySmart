@@ -9,7 +9,6 @@ import { DownOutlined } from '@ant-design/icons';
 import { Content } from "antd/es/layout/layout";
 const { Title, Paragraph, } = Typography;
 
-
 function JobListingPage({
   handleFileUpload,
   handleTextSubmit,
@@ -54,6 +53,7 @@ function JobListingPage({
   const closeModal = () => {
     setIsModalOpen(false);
   };
+
   const handleViewButtonClick = (redirectUrl) => {
     sendJobDForView(redirectUrl);
     openModal();
