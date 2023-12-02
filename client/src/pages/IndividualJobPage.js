@@ -1,10 +1,14 @@
 import React from "react";
 import { Link } from "react-router-dom";
+import { Flex } from "antd";
+import Top from "../components/Top";
 
-function IndividualJobPage({ resultData }) {
+function IndividualJobPage({ resultData, handleFileUpload,
+  handleTextSubmit }) {
   return (
-    <div>
-      <h1>individual job page</h1>
+    <Flex gap="56px" style={{ background: "var(--white, #FFF)", padding: "44px 68px", width: "Hug (1,340px)", height: "Hug (1,662px)" }} vertical>
+      <Top handleFileUpload={handleFileUpload}
+        handleTextSubmit={handleTextSubmit} />
       <Link to="/joblisting">
         <button>Back</button>
       </Link>
@@ -26,7 +30,7 @@ function IndividualJobPage({ resultData }) {
       </div>
       {resultData.url && <button><a href={resultData.url} target="blank" alt="job link">Apply</a> </button>}
 
-    </div>
+    </Flex>
   );
 }
 

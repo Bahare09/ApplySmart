@@ -183,7 +183,8 @@ function App() {
         />
         <Route
           path="/individualJob"
-          element={<IndividualJobPage resultData={resultData} />}
+          element={<IndividualJobPage resultData={resultData} handleFileUpload={handleFileUpload}
+            handleTextSubmit={handleTextSubmit} />}
         />
       </Routes>
     </div>
