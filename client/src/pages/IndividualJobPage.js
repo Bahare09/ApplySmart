@@ -1,6 +1,7 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import { Flex } from "antd";
+import { Button, Flex } from "antd";
+import { ArrowLeftOutlined } from "@ant-design/icons"
 import Top from "../components/Top";
 
 function IndividualJobPage({ resultData, handleFileUpload,
@@ -10,7 +11,7 @@ function IndividualJobPage({ resultData, handleFileUpload,
       <Top handleFileUpload={handleFileUpload}
         handleTextSubmit={handleTextSubmit} />
       <Link to="/joblisting">
-        <button>Back</button>
+        <Button><ArrowLeftOutlined />Back</Button>
       </Link>
       <div>
         <p>Job Description</p>
