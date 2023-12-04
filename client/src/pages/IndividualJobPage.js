@@ -1,9 +1,10 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import { Button, Flex, Tabs } from "antd";
-import { ArrowLeftOutlined } from "@ant-design/icons"
+import { Button, Flex, Divider } from "antd";
+import { ArrowLeftOutlined } from "@ant-design/icons";
 import Top from "../components/Top";
 import { TailoredVersion } from "../components/TailoredVersion";
+import SelectedJobDetails from "../components/SelectedJobDetails";
 
 function IndividualJobPage({ resultData, handleFileUpload,
   handleTextSubmit }) {
@@ -17,19 +18,17 @@ function IndividualJobPage({ resultData, handleFileUpload,
       <Link to="/joblisting">
         <Button><ArrowLeftOutlined />Back</Button>
       </Link>
-      <Flex align="space-between">
-        <Flex vertical>
-          <p>Selected job</p>
-          <div>{resultData.description.trim().split('\n\n').map((paragraph, index) => <p key={index}>{paragraph}</p>)}</div>
-        </Flex>
+      <Flex >
+        <SelectedJobDetails resultData={resultData} />
+        <Divider style={{ height: "100%" }} type="vertical" />
         <TailoredVersion cv={cv} coverLetter={coverLetter} />
       </Flex>
 
-      <div>
+      {/* <div>
         <h2>JobFit</h2>
         <p>{resultData.jobFitForTailoredCv}</p>
-      </div>
-      {resultData.url && <button><a href={resultData.url} target="blank" alt="job link">Apply</a> </button>}
+      </div> */}
+
 
     </Flex>
   );

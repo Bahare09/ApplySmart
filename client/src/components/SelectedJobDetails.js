@@ -1,7 +1,6 @@
-// SelectedJobDetails.jsx
 import React from "react";
-import { Button, Flex, Typography, Divider, Space } from "antd";
-import { ArrowLeftOutlined, LinkOutlined } from "@ant-design/icons";
+import { Button, Flex, Typography, Space } from "antd";
+import { LinkOutlined } from "@ant-design/icons";
 const { Title, Text } = Typography;
 
 const SelectedJobDetails = ({ resultData }) => {
