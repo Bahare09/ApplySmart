@@ -25,8 +25,11 @@ function JobModal({ isOpen, onClose, fullJobDescription, handleOk }) {
     </Modal>
   };
 
-  return (
-    renderJobDescription()
+  return (<div className={`modal ${isOpen ? "open" : "closed"}`}>
+    {renderJobDescription()}
+
+  </div>
+
   );
 }
 export default JobModal;
