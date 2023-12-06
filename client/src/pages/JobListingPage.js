@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from "react";
 import JobModal from "../components/JobModal";
 import LoadingCircle from "../components/LoadingCircle";
-import Top from "../components/Top"
+import Top from "../components/Top";
 import { Button, Space, Flex, List, Typography } from "antd";
 import { Content } from "antd/es/layout/layout";
-const { Title, Paragraph, } = Typography;
+const { Title, Paragraph } = Typography;
 
 function JobListingPage({
   handleFileUpload,
@@ -18,10 +18,12 @@ function JobListingPage({
 }) {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+  const [selectedJobUrl, setSelectedJobUrl] = useState(""); // Added this line
 
   const openModal = () => {
     setIsModalOpen(true);
   };
+
   const closeModal = () => {
     setIsModalOpen(false);
   };
@@ -29,6 +31,11 @@ function JobListingPage({
   const handleViewButtonClick = (redirectUrl) => {
     sendJobDForView(redirectUrl);
     openModal();
+    setSelectedJobUrl(redirectUrl);
+  };
+
+  const tailorCV = () => {
+    sendJobDescriptionToServer(selectedJobUrl);
   };
 
   useEffect(() => {
@@ -48,18 +55,31 @@ function JobListingPage({
 
   return (
     <div className="jobListingPage">
-      <Flex gap="56px" style={{ background: "var(--white, #FFF)", padding: "44px 68px", width: "Hug (1,340px)", height: "Hug (1,662px)" }} vertical>
-        <Top handleFileUpload={handleFileUpload}
-          handleTextSubmit={handleTextSubmit} />
+      <Flex
+        gap="56px"
+        style={{
+          background: "var(--white, #FFF)",
+          padding: "44px 68px",
+          width: "Hug (1,340px)",
+          height: "Hug (1,662px)",
+        }}
+        vertical
+      >
+        <Top
+          handleFileUpload={handleFileUpload}
+          handleTextSubmit={handleTextSubmit}
+        />
         {isLoading ? (
           <p>Loading...</p>
         ) : jobList.length > 0 ? (
           <Flex gap="32px" vertical>
             <Space>
-              <Title level={3} size={"medium"}>Recommended jobs</Title>
+              <Title level={3} size={"medium"}>
+                Recommended jobs
+              </Title>
             </Space>
             <List
-              itemLayout='horizantal'
+              itemLayout="horizantal"
               dataSource={jobList}
               pagination={{
                 onChange: (page) => {
@@ -67,17 +87,43 @@ function JobListingPage({
                 },
                 pageSize: 5,
                 align: "center",
-                position: "bottom"
+                position: "bottom",
               }}
               renderItem={(item, index) => (
-                <List.Item
-                >
+                <List.Item>
                   <Content>
-                    <Flex gap="16px" style={{ position: "relative" }} align="flex-start" >
-                      <Title level={5} style={{ flex: "1", alignItems: "flex-start", margin: "0" }}>{item.title}</Title>
-                      <Flex gap={"24px"} align="flex-start" style={{ position: "relative", display: "inline-flex" }}>
-                        <Button onClick={() => handleViewButtonClick(item.redirect_url)}> Quick view</Button>
-                        <Button type="primary" onClick={() => sendJobDescriptionToServer(item.redirect_url)}> Tailor CV for this job</Button>
+                    <Flex
+                      gap="16px"
+                      style={{ position: "relative" }}
+                      align="flex-start"
+                    >
+                      <Title
+                        level={5}
+                        style={{
+                          flex: "1",
+                          alignItems: "flex-start",
+                          margin: "0",
+                        }}
+                      >
+                        {item.title}
+                      </Title>
+                      <Flex
+                        gap={"24px"}
+                        align="flex-start"
+                        style={{ position: "relative", display: "inline-flex" }}
+                      >
+                        <Button
+                          onClick={() =>
+                            handleViewButtonClick(item.redirect_url)
+                          }
+                        >
+                          {" "}
+                          Quick view
+                        </Button>
+                        <Button type="primary" onClick={() => tailorCV()}>
+                          {" "}
+                          Tailor CV for this job
+                        </Button>
                       </Flex>
                     </Flex>
                     <Title level={5}>Salary:{item.salary_min}</Title>
@@ -87,7 +133,6 @@ function JobListingPage({
               )}
             />
           </Flex>
-
         ) : (
           <p>No jobs available.</p>
         )}
@@ -95,10 +140,11 @@ function JobListingPage({
           isOpen={isModalOpen}
           onClose={closeModal}
           fullJobDescription={fullJobDescription}
+          tailorCV={tailorCV}
         />
       </Flex>
       {loading ? <LoadingCircle /> : ""}
-    </div >
+    </div>
   );
 }
 
