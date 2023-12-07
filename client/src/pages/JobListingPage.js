@@ -117,11 +117,14 @@ function JobListingPage({
                             handleViewButtonClick(item.redirect_url)
                           }
                         >
-                          {" "}
                           Quick view
                         </Button>
-                        <Button type="primary" onClick={() => tailorCV()}>
-                          {" "}
+                        <Button
+                          type="primary"
+                          onClick={() =>
+                            sendJobDescriptionToServer(item.redirect_url)
+                          }
+                        >
                           Tailor CV for this job
                         </Button>
                       </Flex>
