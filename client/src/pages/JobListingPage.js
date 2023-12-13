@@ -70,7 +70,7 @@ function JobListingPage({
           handleTextSubmit={handleTextSubmit}
         />
         {isLoading ? (
-          <p>Loading...</p>
+          <LoadingCircle />
         ) : jobList.length > 0 ? (
           <Flex gap="32px" vertical>
             <Space>

@@ -1,5 +1,5 @@
 import { Image, Flex } from 'antd';
-import graphic from "./images/Graphic.svg"
+import graphic from "./images/Graphic-cover.svg"
 
 function Graphic() {
     return (
