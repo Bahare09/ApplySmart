@@ -14,7 +14,7 @@ function HomePage({ handleFileUpload, handleTextSubmit, loading }) {
   };
 
   return (
-    <Flex justify={"center"} align={"center"} gap={'small'} style={{ padding: '50px' }} >
+    <Flex justify={"center"} align={"start"} gap={'small'} style={{ padding: '50px', justifySelf: "center" }} >
       <Graphic />
 
       <Flex justify={"center"} align={"center"} gap={'small'} vertical flex={1.5}>
