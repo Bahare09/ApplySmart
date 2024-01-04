@@ -6,7 +6,6 @@ const { Title } = Typography;
 
 const SelectedJobDetails = ({ resultData }) => {
   const [isModalVisible, setIsModalVisible] = useState(false);
-  console.log(resultData);
 
   const showModal = () => {
     setIsModalVisible(true);
