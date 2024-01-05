@@ -1,30 +1,17 @@
 import React from "react";
-import { Tabs, Typography } from "antd";
+import { Flex, Tabs, Typography, Alert } from "antd";
 import DownloadCopySection from "./DownloadCopySection";
 
 const { Title, Text } = Typography;
 
-const boxStyle = {
-  width: "100%",
-  padding: "16px",
-  borderRadius: "8px",
-  background: "#f0f6ff", // Very light blue
-  color: "#000",
-  border: "1px solid #1890ff", // Blue border
-  marginBottom: "24px",
-};
+
 
 export const TailoredVersion = ({ cv, coverLetter, jobFit }) => {
   return (
-    <div
-      style={{
-        flex: "1",
-        width: "1440px",
-        height: "1622px",
-        top: "4px",
-        gap: "32px",
-      }}
-    >
+    <Flex
+      gap="32px"
+
+      vertical>
       <Title level={4}>The Tailor CV and Cover Letter</Title>
 
       {/* Tabs for CV, Cover Letter, and Job Fit */}
@@ -32,21 +19,18 @@ export const TailoredVersion = ({ cv, coverLetter, jobFit }) => {
         defaultActiveKey="1"
         type="card"
         size={"middle"}
+        tabBarStyle={{ marginBottom: "32px" }}
         items={[
           {
             label: "CV",
             Title: "CV",
             key: "1",
             children: (
-              <div>
-                <div style={boxStyle}>
-                  <Text>
-                    Content is powered by OpenAI. Kindly review the content and
-                    make any edits according to your preference.
-                  </Text>
-                </div>
+              <Flex gap="32px" vertical>
+                <Alert message="Content is powered by OpenAI. Kindly review the content and
+                    make any edits according to your preference." type="info" showIcon />
                 <DownloadCopySection text={cv} fileName="cv.txt" title="CV" />
-              </div>
+              </Flex>
             ),
           },
           {
@@ -54,19 +38,15 @@ export const TailoredVersion = ({ cv, coverLetter, jobFit }) => {
             Title: "Cover letter",
             key: "2",
             children: (
-              <div>
-                <div style={boxStyle}>
-                  <Text>
-                    Content is powered by OpenAI. Kindly review the content and
-                    make any edits according to your preference.
-                  </Text>
-                </div>
+              <Flex gap="32px" vertical>
+                <Alert message="Content is powered by OpenAI. Kindly review the content and
+                    make any edits according to your preference." type="info" showIcon />
                 <DownloadCopySection
                   text={coverLetter}
                   fileName="coverLetter.txt"
                   title="Cover Letter"
                 />
-              </div>
+              </Flex>
             ),
           },
           {
@@ -74,19 +54,15 @@ export const TailoredVersion = ({ cv, coverLetter, jobFit }) => {
             Title: "Job Fit",
             key: "3",
             children: (
-              <div>
-                <div style={boxStyle}>
-                  <Text>
-                    Content is powered by OpenAI. Kindly review the content and
-                    make any edits according to your preference.
-                  </Text>
-                </div>
+              <Flex gap="32px" vertical>
+                <Alert message="Content is powered by OpenAI. Kindly review the content and
+                    make any edits according to your preference." type="info" showIcon />
                 <DownloadCopySection text={jobFit} title="Job Fit" />
-              </div>
+              </Flex>
             ),
           },
         ]}
       />
-    </div>
+    </Flex>
   );
 };

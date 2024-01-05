@@ -24,7 +24,7 @@ const SelectedJobDetails = ({ resultData }) => {
             {resultData.title}
           </Title> */}
         </div>
-        <div>
+        <Flex gap="24px">
           <Button onClick={showModal}>View the job description</Button>
           <Button
             type="primary"
@@ -32,7 +32,7 @@ const SelectedJobDetails = ({ resultData }) => {
           >
             Apply on the job listing website
           </Button>
-        </div>
+        </Flex>
       </Flex>
 
       {/* Job Description Modal */}
