@@ -18,7 +18,7 @@ function JobListingPage({
 }) {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
-  const [selectedJobUrl, setSelectedJobUrl] = useState(""); // Added this line
+  const [selectedJobUrl, setSelectedJobUrl] = useState("");
 
   const openModal = () => {
     setIsModalOpen(true);
@@ -144,6 +144,7 @@ function JobListingPage({
           onClose={closeModal}
           fullJobDescription={fullJobDescription}
           tailorCV={tailorCV}
+          showTailorCVButton={selectedJobUrl !== ""} // Pass the condition to show the button
         />
       </Flex>
       {loading ? <LoadingCircle /> : ""}
