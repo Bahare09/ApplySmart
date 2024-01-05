@@ -34,13 +34,11 @@ function IndividualJobPage({ resultData, handleFileUpload, handleTextSubmit }) {
       </Link>
 
       {/* Selected Job Section */}
-      <Flex style={{ marginBottom: "24px" }}>
-        <div style={{ flex: 1 }}>
-          <SelectedJobDetails resultData={resultData} />
-        </div>
+      <Flex vertical gap="56px">
+        <SelectedJobDetails resultData={resultData} />
+        <TailoredVersion cv={cv} coverLetter={coverLetter} jobFit={jobFit} />
       </Flex>
 
-      <TailoredVersion cv={cv} coverLetter={coverLetter} jobFit={jobFit} />
     </Flex>
   );
 }
