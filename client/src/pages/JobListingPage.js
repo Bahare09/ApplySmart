@@ -3,8 +3,10 @@ import JobModal from "../components/JobModal";
 import LoadingCircle from "../components/LoadingCircle";
 import Top from "../components/Top";
 import { Button, Space, Flex, List, Typography } from "antd";
+import { LinkOutlined } from "@ant-design/icons";
 import { Content } from "antd/es/layout/layout";
-const { Title, Paragraph } = Typography;
+
+const { Title, Paragraph, Link: AntdLink } = Typography; // Destructuring Link as AntdLink
 
 function JobListingPage({
   handleFileUpload,
@@ -98,11 +100,12 @@ function JobListingPage({
                       align="flex-start"
                     >
                       <Title
-                        level={5}
+                        level={4}
                         style={{
                           flex: "1",
                           alignItems: "flex-start",
                           margin: "0",
+                          marginTop: 10,
                         }}
                       >
                         {item.title}
@@ -131,6 +134,17 @@ function JobListingPage({
                     </Flex>
                     <Title level={5}>Salary:{item.salary_min}</Title>
                     <Paragraph>{item.description}</Paragraph>
+                    <AntdLink
+                      href={item.redirect_url}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
+                      <LinkOutlined /> View job (open a new tab)
+                    </AntdLink>
+                    <Typography.Text type="secondary">
+                      {" "}
+                      You will be redirected to Adzuna, a job ads website.
+                    </Typography.Text>
                   </Content>
                 </List.Item>
               )}
