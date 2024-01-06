@@ -74,7 +74,7 @@ function HomePage({ handleFileUpload, handleTextSubmit, loading }) {
           {loading ? <LoadingCircle /> : ""}
         </Flex>
       </Flex>
-      <Footer />
+
     </Flex>
   );
 }
