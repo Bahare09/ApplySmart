@@ -4,6 +4,7 @@ import HomePage from "./pages/HomePage";
 import JobListingPage from "./pages/JobListingPage";
 import IndividualJobPage from "./pages/IndividualJobPage";
 import apiUrl from "./api";
+import AppFooter from "./components/Footer";
 function App() {
   const [jobList, setJobList] = useState([]);
   const [resultData, setResultData] = useState([]);
@@ -187,6 +188,7 @@ function App() {
             handleTextSubmit={handleTextSubmit} />}
         />
       </Routes>
+      <AppFooter />
     </div>
   );
 }
