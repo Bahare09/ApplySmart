@@ -1,37 +1,18 @@
 import React from "react";
-import { Button, Typography } from "antd";
+import { Layout, Flex, Divider, Button, Typography, } from "antd";
 
 const { Text } = Typography;
+const { Footer, Content } = Layout;
 
-const Footer = () => {
+const AppFooter = () => {
+  const layoutStyle = {
+    backgroundColor: "rgba(255, 255, 255, 1)",
+  };
+
   const footerStyle = {
-    width: "1440px",
-    height: "166px",
-    position: "absolute",
-    top: "858px",
-    padding: "0px 0px 24px 0px",
+    backgroundColor: "rgba(255, 255, 255, 1)",
     textAlign: "center",
-  };
-
-  const lineStyle = {
-    width: "100%",
-    height: "1px",
-    background: "#ccc",
-    margin: "12px 0",
-  };
-
-  const textStyle = {
-    fontSize: "18px",
-    fontWeight: "bold",
-  };
-
-  const buttonStyle = {
-    marginTop: "12px",
-  };
-
-  const rightsReservedStyle = {
-    fontSize: "14px",
-    marginTop: "12px",
+    fontSize: "12px",
   };
 
   const openGoogleForm = () => {
@@ -41,19 +22,18 @@ const Footer = () => {
   };
 
   return (
-    <div style={footerStyle}>
-      <div style={lineStyle}></div>
-      <Text style={textStyle}>
-        We'd like to hear what you think about your experience.
-      </Text>
-      <div style={lineStyle}></div>
-      <Button style={buttonStyle} type="primary" onClick={openGoogleForm}>
-        Send us feedback
-      </Button>
-      <div style={lineStyle}></div>
-      <Text style={rightsReservedStyle}>@All rights reserved ApplySmart</Text>
-    </div>
+    <Layout style={layoutStyle}>
+      <Content > <Flex justify="center" align="center" vertical>
+        <Divider horizontal>  We'd like to hear what you think about your experience.</Divider>
+        <Button onClick={openGoogleForm}>
+          Send us feedback
+        </Button>
+      </Flex></Content>
+      <Footer style={footerStyle}>
+        <Text style={footerStyle} disabled>@All rights reserved ApplySmart</Text>
+      </Footer>
+    </Layout>
   );
 };
 
-export default Footer;
+export default AppFooter;
