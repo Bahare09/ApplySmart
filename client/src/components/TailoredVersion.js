@@ -2,7 +2,7 @@ import React from "react";
 import { Flex, Tabs, Typography, Alert } from "antd";
 import DownloadCopySection from "./DownloadCopySection";
 
-const { Title, Text } = Typography;
+const { Title } = Typography;
 
 
 
