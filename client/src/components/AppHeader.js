@@ -1,11 +1,13 @@
 import { Flex, Layout, Typography, Image } from "antd";
 import Graphic from "../components/images/Graphic-header.svg"
 const { Title } = Typography;
+const { Header } = Layout
 
 
-const Header = () => {
+const AppHeader = () => {
+
     return (
-        <Layout row>
+        <Header style={{ backgroundColor: "rgba(250, 250, 250, 1)" }} >
             <Flex align="baseline" justify="left" gap="24px">
                 <Title level={4}>ApplySmart</Title>
                 <Image
@@ -13,12 +15,9 @@ const Header = () => {
                     height={"66px"}
                     src={Graphic}
                 />
-
-
             </Flex>
-
-        </Layout>
+        </Header>
     )
 }
 
-export default Header
+export default AppHeader
