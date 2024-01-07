@@ -5,6 +5,7 @@ import JobListingPage from "./pages/JobListingPage";
 import IndividualJobPage from "./pages/IndividualJobPage";
 import apiUrl from "./api";
 import AppFooter from "./components/Footer";
+import Header from "./components/Header";
 function App() {
   const [jobList, setJobList] = useState([]);
   const [resultData, setResultData] = useState([]);
@@ -156,6 +157,7 @@ function App() {
   };
   return (
     <div className="App">
+      <Header />
       <Routes>
         <Route
           path="/"
