@@ -3,9 +3,8 @@ import SubmitText from "../components/SubmitText";
 import UploadFile from "../components/UploadFile";
 import LoadingCircle from "../components/LoadingCircle";
 import Graphic from "../components/Graphic";
-import { Segmented } from "antd";
-import { Flex } from "antd";
-import Footer from "../components/Footer";
+import { Segmented, Flex, Typography } from "antd";
+const { Title } = Typography;
 
 function HomePage({ handleFileUpload, handleTextSubmit, loading }) {
   const [selectedOption, setSelectedOption] = useState("file");
@@ -30,24 +29,11 @@ function HomePage({ handleFileUpload, handleTextSubmit, loading }) {
         vertical
         flex={1.5}
       >
-        <div style={{ textAlign: "center" }}>
-          <h1>ApplySmart</h1>
-          <p
-            style={{
-              textAlign: "center",
-              color: " #000000d9",
-              fontFamily: "Roboto-Medium",
-              fontSize: "20px",
-              fontWeight: 500,
-              letterSpacing: 0,
-              lineHeight: "28px",
-            }}
-          >
-            Tailor your CV to align with the recommended job description,
-            <br />
-            Make your profile stand out among other candidates.
-          </p>
-        </div>
+        <Title level={4} style={{ textAlign: "center" }}>
+          Tailor your CV to align with the recommended job description,
+          <br />
+          Make your profile stand out among other candidates.
+        </Title>
 
         <Flex
           style={{ width: "100%", textAlign: "center" }}
