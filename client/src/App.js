@@ -160,9 +160,9 @@ function App() {
   };
   return (
     <div className="App">
-      <Layout style={{ backgroundColor: "rgba(250, 250, 250, 1)", gap: "32px" }}>
+      <Layout style={{ minHeight: "100vh", backgroundColor: "rgba(250, 250, 250, 1)" }}>
         <AppHeader />
-        <Content style={{ padding: "0 52px" }}>
+        <Content style={{ padding: "0 52px", minHeight: "calc(100vh - 66px - 166px - 50px)", flex: "1" }}>
           <Routes>
             <Route
               path="/"
