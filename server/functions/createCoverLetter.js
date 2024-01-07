@@ -14,7 +14,9 @@ const createCoverLetter = async (cvText, jobText) => {
         {
           role: "user",
           content: `Generate a distinctive cover letter that goes beyond duplicating information from my CV (${cvText}). Instead, focus on highlighting specific aspects of my experience, skills, and achievements that directly align with the requirements outlined in the job description (${jobText}).
-           Prioritize uniqueness and provide a fresh perspective that sets the cover letter apart from the CV. Avoid redundant details already present in the CV and emphasize what makes me uniquely qualified for this position. #CreativeCoverLetter`
+           Prioritise uniqueness and provide a fresh perspective that sets the cover letter apart from the CV. Avoid redundant details already present in the CV and emphasise what makes me uniquely qualified for this position. #CreativeCoverLetter
+           Please ensure the response is in British English.`
+
         },
       ],
     });
