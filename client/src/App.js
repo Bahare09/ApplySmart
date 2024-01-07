@@ -4,8 +4,11 @@ import HomePage from "./pages/HomePage";
 import JobListingPage from "./pages/JobListingPage";
 import IndividualJobPage from "./pages/IndividualJobPage";
 import apiUrl from "./api";
-import AppFooter from "./components/Footer";
-import Header from "./components/Header";
+import AppFooter from "./components/AppFooter";
+import AppHeader from "./components/AppHeader";
+import { Layout } from "antd";
+const { Content } = Layout
+
 function App() {
   const [jobList, setJobList] = useState([]);
   const [resultData, setResultData] = useState([]);
@@ -157,40 +160,44 @@ function App() {
   };
   return (
     <div className="App">
-      <Header />
-      <Routes>
-        <Route
-          path="/"
-          element={
-            <HomePage
-              handleFileUpload={handleFileUpload}
-              handleTextSubmit={handleTextSubmit}
-              loading={loading}
+      <Layout style={{ minHeight: "100vh", backgroundColor: "rgba(250, 250, 250, 1)" }}>
+        <AppHeader />
+        <Content style={{ padding: "0 52px", minHeight: "calc(100vh - 66px - 166px - 50px)", flex: "1" }}>
+          <Routes>
+            <Route
+              path="/"
+              element={
+                <HomePage
+                  handleFileUpload={handleFileUpload}
+                  handleTextSubmit={handleTextSubmit}
+                  loading={loading}
+                />
+              }
             />
-          }
-        />
-        <Route
-          path="/jobListing"
-          element={
-            <JobListingPage
-              handleFileUpload={handleFileUpload}
-              handleTextSubmit={handleTextSubmit}
-              generateJobList={generateJobList}
-              sendJobDescriptionToServer={sendJobDescriptionToServer}
-              jobList={jobList}
-              sendJobDForView={sendJobDForView}
-              fullJobDescription={fullJobDescription}
-              loading={loading}
+            <Route
+              path="/jobListing"
+              element={
+                <JobListingPage
+                  handleFileUpload={handleFileUpload}
+                  handleTextSubmit={handleTextSubmit}
+                  generateJobList={generateJobList}
+                  sendJobDescriptionToServer={sendJobDescriptionToServer}
+                  jobList={jobList}
+                  sendJobDForView={sendJobDForView}
+                  fullJobDescription={fullJobDescription}
+                  loading={loading}
+                />
+              }
             />
-          }
-        />
-        <Route
-          path="/individualJob"
-          element={<IndividualJobPage resultData={resultData} handleFileUpload={handleFileUpload}
-            handleTextSubmit={handleTextSubmit} />}
-        />
-      </Routes>
-      <AppFooter />
+            <Route
+              path="/individualJob"
+              element={<IndividualJobPage resultData={resultData} handleFileUpload={handleFileUpload}
+                handleTextSubmit={handleTextSubmit} />}
+            />
+          </Routes>
+        </Content>
+        <AppFooter />
+      </Layout>
     </div>
   );
 }
