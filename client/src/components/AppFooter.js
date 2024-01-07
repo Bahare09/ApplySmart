@@ -2,11 +2,12 @@ import React from "react";
 import { Layout, Flex, Divider, Button, Typography, } from "antd";
 
 const { Text } = Typography;
-const { Footer, Content } = Layout;
+const { Footer } = Layout;
 
 const AppFooter = () => {
   const layoutStyle = {
     backgroundColor: "rgba(255, 255, 255, 1)",
+    gap: "26px"
   };
 
   const footerStyle = {
@@ -23,12 +24,12 @@ const AppFooter = () => {
 
   return (
     <Layout style={layoutStyle}>
-      <Content > <Flex justify="center" align="center" vertical>
+      <Flex justify="center" align="center" vertical>
         <Divider horizontal>  We'd like to hear what you think about your experience.</Divider>
         <Button onClick={openGoogleForm}>
           Send us feedback
         </Button>
-      </Flex></Content>
+      </Flex>
       <Footer style={footerStyle}>
         <Text style={footerStyle} disabled>@All rights reserved ApplySmart</Text>
       </Footer>
