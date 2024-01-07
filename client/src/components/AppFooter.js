@@ -25,7 +25,7 @@ const AppFooter = () => {
   return (
     <Layout style={layoutStyle}>
       <Flex justify="center" align="center" vertical>
-        <Divider horizontal>  We'd like to hear what you think about your experience.</Divider>
+        <Divider >  We'd like to hear what you think about your experience.</Divider>
         <Button onClick={openGoogleForm}>
           Send us feedback
         </Button>
