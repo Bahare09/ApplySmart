@@ -13,12 +13,12 @@ function App() {
   const [jobList, setJobList] = useState([]);
   const [resultData, setResultData] = useState([]);
   const [fullJobDescription, setFullJobDescription] = useState("");
-  const [loading, setloading] = useState(false);
+  const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
   const handleFileUpload = async (file, fileType) => {
     if (file && fileType) {
       try {
-        setloading(true)
+        setLoading(true);
         const formData = new FormData();
         formData.append("file", file);
         formData.append("type", fileType); // Set the type field
@@ -27,10 +27,10 @@ function App() {
           body: formData,
         });
         if (response.ok) {
-          alert(
-            `${fileType === "cv" ? "CV" : "Job Description"
-            } uploaded successfully!`
-          );
+          // alert(
+          //   `${fileType === "cv" ? "CV" : "Job Description"
+          //   } uploaded successfully!`
+          // );
           // Navigate based on the fileType
           if (fileType === "cv") {
             navigate("/jobListing");
@@ -41,18 +41,21 @@ function App() {
           }
         } else {
           alert(
-            `${fileType === "cv" ? "CV" : "Job Description"} upload failed.`
+            `${
+              fileType === "cv" ? "CV" : "Job Description"
+            } upload failed.Please try again!`
           );
         }
       } catch (error) {
         console.error("An error occurred:", error);
       } finally {
-        setloading(false)
+        setLoading(false);
       }
     } else {
       alert(
-        `Please select a ${fileType === "cv" ? "CV" : "Job Description"
-        } file to upload.`
+        `Please select a ${
+          fileType === "cv" ? "CV" : "Job Description"
+        } file to upload. Please try again`
       );
       navigate("/");
     }
@@ -60,7 +63,7 @@ function App() {
   const handleTextSubmit = async (text, type) => {
     if (text && type) {
       try {
-        setloading(true)
+        setLoading(true);
         // Send a POST request to the backend with the text data and type
         const response = await fetch(apiUrl + "/submit-text", {
           method: "POST",
@@ -70,9 +73,9 @@ function App() {
           body: JSON.stringify({ text, type }),
         });
         if (response.ok) {
-          alert(
-            `${type === "cv" ? "CV" : "Job Description"} uploaded successfully!`
-          );
+          // alert(
+          //   `${type === "cv" ? "CV" : "Job Description"} uploaded successfully!`
+          // );
           // Navigate based on the fileType
           if (type === "cv") {
             navigate("/jobListing");
@@ -82,15 +85,23 @@ function App() {
             navigate("/individualJob");
           }
         } else {
-          alert(`${type === "cv" ? "CV" : "Job Description"} upload failed.`);
+          alert(
+            `${
+              type === "cv" ? "CV" : "Job Description"
+            } submit failed.Please try again.`
+          );
         }
       } catch (error) {
         console.error("An error occurred:", error);
       } finally {
-        setloading(false)
+        setLoading(false);
       }
     } else {
-      alert("Please enter text and select a type to submit.");
+      alert(
+        `Please write a ${
+          type === "cv" ? "CV" : "Job Description"
+        } text to submit.`
+      );
     }
   };
   const generateJobList = async () => {
@@ -109,8 +120,8 @@ function App() {
   const sendJobDescriptionToServer = async (jobRedirectURL) => {
     if (jobRedirectURL) {
       try {
-        setloading(true);
-        console.log(loading)
+        setLoading(true);
+        console.log(loading);
         const response = await fetch(apiUrl + "/individualJob", {
           method: "POST",
           headers: {
@@ -122,23 +133,23 @@ function App() {
           const data = await response.json();
           setResultData(data);
 
-          alert("Job selected successfully!");
+          // alert("Job selected successfully!");
           navigate("/individualJob");
         } else {
-          alert("Failed to select job.");
+          alert("Failed to select job. Please try again.");
         }
       } catch (error) {
         console.error("An error occurred:", error);
       } finally {
-        setloading(false)
+        setLoading(false);
       }
     } else {
-      alert("Please select a job or enter a job description.");
+      alert("Please select a job from jobList or enter a job description.");
     }
   };
   const sendJobDForView = async (redirectUrl) => {
     try {
-      setloading(true);
+      setLoading(true);
       const response = await fetch(apiUrl + "/sendJobDForView", {
         method: "POST",
         headers: {
@@ -148,14 +159,14 @@ function App() {
       });
       if (response.ok) {
         const data = await response.json();
-        setFullJobDescription(data.fullJobDescription)
+        setFullJobDescription(data.fullJobDescription);
       } else {
         console.error("Failed to fetch full job description");
       }
     } catch (error) {
       console.error("Error sending request:", error);
     } finally {
-      setloading(false)
+      setLoading(false);
     }
   };
   return (
@@ -189,6 +200,7 @@ function App() {
                 />
               }
             />
+
             <Route
               path="/individualJob"
               element={<IndividualJobPage resultData={resultData} handleFileUpload={handleFileUpload}
@@ -198,6 +210,7 @@ function App() {
         </Content>
         <AppFooter />
       </Layout>
+
     </div>
   );
 }

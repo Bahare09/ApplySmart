@@ -11,7 +11,8 @@ const tailorCv = async (cvText, jobText) => {
       messages: [
         {
           role: "user",
-          content: `take the following CV and Job description then create a new cv depends on job description. cv: ${cvText}  job description :${jobText}`,
+          content: `take the following CV and Job description then create a tailor cv depends on job description ,prioritize accuracy over creativity. Do not include information in the new CV that the candidate doesn't know or hasn't experienced.and dont use any words from job description inside the new cv.
+          cv: ${cvText}  job description :${jobText}`,
         },
       ],
     });
