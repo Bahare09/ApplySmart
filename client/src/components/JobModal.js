@@ -1,7 +1,15 @@
+// JobModal.js
 import React from "react";
 import "./JobModal.css";
 import { Modal, Button } from "antd";
-function JobModal({ isOpen, onClose, fullJobDescription, tailorCV }) {
+
+function JobModal({
+  isOpen,
+  onClose,
+  fullJobDescription,
+  tailorCV,
+  showTailorCVButton,
+}) {
   const renderJobDescription = () => {
     if (!fullJobDescription) {
       return <p>No job description available.</p>;
@@ -16,9 +24,11 @@ function JobModal({ isOpen, onClose, fullJobDescription, tailorCV }) {
           <Button key="back" onClick={onClose}>
             Close
           </Button>,
-          <Button key="submit" type="primary" onClick={() => tailorCV()}>
-            Tailor CV for this job
-          </Button>,
+          showTailorCVButton && (
+            <Button key="submit" type="primary" onClick={tailorCV}>
+              Tailor CV for this job
+            </Button>
+          ),
         ]}
       >
         {fullJobDescription.split("\n\n").map((paragraph, index) => (
@@ -34,4 +44,5 @@ function JobModal({ isOpen, onClose, fullJobDescription, tailorCV }) {
     </div>
   );
 }
+
 export default JobModal;

@@ -1,38 +1,46 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import { Button, Flex, Divider } from "antd";
+import { Button, Flex } from "antd";
 import { ArrowLeftOutlined } from "@ant-design/icons";
 import Top from "../components/Top";
 import { TailoredVersion } from "../components/TailoredVersion";
 import SelectedJobDetails from "../components/SelectedJobDetails";
 
-function IndividualJobPage({ resultData, handleFileUpload,
-  handleTextSubmit }) {
+function IndividualJobPage({ resultData, handleFileUpload, handleTextSubmit }) {
   const cv = resultData.newCv;
-  const coverLetter = resultData.coverLetter
+  const coverLetter = resultData.coverLetter;
+  const jobFit = resultData.jobFitForTailoredCv;
 
   return (
-    <Flex gap="56px" style={{ background: "var(--white, #FFF)", padding: "44px 68px", width: "Hug (1,340px)", height: "Hug (1,662px)" }} vertical>
-      <Top handleFileUpload={handleFileUpload}
-        handleTextSubmit={handleTextSubmit} />
+    <Flex
+      gap="56px"
+      style={{
+        background: "var(--white, #FFF)",
+        padding: "44px 68px",
+        width: "Hug (1,340px)",
+        height: "Hug (1,662px)",
+      }}
+      vertical
+    >
+      <Top
+        handleFileUpload={handleFileUpload}
+        handleTextSubmit={handleTextSubmit}
+      />
       <Link to="/joblisting">
-        <Button><ArrowLeftOutlined />Back</Button>
+        <Button>
+          <ArrowLeftOutlined />
+          Back
+        </Button>
       </Link>
-      <Flex >
+
+      {/* Selected Job Section */}
+      <Flex vertical gap="56px">
         <SelectedJobDetails resultData={resultData} />
-        <Divider style={{ height: "100%" }} type="vertical" />
-        <TailoredVersion cv={cv} coverLetter={coverLetter} />
+        <TailoredVersion cv={cv} coverLetter={coverLetter} jobFit={jobFit} />
       </Flex>
-
-      {/* <div>
-        <h2>JobFit</h2>
-        <p>{resultData.jobFitForTailoredCv}</p>
-      </div> */}
-
 
     </Flex>
   );
 }
-
 
 export default IndividualJobPage;
