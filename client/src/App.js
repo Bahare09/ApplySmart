@@ -6,8 +6,9 @@ import IndividualJobPage from "./pages/IndividualJobPage";
 import apiUrl from "./api";
 import AppFooter from "./components/AppFooter";
 import AppHeader from "./components/AppHeader";
-import { Layout } from "antd";
-const { Content } = Layout
+import { Layout, Grid } from "antd";
+const { Content } = Layout;
+const { useBreakpoint } = Grid;
 
 function App() {
   const [jobList, setJobList] = useState([]);
@@ -15,6 +16,7 @@ function App() {
   const [fullJobDescription, setFullJobDescription] = useState("");
   const [loading, setloading] = useState(false);
   const navigate = useNavigate();
+  const breakpoints = useBreakpoint();
   const handleFileUpload = async (file, fileType) => {
     if (file && fileType) {
       try {
@@ -162,7 +164,7 @@ function App() {
     <div className="App">
       <Layout style={{ minHeight: "100vh", backgroundColor: "rgba(250, 250, 250, 1)", gap: "32px" }}>
         <AppHeader />
-        <Content style={{ padding: "0 52px", minHeight: "calc(100vh - 66px - 166px - 50px)", flex: "1" }}>
+        <Content style={{display:"grid", padding: breakpoints.xs? "0  24px": "0  52px", minHeight: "calc(100vh - 66px - 166px - 50px)", flex: "1" }}>
           <Routes>
             <Route
               path="/"
