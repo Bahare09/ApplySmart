@@ -3,24 +3,24 @@ import SubmitText from "../components/SubmitText";
 import UploadFile from "../components/UploadFile";
 import LoadingCircle from "../components/LoadingCircle";
 import Graphic from "../components/Graphic";
-import { Segmented, Flex, Typography } from "antd";
+import { Segmented, Flex, Typography, Grid} from "antd";
+const { useBreakpoint } = Grid;
 const { Title } = Typography;
 
 function HomePage({ handleFileUpload, handleTextSubmit, loading }) {
   const [selectedOption, setSelectedOption] = useState("file");
-
+  const breakpoints = useBreakpoint();
   const handleOptionChange = (value) => {
     setSelectedOption(value);
   };
 
   return (
     <Flex
-      justify={"center"}
-      align={"start"}
-      gap={"small"}
-      style={{ padding: "50px", justifySelf: "center" }}
+      justify={"space-between"}
+      gap= {!breakpoints.md ?"small": "large"}
+      style={{ padding: 0, flexDirection: !breakpoints.md ? "column" : "row"}}
     >
-      <Graphic />
+    <Graphic  />
 
       <Flex
         justify={"center"}
