@@ -1,10 +1,11 @@
 import React, { useState } from "react";
-import { Upload, Button, Flex } from 'antd';
+import { Upload, Button, Flex, Grid } from 'antd';
 import { InboxOutlined } from '@ant-design/icons';
+const { useBreakpoint } = Grid;
 
 const { Dragger } = Upload;
 function UploadFile({ onFileUpload, fileType }) {
-
+  const breakpoints = useBreakpoint();
 
   const [selectedFile, setSelectedFile] = useState(null);
 
@@ -51,7 +52,7 @@ function UploadFile({ onFileUpload, fileType }) {
         </p>
       </Dragger>
       <Flex align="flex-start" justify="end">
-        <Button title="Submit" onClick={handleFileUpload} type="primary" size="large" shape="normal" >Submit</Button>
+        <Button title="Submit" onClick={handleFileUpload} type="primary" size="large" shape="normal" style={{width:breakpoints.xs && "100%"}} >Submit</Button>
       </Flex>
 
     </Flex >

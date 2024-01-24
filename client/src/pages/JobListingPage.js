@@ -62,8 +62,7 @@ function JobListingPage({
         style={{
           background: "var(--white, #FFF)",
           padding: "44px 68px",
-          width: "Hug (1,340px)",
-          height: "Hug (1,662px)",
+          height:"100%"
         }}
         vertical
       >
