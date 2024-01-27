@@ -10,6 +10,9 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+     - name: Clear Node.js Cache
+      run: npm cache clean -f
+
     - name: Checkout Repository
       uses: actions/checkout@v2
 
