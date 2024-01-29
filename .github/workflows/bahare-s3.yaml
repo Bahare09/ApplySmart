@@ -12,9 +12,7 @@ jobs:
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v2
-        with:
-          path: ./client
-          
+      
 
       - name: Setup Node.js
         uses: actions/setup-node@v2
