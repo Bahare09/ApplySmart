@@ -54,6 +54,7 @@ function JobListingPage({
     };
 
     fetchData();
+    //eslint-disable-next-line
   }, []);
 
   return (
