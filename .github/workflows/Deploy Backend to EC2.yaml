@@ -27,3 +27,9 @@ jobs:
       - name: Deploy to EC2
         run: |
           ssh -i ${{ secrets.IAM_USER_SSH_KEY }} ${{ secrets.IAM_USERNAME }}@${{ secrets.HOST_DNS }} "git pull origin Dev && npm install && pm2 restart server.js"
+          env:
+             OPEN_AI_SECRET_KEY: ${{ secrets.OPEN_AI_SECRET_KEY }}
+             DB_URL: ${{ secrets.DB_URL }}
+             ADZUNA_APP_ID: ${{ secrets.ADZUNA_APP_ID }}
+             ADZUNA_APP_KEY: ${{ secrets.ADZUNA_APP_KEY }}
+             CLIENT_URL: ${{ secrets.CLIENT_URL }}
