@@ -39,7 +39,8 @@ function JobListingPage({
   const tailorCV = () => {
     sendJobDescriptionToServer(selectedJobUrl);
   };
-
+  
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(() => {
     const fetchData = async () => {
       try {
