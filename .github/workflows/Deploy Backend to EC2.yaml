@@ -1,0 +1,27 @@
+name: Deploy Backend to EC2
+
+on:
+  push:
+    branches:
+      - Dev
+
+jobs:
+  deploy:
+    name: Deploy Backend to EC2
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Deploy to EC2
+        run: |
+          ssh -i ${{ secrets.IAM_USER_SSH_KEY }} ${{ secrets.IAM_USERNAME }}@${{ secrets.HOST_DNS }} "git pull origin Dev && npm install && pm2 restart server.js"
