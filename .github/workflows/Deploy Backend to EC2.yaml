@@ -18,7 +18,7 @@ jobs:
         run: npm install
       - name: Deploy Server
         run: |
-          scp -r ./server/* ${{ secrets.IAM_USER }}@${{ secrets.HOST_DNS }}:
+          scp -r ./server/* ${{ secrets.IAM_USERNAME }}@${{ secrets.HOST_DNS }}:
           # Restart PM2 (replace your-app-name)
           # ssh ec2-user@ec2-ip "pm2 restart your-app-n"
 
