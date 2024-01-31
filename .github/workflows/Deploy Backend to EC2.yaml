@@ -16,12 +16,11 @@ jobs:
           node-version: 20
       - name: Install Dependencies
         run: npm install
-      # - name: Deploy Server
-      #   run: |
-      #     # Copy files to your EC2 instance (replace ec2-user and ec2-ip)
-      #     scp -r ./* ec2-user@ec2-ip:/path/to/your/server
-      #     # Restart PM2 (replace your-app-name)
-      #     ssh ec2-user@ec2-ip "pm2 restart your-app-name"
+      - name: Deploy Server
+        run: |
+          scp -r ./server/* ${{ secrets.EC2_USER }}@${{ secrets.EC2_HOST }}:
+          # Restart PM2 (replace your-app-name)
+          # ssh ec2-user@ec2-ip "pm2 restart your-app-n"
 
 
 
