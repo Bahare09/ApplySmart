@@ -4,32 +4,29 @@ on:
   push:
     branches:
       - Dev
-
 jobs:
   deploy:
-    name: Deploy Backend to EC2
-    runs-on: ubuntu-latest
-
+    runs-on: self-hosted
     steps:
-      - name: Checkout code
+      - name: Checkout Repository
         uses: actions/checkout@v2
-
       - name: Setup Node.js
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v3
         with:
-          node-version: '20'
+          node-version: 20
+      - name: Install Dependencies
+        run: npm install
+      # - name: Deploy Server
+      #   run: |
+      #     # Copy files to your EC2 instance (replace ec2-user and ec2-ip)
+      #     scp -r ./* ec2-user@ec2-ip:/path/to/your/server
+      #     # Restart PM2 (replace your-app-name)
+      #     ssh ec2-user@ec2-ip "pm2 restart your-app-name"
 
-      - name: Install dependencies
-        run: |
-          cd server
-          npm install
 
-      - name: Deploy to EC2
-        run: |
-          ssh -i ${{ secrets.IAM_USER_SSH_KEY }} ${{ secrets.IAM_USERNAME }}@${{ secrets.HOST_DNS }} "git pull origin Dev && npm install && pm2 restart server.js"
-          env:
-             OPEN_AI_SECRET_KEY: ${{ secrets.OPEN_AI_SECRET_KEY }}
-             DB_URL: ${{ secrets.DB_URL }}
-             ADZUNA_APP_ID: ${{ secrets.ADZUNA_APP_ID }}
-             ADZUNA_APP_KEY: ${{ secrets.ADZUNA_APP_KEY }}
-             CLIENT_URL: ${{ secrets.CLIENT_URL }}
+
+
+
+
+
+
