@@ -28,19 +28,19 @@ jobs:
         working-directory: server
         run: npm install
  
-#       - name: Deploy Server
-#         run: |
-#           rsync -avz --exclude='.git/' --exclude='node_modules/' --delete -e "ssh -i ${{ secrets.SSH_PRIVATE_KEY }}" ./ ec2-user@${{ secrets.HOST_DNS }}:/home/ec2-user/app/
-#           scp -i ${{ secrets.SSH_PRIVATE_KEY }} .env ec2-user@${{ secrets.HOST_DNS }}:/home/ec2-user/app/.env
+      - name: Deploy Server
+        run: |
+          rsync -avz --exclude='.git/' --exclude='node_modules/' --delete -e "ssh -i ${{ secrets.SSH_PRIVATE_KEY }}" ./ ec2-user@${{ secrets.HOST_DNS }}:/home/ec2-user/app/
+          scp -i ${{ secrets.SSH_PRIVATE_KEY }} .env ec2-user@${{ secrets.HOST_DNS }}:/home/ec2-user/app/.env
 
      
-      - name: rsync deployments
-        uses: burnett01/rsync-deployments@6.0.0
-        with:
-          switches: -avzr --exclude=node_modules --delete
-          path: ./server/
-          remote_path: /home/ec2-user/app/
-          remote_host: ${{ secrets.HOST_DNS }}
-          remote_port: 22
-          remote_user: ec2-user
-          remote_key: ${{ secrets.SSH_PRIVATE_KEY }}
+      # - name: rsync deployments
+      #   uses: burnett01/rsync-deployments@6.0.0
+      #   with:
+      #     switches: -avzr --exclude=node_modules --delete
+      #     path: ./server/
+      #     remote_path: /home/ec2-user/app/
+      #     remote_host: ${{ secrets.HOST_DNS }}
+      #     remote_port: 22
+      #     remote_user: ec2-user
+      #     remote_key: ${{ secrets.SSH_PRIVATE_KEY }}
