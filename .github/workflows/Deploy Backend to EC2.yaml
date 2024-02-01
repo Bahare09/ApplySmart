@@ -5,19 +5,40 @@ on:
     branches:
       - Dev
 
+# jobs:
+#   deploy:
+#     runs-on: self-hosted
+#     steps:
+#       - name: Checkout Repository
+#         uses: actions/checkout@v2
+
+#       - name: Create .env File
+#         run: |
+#           echo "ENV_VARIABLES=${{ secrets.ENV_VARIABLES }}" > .env
+
+#       - name: Set working directory
+#         run: cd server
+
+#       - name: Setup Node.js
+#         uses: actions/setup-node@v3
+#         with:
+#           node-version: 20
+
+#       - name: Install Dependencies
+#         run: npm install
+ 
+#       - name: Deploy Server
+#         run: |
+#           rsync -avz --exclude='.git/' --exclude='node_modules/' --delete -e "ssh -i ${{ secrets.SSH_PRIVATE_KEY }}" ./ ec2-user@${{ secrets.HOST_DNS }}:/home/ec2-user/app/
+#           scp -i ${{ secrets.SSH_PRIVATE_KEY }} .env ec2-user@${{ secrets.HOST_DNS }}:/home/ec2-user/app/.env
 jobs:
   deploy:
-    runs-on: self-hosted
+    runs-on: ubuntu-latest
+ 
     steps:
+      
       - name: Checkout Repository
         uses: actions/checkout@v2
-
-      - name: Create .env File
-        run: |
-          echo "ENV_VARIABLES=${{ secrets.ENV_VARIABLES }}" > .env
-
-      - name: Set working directory
-        run: cd server
 
       - name: Setup Node.js
         uses: actions/setup-node@v3
@@ -25,9 +46,15 @@ jobs:
           node-version: 20
 
       - name: Install Dependencies
-        run: npm install
- 
-      - name: Deploy Server
         run: |
-          rsync -avz --exclude='.git/' --exclude='node_modules/' --delete -e "ssh -i ${{ secrets.SSH_PRIVATE_KEY }}" ./ ec2-user@${{ secrets.HOST_DNS }}:/home/ec2-user/app/
-          scp -i ${{ secrets.SSH_PRIVATE_KEY }} .env ec2-user@${{ secrets.HOST_DNS }}:/home/ec2-user/app/.env
+          npm install
+      - name: rsync deployments
+        uses: burnett01/rsync-deployments@6.0.0
+        with:
+          switches: -avzr --exclude=node_modules --delete
+          path: ./server/
+          remote_path: /home/ec2-user/app/
+          remote_host: ${{ secrets.HOST_DNS }}
+          remote_port: 22
+          remote_user: ec2-user
+          remote_key: ${{ secrets.SSH_PRIVATE_KEY }}
