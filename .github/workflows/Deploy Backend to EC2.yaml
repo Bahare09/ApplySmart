@@ -26,10 +26,9 @@ jobs:
 
       - name: Install Dependencies
         run: npm install
-
-      # - name: Deploy Server
-      #   run: |
-      #     rsync -avz --exclude='.git/' --exclude='node_modules/' --delete ./ ${{ secrets.IAM_USERNAME }}@${{ secrets.HOST_DNS }}:/path/to/remote/directory/
-      #     scp .env ${{ secrets.IAM_USERNAME }}@${{ secrets.HOST_DNS }}:/path/to/remote/directory/.env
-      #   env:
-      #     ENV_VARIABLES: ${{ secrets.YOUR_SINGLE_SECRET }}
+ 
+      - name: Deploy Server
+        run: |
+          rsync -avz --exclude='.git/' --exclude='node_modules/' --delete ./ ec2-user@${{ secrets.HOST_DNS }}:/home/ec2-user/app/
+            scp .env ec2-user@${{ secrets.HOST_DNS }}:/home/ec2-user/app/.env
+        
