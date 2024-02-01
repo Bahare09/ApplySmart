@@ -31,7 +31,6 @@ jobs:
           path: ./server/
           remote_path: /home/ec2-user/app/
           remote_host: ${{ secrets.HOST_DNS }}
-          remote_port: 22
           remote_user: ec2-user
           remote_key: ${{ secrets.SSH_PRIVATE_KEY }}
           
