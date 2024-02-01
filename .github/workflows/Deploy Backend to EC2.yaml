@@ -16,9 +16,6 @@ jobs:
         run: |
           echo "ENV_VARIABLES=${{ secrets.ENV_VARIABLES }}" > .env
 
-      # - name: Set working directory
-      #   run: cd server
-
       - name: Setup Node.js
         uses: actions/setup-node@v3
         with:
@@ -28,12 +25,6 @@ jobs:
         working-directory: server
         run: npm install
  
-      # - name: Deploy Server
-      #   run: |
-      #     rsync -avz --exclude='.git/' --exclude='node_modules/' --delete -e "ssh -i ${{ secrets.SSH_PRIVATE_KEY }}" ./ ec2-user@${{ secrets.HOST_DNS }}:/home/ec2-user/app/
-      #     scp -i ${{ secrets.SSH_PRIVATE_KEY }} .env ec2-user@${{ secrets.HOST_DNS }}:/home/ec2-user/app/.env
-
-     
       - name: rsync deployments
         uses: burnett01/rsync-deployments@6.0.0
         with:
@@ -45,8 +36,8 @@ jobs:
           remote_user: ec2-user
           remote_key: ${{ secrets.SSH_PRIVATE_KEY }}
           
-       - name: Copy .env to EC2
-         run: |
+      - name: Copy .env to EC2
+        run: |
           echo -e "${{ secrets.SSH_PRIVATE_KEY }}" > private_key.pem
           chmod 600 private_key.pem
           scp -i private_key.pem ./server/.env ec2-user@${{ secrets.HOST_DNS }}:/home/ec2-user/app/.env
