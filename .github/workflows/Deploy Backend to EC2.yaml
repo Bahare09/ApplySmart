@@ -5,37 +5,10 @@ on:
     branches:
       - Dev
 
-# jobs:
-#   deploy:
-#     runs-on: self-hosted
-#     steps:
-#       - name: Checkout Repository
-#         uses: actions/checkout@v2
-
-#       - name: Create .env File
-#         run: |
-#           echo "ENV_VARIABLES=${{ secrets.ENV_VARIABLES }}" > .env
-
-#       - name: Set working directory
-#         run: cd server
-
-#       - name: Setup Node.js
-#         uses: actions/setup-node@v3
-#         with:
-#           node-version: 20
-
-#       - name: Install Dependencies
-#         run: npm install
- 
-#       - name: Deploy Server
-#         run: |
-#           rsync -avz --exclude='.git/' --exclude='node_modules/' --delete -e "ssh -i ${{ secrets.SSH_PRIVATE_KEY }}" ./ ec2-user@${{ secrets.HOST_DNS }}:/home/ec2-user/app/
-#           scp -i ${{ secrets.SSH_PRIVATE_KEY }} .env ec2-user@${{ secrets.HOST_DNS }}:/home/ec2-user/app/.env
 jobs:
   deploy:
-    runs-on: ubuntu-latest
+    runs-on: self-hosted
     steps:
-  
       - name: Checkout Repository
         uses: actions/checkout@v2
 
@@ -53,6 +26,13 @@ jobs:
 
       - name: Install Dependencies
         run: npm install
+ 
+#       - name: Deploy Server
+#         run: |
+#           rsync -avz --exclude='.git/' --exclude='node_modules/' --delete -e "ssh -i ${{ secrets.SSH_PRIVATE_KEY }}" ./ ec2-user@${{ secrets.HOST_DNS }}:/home/ec2-user/app/
+#           scp -i ${{ secrets.SSH_PRIVATE_KEY }} .env ec2-user@${{ secrets.HOST_DNS }}:/home/ec2-user/app/.env
+
+     
       - name: rsync deployments
         uses: burnett01/rsync-deployments@6.0.0
         with:
