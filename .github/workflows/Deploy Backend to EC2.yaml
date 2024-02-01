@@ -6,8 +6,26 @@ on:
       - Dev
 
 jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v2
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: 14
+
+      - name: Install Dependencies
+        run: npm install
+
+      - name: Run Tests
+        run: npm test
+
   deploy:
     runs-on: ubuntu-latest
+    needs: test
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v2
@@ -18,12 +36,12 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v3
         with:
-          node-version: 20
+          node-version: 14
 
       - name: Install Dependencies
         working-directory: server
         run: npm install
- 
+
       - name: rsync deployments
         uses: burnett01/rsync-deployments@6.0.0
         with:
@@ -33,5 +51,5 @@ jobs:
           remote_host: ${{ secrets.HOST_DNS }}
           remote_user: ec2-user
           remote_key: ${{ secrets.SSH_PRIVATE_KEY }}
-          
+
       
