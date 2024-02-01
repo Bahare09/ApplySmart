@@ -25,6 +25,7 @@ jobs:
           node-version: 20
 
       - name: Install Dependencies
+        working-directory: server
         run: npm install
  
 #       - name: Deploy Server
