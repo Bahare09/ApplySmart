@@ -4,28 +4,32 @@ on:
   push:
     branches:
       - Dev
+
 jobs:
   deploy:
     runs-on: self-hosted
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v2
+
+      - name: Create .env File
+        run: |
+          echo "ENV_VARIABLES=${{ secrets.ENV_VARIABLES }}" > .env
+
+      - name: Set working directory
+        run: cd server
+
       - name: Setup Node.js
         uses: actions/setup-node@v3
         with:
           node-version: 20
+
       - name: Install Dependencies
         run: npm install
-      - name: Deploy Server
-        run: |
-          scp -r ./server/* ${{ secrets.IAM_USERNAME }}@${{ secrets.HOST_DNS }}:
-          # Restart PM2 (replace your-app-name)
-          # ssh ec2-user@ec2-ip "pm2 restart your-app-n"
 
-
-
-
-
-
-
-
+      # - name: Deploy Server
+      #   run: |
+      #     rsync -avz --exclude='.git/' --exclude='node_modules/' --delete ./ ${{ secrets.IAM_USERNAME }}@${{ secrets.HOST_DNS }}:/path/to/remote/directory/
+      #     scp .env ${{ secrets.IAM_USERNAME }}@${{ secrets.HOST_DNS }}:/path/to/remote/directory/.env
+      #   env:
+      #     ENV_VARIABLES: ${{ secrets.YOUR_SINGLE_SECRET }}
