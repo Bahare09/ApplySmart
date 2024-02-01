@@ -35,8 +35,4 @@ jobs:
           remote_user: ec2-user
           remote_key: ${{ secrets.SSH_PRIVATE_KEY }}
           
-      - name: Copy .env to EC2
-        run: |
-          echo -e "${{ secrets.SSH_PRIVATE_KEY }}" > private_key.pem
-          chmod 600 private_key.pem
-          scp -i private_key.pem ./server/.env ec2-user@${{ secrets.HOST_DNS }}:/home/ec2-user/app/.env
+      
