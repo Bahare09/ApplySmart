@@ -34,11 +34,17 @@ on:
 jobs:
   deploy:
     runs-on: ubuntu-latest
- 
     steps:
-      
+  
       - name: Checkout Repository
         uses: actions/checkout@v2
+
+      - name: Create .env File
+        run: |
+          echo "ENV_VARIABLES=${{ secrets.ENV_VARIABLES }}" > .env
+
+      - name: Set working directory
+        run: cd server
 
       - name: Setup Node.js
         uses: actions/setup-node@v3
@@ -46,8 +52,7 @@ jobs:
           node-version: 20
 
       - name: Install Dependencies
-        run: |
-          npm install
+        run: npm install
       - name: rsync deployments
         uses: burnett01/rsync-deployments@6.0.0
         with:
