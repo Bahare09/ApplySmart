@@ -16,8 +16,8 @@ jobs:
         run: |
           echo "ENV_VARIABLES=${{ secrets.ENV_VARIABLES }}" > .env
 
-      - name: Set working directory
-        run: cd server
+      # - name: Set working directory
+      #   run: cd server
 
       - name: Setup Node.js
         uses: actions/setup-node@v3
