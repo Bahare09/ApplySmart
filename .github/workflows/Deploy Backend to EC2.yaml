@@ -29,6 +29,5 @@ jobs:
  
       - name: Deploy Server
         run: |
-          rsync -avz --exclude='.git/' --exclude='node_modules/' --delete ./ ec2-user@${{ secrets.HOST_DNS }}:/home/ec2-user/app/
-            scp .env ec2-user@${{ secrets.HOST_DNS }}:/home/ec2-user/app/.env
-        
+          rsync -avz --exclude='.git/' --exclude='node_modules/' --delete -e "ssh -i ${{ secrets.SSH_PRIVATE_KEY }}" ./ ec2-user@${{ secrets.HOST_DNS }}:/home/ec2-user/app/
+          scp -i ${{ secrets.SSH_PRIVATE_KEY }} .env ec2-user@${{ secrets.HOST_DNS }}:/home/ec2-user/app/.env
