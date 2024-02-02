@@ -33,7 +33,10 @@ jobs:
         run: npm install
         
       - name: Copy files to EC2
-        run: scp -o StrictHostKeyChecking=no -i private_key.pem -r ./server/* ${{ secrets.HOST_DNS }}:/home/ec2-user/app
+        # run: scp -o StrictHostKeyChecking=no -i private_key.pem -r ./server/* ${{ secrets.HOST_DNS }}:/home/ec2-user/app
+        run: |
+         rsync -e "ssh -o StrictHostKeyChecking=no -i private_key.pem" -avzr --exclude=node_modules --delete ./server/* ec2-user@${{ secrets.HOST_DNS }}:/home/ec2-user/app
+
 
       - name: Debug list files after copy
         run: ssh -o StrictHostKeyChecking=no -i private_key.pem ec2-user@${{ secrets.HOST_DNS }} 'ls -al /home/ec2-user/app'
