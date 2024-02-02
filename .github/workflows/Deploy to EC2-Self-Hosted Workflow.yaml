@@ -1,0 +1,42 @@
+name: Deploy to EC2-Self-Hosted Workflow
+
+on:
+  push:
+    branches:
+      - 'Dev'
+
+jobs:
+  deploy:
+    runs-on: self-host
+
+    steps:
+      - name: Checkout source
+        uses: actions/checkout@v2
+
+      - name: Create private key file
+        run: echo "${{ secrets.SSH_PRIVATE_KEY }}" > private_key.pem
+        shell: bash
+
+      - name: Set private key permissions
+        run: chmod 600 private_key.pem
+
+      - name: Create .env File
+        run: echo "${{ secrets.ENV_VARIABLES }}" > ./server/.env
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: 14
+
+      - name: Install Dependencies
+        working-directory: server
+        run: npm install
+        
+      - name: Copy files to EC2
+        run: scp -o StrictHostKeyChecking=no -i private_key.pem -r ./server/* ${{ secrets.HOST_DNS }}:/home/ec2-user/app
+
+      - name: Debug list files after copy
+        run: ssh -o StrictHostKeyChecking=no -i private_key.pem ec2-user@${{ secrets.HOST_DNS }} 'ls -al /home/ec2-user/app'
+
+      - name: SSH into EC2 and restart server
+        run: ssh -o StrictHostKeyChecking=no -i private_key.pem ec2-user@${{ secrets.HOST_DNS }} 'cd /home/ec2-user/app && npm install && pm2 restart server'
