@@ -18,5 +18,6 @@ jobs:
         
       - name: Build and Push Docker Image
         run: |
+          cd server
           docker build -t ${{ secrets.DOCKERHUB_USERNAME }}/applysmart:latest .
           docker push ${{ secrets.DOCKERHUB_USERNAME }}/applysmart:latest
