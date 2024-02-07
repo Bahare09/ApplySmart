@@ -20,9 +20,13 @@ jobs:
       - name: Copy .env File
         run: echo "${{ secrets.ENV_VARIABLES }}" > .env
 
-      - name: run Latest Image
+      - name: Stop & Remove Prev Container (or True if None Found)
+        run: sudo docker stop applysmart_container && sudo docker rm applysmart_container || true
 
-        run: sudo docker run -d --env-file .env ${{secrets.DOCKERHUB_USERNAME}}/applysmart:latest
+      - name: run Latest Image with named container
+        # run: sudo docker run -d --env-file .env ${{secrets.DOCKERHUB_USERNAME}}/applysmart:latest
+        run: sudo docker run -d --env-file .env --name applysmart_container ${{secrets.DOCKERHUB_USERNAME}}/applysmart:latest
+        
       - name: Debugging Commands
         run: |
          ps aux
