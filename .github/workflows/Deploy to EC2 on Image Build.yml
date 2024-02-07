@@ -17,8 +17,8 @@ jobs:
       - name: Pull Latest Image
         run: sudo docker pull ${{secrets.DOCKERHUB_USERNAME}}/applysmart:latest
 
-      # - name: Copy .env File
-      #   run: echo "${{ secrets.ENV_VARIABLES }}" > $GITHUB_WORKSPACE/.env
+      - name: Copy .env File
+        run: echo "${{ secrets.ENV_VARIABLES }}" > .env
 
       - name: run Latest Image
-        run: sudo docker run ${{secrets.DOCKERHUB_USERNAME}}/applysmart:latest
+        run: sudo docker run --env-file .env ${{secrets.DOCKERHUB_USERNAME}}/applysmart:latest
