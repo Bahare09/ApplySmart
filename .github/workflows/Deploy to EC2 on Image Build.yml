@@ -15,7 +15,7 @@ jobs:
         uses: actions/checkout@v2
         
       - name: Pull Latest Image
-        run: docker pull ${{secrets.DOCKERHUB_USERNAME}}/applysmart:latest
+        run: sudo docker pull ${{secrets.DOCKERHUB_USERNAME}}/applysmart:latest
 
       # - name: Copy .env File
       #   run: echo "${{ secrets.ENV_VARIABLES }}" > $GITHUB_WORKSPACE/.env
