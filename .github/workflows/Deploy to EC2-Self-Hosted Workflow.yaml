@@ -35,11 +35,14 @@ jobs:
       - name: Copy files to EC2
         # run: scp -o StrictHostKeyChecking=no -i private_key.pem -r ./server/* ${{ secrets.HOST_DNS }}:/home/ec2-user/app
         run: |
-         rsync -e "ssh -o StrictHostKeyChecking=no -i private_key.pem" -avzr --exclude=node_modules --delete ./server/* ec2-user@${{ secrets.HOST_DNS }}:/home/ec2-user/app
+         # rsync -e "ssh -o StrictHostKeyChecking=no -i private_key.pem" -avzr --exclude=node_modules --delete ./server/* ec2-user@${{ secrets.HOST_DNS }}:/home/ec2-user/app
+         rsync -avzr --exclude=node_modules --delete ./server/* /home/ec2-user/app
 
 
       - name: Debug list files after copy
-        run: ssh -o StrictHostKeyChecking=no -i private_key.pem ec2-user@${{ secrets.HOST_DNS }} 'ls -al /home/ec2-user/app'
+        # run: ssh -o StrictHostKeyChecking=no -i private_key.pem ec2-user@${{ secrets.HOST_DNS }} 'ls -al /home/ec2-user/app'
+        run: ls -al /home/ec2-user/app
 
       - name: SSH into EC2 and restart server
-        run: ssh -o StrictHostKeyChecking=no -i private_key.pem ec2-user@${{ secrets.HOST_DNS }} 'cd /home/ec2-user/app && npm install && pm2 restart server'
+        # run: ssh -o StrictHostKeyChecking=no -i private_key.pem ec2-user@${{ secrets.HOST_DNS }} 'cd /home/ec2-user/app && npm install && pm2 restart server'
+        run: cd /home/ec2-user/app && npm install && pm2 restart server
