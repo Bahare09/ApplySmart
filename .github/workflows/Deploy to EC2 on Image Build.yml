@@ -22,7 +22,7 @@ jobs:
 
       - name: run Latest Image
 
-        run: sudo docker run --env-file .env ${{secrets.DOCKERHUB_USERNAME}}/applysmart:latest
+        run: sudo docker run -d --env-file .env ${{secrets.DOCKERHUB_USERNAME}}/applysmart:latest
       - name: Debugging Commands
         run: |
          ps aux
