@@ -13,9 +13,9 @@ jobs:
       - name: Checkout source
         uses: actions/checkout@v2
 
-      - name: Create private key file
-        run: echo "${{ secrets.SSH_PRIVATE_KEY }}" > private_key.pem
-        shell: bash
+      # - name: Create private key file
+      #   run: echo "${{ secrets.SSH_PRIVATE_KEY }}" > private_key.pem
+      #   shell: bash
 
       - name: Set private key permissions
         run: chmod 600 private_key.pem
