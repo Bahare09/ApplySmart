@@ -17,8 +17,8 @@ jobs:
       #   run: echo "${{ secrets.SSH_PRIVATE_KEY }}" > private_key.pem
       #   shell: bash
 
-      - name: Set private key permissions
-        run: chmod 600 private_key.pem
+      # - name: Set private key permissions
+      #   run: chmod 600 private_key.pem
 
       - name: Create .env File
         run: echo "${{ secrets.ENV_VARIABLES }}" > ./server/.env
