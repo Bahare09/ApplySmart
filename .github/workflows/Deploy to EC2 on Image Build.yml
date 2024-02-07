@@ -1,0 +1,24 @@
+name: Deploy to EC2 on Image Build
+
+on:
+  workflow_run:
+    workflows: ["Build and Push Docker Image (server)"]
+    types:
+      - completed
+
+jobs:
+  deploy:
+    runs-on: self-hosted
+    
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v2
+        
+      - name: Pull Latest Image
+        run: docker pull ${{secrets.DOCKERHUB_USERNAME}}/applysmart:latest
+
+      # - name: Copy .env File
+      #   run: echo "${{ secrets.ENV_VARIABLES }}" > $GITHUB_WORKSPACE/.env
+
+      - name: run Latest Image
+        run: docker run ${{secrets.DOCKERHUB_USERNAME}}/applysmart:latest
