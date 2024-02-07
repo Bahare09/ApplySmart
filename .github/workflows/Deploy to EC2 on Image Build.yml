@@ -21,4 +21,9 @@ jobs:
         run: echo "${{ secrets.ENV_VARIABLES }}" > .env
 
       - name: run Latest Image
+
         run: sudo docker run --env-file .env ${{secrets.DOCKERHUB_USERNAME}}/applysmart:latest
+      - name: Debugging Commands
+        run: |
+         ps aux
+         echo "Workflow completed!"
