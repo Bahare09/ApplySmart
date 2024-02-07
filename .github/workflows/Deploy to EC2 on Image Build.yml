@@ -21,4 +21,4 @@ jobs:
       #   run: echo "${{ secrets.ENV_VARIABLES }}" > $GITHUB_WORKSPACE/.env
 
       - name: run Latest Image
-        run: docker run ${{secrets.DOCKERHUB_USERNAME}}/applysmart:latest
+        run: sudo docker run ${{secrets.DOCKERHUB_USERNAME}}/applysmart:latest
