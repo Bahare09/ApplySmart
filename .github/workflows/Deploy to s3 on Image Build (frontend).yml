@@ -15,7 +15,7 @@ jobs:
       run: echo "${{ secrets.ENV_VARIABLES_CLIENT }}" > ./.env
 
     - name: Pull Docker image from Docker Hub
-      run: sudo docker pull ${{secrets.DOCKERHUB_USERNAME}}/applysmart:latest
+      run: sudo docker pull ${{secrets.DOCKERHUB_USERNAME}}/applysmartclient:latest
 
     - name: Build frontend inside the Docker container
       run: |
