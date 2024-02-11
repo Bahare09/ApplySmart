@@ -1,10 +1,10 @@
-# name : Deploy to s3 on Image Build (frontend)
+name : Deploy to s3 on Image Build (frontend)
 
-# on:
-#   workflow_run:
-#     workflows: ["Build and Push Docker Image (client)"]
-#     types:
-#       - completed
+on:
+  workflow_run:
+    workflows: ["Build and Push Docker Image (client)"]
+    types:
+      - completed
 # jobs:
 #   build_push_deploy:
 #     runs-on: ubuntu-latest
