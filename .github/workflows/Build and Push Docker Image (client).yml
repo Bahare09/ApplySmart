@@ -20,4 +20,4 @@ jobs:
         run: |
           cd client
           docker build -t ${{ secrets.DOCKERHUB_USERNAME }}/applysmartclient:latest .
-          docker push ${{ secrets.DOCKERHUB_USERNAME }}/applysmart:latest
+          docker push ${{ secrets.DOCKERHUB_USERNAME }}/applysmartclient:latest
