@@ -5,14 +5,13 @@ on:
     workflows: ["Build and Push Docker Image (client)"]
     types:
       - completed
-# jobs:
-#   build_push_deploy:
-#     runs-on: ubuntu-latest
+jobs:
+   build_push_deploy:
+    runs-on: ubuntu-latest
+    steps:
 
-#     steps:
-
-#     - name: Create .env File
-#       run: echo "${{ secrets.ENV_VARIABLES_CLIENT }}" > ./.env
+    - name: Create .env File
+      run: echo "${{ secrets.ENV_VARIABLES_CLIENT }}" > ./.env
 
 #     - name: Pull Docker image from Docker Hub
 #       run: sudo docker pull ${{secrets.DOCKERHUB_USERNAME}}/applysmartclient:latest
