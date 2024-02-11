@@ -1,0 +1,23 @@
+name: Build and Push Docker Image (client)
+
+on:
+  push:
+    branches:
+      - Dev
+
+jobs:
+  build-and-push:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+        
+      - name: Login to Docker Hub
+        run: docker login -u ${{secrets.DOCKERHUB_USERNAME}} -p ${{secrets.DOCKERHUB_TOKEN}}
+        
+      - name: Build and Push Docker Image
+        run: |
+          cd client
+          docker build -t ${{ secrets.DOCKERHUB_USERNAME }}/applysmartclient:latest .
+          docker push ${{ secrets.DOCKERHUB_USERNAME }}/applysmart:latest
