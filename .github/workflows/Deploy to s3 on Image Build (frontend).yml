@@ -1,10 +1,10 @@
 name : Deploy to s3 on Image Build (frontend)
 
 on:
-  push:
-    branches:
-      - Dev
-
+  workflow_run:
+    workflows: ["Build and Push Docker Image (client)"]
+    types:
+      - completed
 jobs:
   build_push_deploy:
     runs-on: ubuntu-latest
@@ -12,7 +12,7 @@ jobs:
     steps:
 
     - name: Create .env File
-      run: echo "${{ secrets.ENV_VARIABLES_CLIENT }}" > ./client/.env
+      run: echo "${{ secrets.ENV_VARIABLES_CLIENT }}" > ./.env
 
     - name: Pull Docker image from Docker Hub
       run: sudo docker pull ${{secrets.DOCKERHUB_USERNAME}}/applysmart:latest
