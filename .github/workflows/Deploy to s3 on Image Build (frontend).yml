@@ -1,0 +1,33 @@
+name : Deploy to s3 on Image Build (frontend)
+
+on:
+  push:
+    branches:
+      - Dev
+
+jobs:
+  build_push_deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+
+    - name: Create .env File
+      run: echo "${{ secrets.ENV_VARIABLES_CLIENT }}" > ./client/.env
+
+    - name: Pull Docker image from Docker Hub
+      run: sudo docker pull ${{secrets.DOCKERHUB_USERNAME}}/applysmart:latest
+
+    - name: Build frontend inside the Docker container
+      run: |
+        docker run -v "$(pwd)/app/client:/app/client" ${{secrets.DOCKERHUB_USERNAME}}/applysmart:latest npm run build
+
+  
+    - name: Configure AWS Credentials
+      uses: aws-actions/configure-aws-credentials@v1
+      with:
+        aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+        aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        aws-region: eu-west-2
+
+    - name: Deploy to S3
+      run: aws s3 sync ./client/build/ s3://applysmart
