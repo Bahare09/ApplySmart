@@ -26,7 +26,7 @@ jobs:
       - name: run Latest Image with named container
         # run: sudo docker run -d --env-file .env ${{secrets.DOCKERHUB_USERNAME}}/applysmart:latest
         # run: sudo docker run -d --env-file .env --name applysmart_container ${{secrets.DOCKERHUB_USERNAME}}/applysmart:latest
-        run: sudo docker run -d -p 8080:3000 --env-file .env --name applysmart_container ${{secrets.DOCKERHUB_USERNAME}}/applysmart:latest
+        run: sudo docker run -d -p 80:4000 --env-file .env --name applysmart_container ${{secrets.DOCKERHUB_USERNAME}}/applysmart:latest
 
        
       - name: Debugging Commands
