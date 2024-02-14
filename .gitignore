@@ -1,0 +1,9 @@
+
+# .gitignore
+
+# Exclude private keys
+*.pem
+*.key
+*.tfstate
+*.tfstate.backup
+.terraform
