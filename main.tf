@@ -1,6 +1,6 @@
 # modules/ec2_instance/main.tf
 
-module "applysmart" {
+module "applysmart-terraform" {
   source = "./modules/ec2"
 
   #   region          = var.region
