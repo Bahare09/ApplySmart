@@ -1,33 +1,20 @@
 
-# VPC creation
-resource "aws_vpc" "main" {
-  cidr_block = "10.0.0.0/16"
-  enable_dns_support = true
-  enable_dns_hostnames = true
 
-  tags = {
-    Name = "main-vpc"
-  }
-}
+module "vpc_subnet" {
+  source = "../vpc_subnet"
 
-# Subnet creation within the VPC
-resource "aws_subnet" "main_subnet" {
-  vpc_id                  = aws_vpc.main.id
-  cidr_block              = "10.0.1.0/24"
-  availability_zone       = "eu-west-2b"  
+  vpc_cidr_block          = "10.0.0.0/16"
+  subnet_cidr_block       = "10.0.1.0/24"
+  availability_zone       = "eu-west-2b"
   map_public_ip_on_launch = true
 
-  tags = {
-    Name = "main-subnet"
-  }
 }
 
 # Security Group creation within the VPC
-resource "aws_security_group" "TF_SG" {
-  vpc_id = aws_vpc.main.id
-  name        = "security group using Terraform"
-  description = "security group using Terraform"
-  
+resource "aws_security_group" "TF_SG_ec2" {
+  vpc_id        = module.vpc_subnet.vpc_id
+  name          = "security group using Terraform"
+  description   = "security group using Terraform"
 
   ingress {
     description      = "HTTPS"
@@ -56,10 +43,18 @@ resource "aws_security_group" "TF_SG" {
     ipv6_cidr_blocks = ["::/0"]
   }
 
-   ingress {
+  ingress {
     description      = "Custom Port 4000"
     from_port        = 4000
     to_port          = 4000
+    protocol         = "tcp"
+    cidr_blocks      = ["0.0.0.0/0"]
+    ipv6_cidr_blocks = ["::/0"]
+  }
+   ingress {
+    description      = "SSH"
+    from_port        = 5432
+    to_port          = 5432
     protocol         = "tcp"
     cidr_blocks      = ["0.0.0.0/0"]
     ipv6_cidr_blocks = ["::/0"]
@@ -74,10 +69,10 @@ resource "aws_security_group" "TF_SG" {
   }
 
   tags = {
-    Name = "TF_SG"
+    Name = "TF_SG_ec2"
   }
 }
- 
+
 
 
 # Key Pair creation
@@ -100,9 +95,9 @@ resource "local_file" "TF-key" {
 resource "aws_instance" "ec2" {
   ami                    = var.ami_id
   instance_type          = var.instance_type
-  vpc_security_group_ids = [aws_security_group.TF_SG.id]
+  vpc_security_group_ids = [aws_security_group.TF_SG_ec2.id]
   key_name               = aws_key_pair.TF_key.key_name
-  subnet_id              = aws_subnet.main_subnet.id
+  subnet_id              = module.vpc_subnet.subnet_id
 
   tags = {
     Name = var.instance_name

@@ -10,7 +10,5 @@ output "public_ip" {
   value       = aws_instance.ec2.public_ip
 }
 
-output "instance_name_debug" {
-  value = var.instance_name
-}
+
 
