@@ -1,18 +1,7 @@
 
-
-module "vpc_subnet" {
-  source = "../vpc_subnet"
-
-  vpc_cidr_block          = "10.0.0.0/16"
-  subnet_cidr_block       = "10.0.1.0/24"
-  availability_zone       = "eu-west-2b"
-  map_public_ip_on_launch = true
-
-}
-
 # Security Group creation within the VPC
 resource "aws_security_group" "TF_SG_ec2" {
-  vpc_id        = module.vpc_subnet.vpc_id
+  vpc_id        = var.vpc_id
   name          = "security group using Terraform"
   description   = "security group using Terraform"
 
@@ -97,7 +86,7 @@ resource "aws_instance" "ec2" {
   instance_type          = var.instance_type
   vpc_security_group_ids = [aws_security_group.TF_SG_ec2.id]
   key_name               = aws_key_pair.TF_key.key_name
-  subnet_id              = module.vpc_subnet.subnet_id
+  subnet_id              = var.subnet_id
 
   tags = {
     Name = var.instance_name

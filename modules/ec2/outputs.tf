@@ -12,3 +12,7 @@ output "public_ip" {
 
 
 
+# Output for the Security Group ID
+output "security_group_id" {
+  value = aws_security_group.TF_SG_ec2.id
+}
