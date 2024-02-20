@@ -58,7 +58,7 @@ resource "aws_s3_object" "hosting_bucket_files" {
 
   for_each = module.template_files.files
 
-  key         = each.key
+  key          = each.key
   content_type = each.value.content_type
 
   source  = each.value.source_path

@@ -1,9 +1,9 @@
 
 # Security Group creation within the VPC
 resource "aws_security_group" "TF_SG_ec2" {
-  vpc_id        = var.vpc_id
-  name          = "security group using Terraform"
-  description   = "security group using Terraform"
+  vpc_id      = var.vpc_id
+  name        = "security group using Terraform"
+  description = "security group using Terraform"
 
   ingress {
     description      = "HTTPS"
@@ -40,7 +40,7 @@ resource "aws_security_group" "TF_SG_ec2" {
     cidr_blocks      = ["0.0.0.0/0"]
     ipv6_cidr_blocks = ["::/0"]
   }
-   ingress {
+  ingress {
     description      = "SSH"
     from_port        = 5432
     to_port          = 5432
