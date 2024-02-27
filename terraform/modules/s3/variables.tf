@@ -10,14 +10,3 @@ variable "bucket_name" {
   default     = "applysmart-terraform11"
 }
 
-# variable "acl_s3" {
-#   description = "Access Control List (ACL) for the S3 bucket"
-#   type        = string
-#   # default     = "public"
-# }
-
-# variable "enable_versioning" {
-#   description = "Enable versioning for the S3 bucket"
-#   type        = bool
-#   default     = true
-# }

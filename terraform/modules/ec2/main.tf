@@ -62,8 +62,6 @@ resource "aws_security_group" "TF_SG_ec2" {
   }
 }
 
-
-
 # Key Pair creation
 resource "aws_key_pair" "TF_key" {
   key_name   = "TF_key"
