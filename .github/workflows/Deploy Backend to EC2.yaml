@@ -5,8 +5,8 @@ on:
   push:
     branches:
       - Dev
-    types:
-      - closed
+    # types:
+    #   - closed
 jobs:
   deploy:
     runs-on: ubuntu-latest
@@ -32,7 +32,7 @@ jobs:
           switches: -avzr --exclude=node_modules --delete
           path: ./server/
           remote_path: /home/ec2-user/app/
-          remote_host: ${{ secrets.HOST_DNS_tf }}
+          remote_host: ${{ secrets.HOST_DNS_TF }}
           remote_user: ec2-user
-          remote_key: ${{ secrets.SSH_PRIVATE_KEY_tf }}
+          remote_key: ${{ secrets.SSH_PRIVATE_KEY_TF }}
           
