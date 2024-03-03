@@ -2,7 +2,7 @@
 name: Deploy Backend to EC2
 
 on:
-  pull_request:
+  push:
     branches:
       - Dev
     types:
@@ -32,7 +32,7 @@ jobs:
           switches: -avzr --exclude=node_modules --delete
           path: ./server/
           remote_path: /home/ec2-user/app/
-          remote_host: ${{ secrets.HOST_DNS }}
+          remote_host: ${{ secrets.HOST_DNS_tf }}
           remote_user: ec2-user
-          remote_key: ${{ secrets.SSH_PRIVATE_KEY }}
+          remote_key: ${{ secrets.SSH_PRIVATE_KEY_tf }}
           
