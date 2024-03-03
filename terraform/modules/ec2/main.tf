@@ -2,8 +2,8 @@
 # Security Group creation within the VPC
 resource "aws_security_group" "TF_SG_ec2" {
   vpc_id      = var.vpc_id
-  name        = "security group using Terraform"
-  description = "security group using Terraform"
+  name        = "ec2 security group using Terraform"
+  description = "ec2 security group using Terraform"
 
   ingress {
     description      = "HTTPS"
@@ -56,7 +56,6 @@ resource "aws_security_group" "TF_SG_ec2" {
     cidr_blocks      = ["0.0.0.0/0"]
     ipv6_cidr_blocks = ["::/0"]
   }
-
   tags = {
     Name = "TF_SG_ec2"
   }
@@ -84,8 +83,7 @@ resource "aws_instance" "ec2" {
   instance_type          = var.instance_type
   vpc_security_group_ids = [aws_security_group.TF_SG_ec2.id]
   key_name               = aws_key_pair.TF_key.key_name
-  subnet_id              = var.subnet_id
-
+  subnet_id              = element(var.subnet_ids, var.desired_subnet_index)
   tags = {
     Name = var.instance_name
   }

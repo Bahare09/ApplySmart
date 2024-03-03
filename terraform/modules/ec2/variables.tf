@@ -23,12 +23,10 @@ variable "instance_type" {
 
 
 variable "security_group_ids" {
-  description = "Security group IDs for the EC2 instance."
   type        = list(string)
   default     = []
+  description = "List of security group IDs for EC2 instances"
 }
-
-
 
 variable "instance_name" {
   description = "name for the EC2 instance."
@@ -36,7 +34,13 @@ variable "instance_name" {
   default     = "applysmart-terraform"
 }
 
+variable "subnet_ids" {
+  type        = list(string)
+  description = "List of subnet IDs where EC2 instances will be created"
+}
 
-variable "subnet_id" {
-  type = string
+variable "desired_subnet_index" {
+  description = "Index of the desired subnet from the subnet_ids list"
+  type        = number
+  default     = 0 # Default to the first subnet
 }

@@ -10,9 +10,7 @@ output "public_ip" {
   value       = aws_instance.ec2.public_ip
 }
 
-
-
 # Output for the Security Group ID
-output "security_group_id" {
-  value = aws_security_group.TF_SG_ec2.id
+output "security_group_ids" {
+  value = [aws_security_group.TF_SG_ec2.id]
 }
