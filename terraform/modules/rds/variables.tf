@@ -41,6 +41,10 @@ variable "subnet_ids" {
   type        = list(string)
   description = "The list of subnet IDs for the RDS instance."
 }
-# variable "security_groups" {
-#   type    = list(string)
-# }
+variable "security_group_ids" {
+  type = list(string)
+}
+variable "db_name" {
+  type    = string
+  default = "dbname"
+}
