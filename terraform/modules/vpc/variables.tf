@@ -17,5 +17,5 @@ variable "vpc_name" {
 
 # Variable for Internet Gateway Name
 variable "igw_name" {
-  default = "my-igw"
+  default = "applysmart-igw"
 }
