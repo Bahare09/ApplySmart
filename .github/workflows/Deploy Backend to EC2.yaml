@@ -2,11 +2,11 @@
 name: Deploy Backend to EC2
 
 on:
-  push:
+  pull_request:
     branches:
       - Dev
-    # types:
-    #   - closed
+    types:
+      - closed
 jobs:
   deploy:
     runs-on: ubuntu-latest
