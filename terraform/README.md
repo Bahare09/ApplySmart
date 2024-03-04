@@ -8,4 +8,4 @@ This Terraform project automates the deployment of the ApplySmart infrastructure
 
 ##
 
-![alt text](image-2.png)
+![alt text](image.png)
