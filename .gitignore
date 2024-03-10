@@ -1,6 +1,4 @@
 
-# .gitignore
-
 # Exclude private keys
 *.pem
 *.key
