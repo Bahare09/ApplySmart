@@ -1,5 +1,4 @@
 name : Deploy to s3 on Image Build (frontend)
-
 on:
   workflow_run:
     workflows: ["Build and Push Docker Image (client)"]
