@@ -2,9 +2,10 @@ import React, { useEffect, useState } from "react";
 import JobModal from "../components/JobModal";
 import LoadingCircle from "../components/LoadingCircle";
 import Top from "../components/Top";
-import { Button, Space, Flex, List, Typography } from "antd";
+import { Button, Space, Flex, List, Typography , Grid} from "antd";
 import { LinkOutlined } from "@ant-design/icons";
 import { Content } from "antd/es/layout/layout";
+const { useBreakpoint } = Grid;
 
 const { Title, Paragraph, Link: AntdLink } = Typography; // Destructuring Link as AntdLink
 
@@ -21,6 +22,7 @@ function JobListingPage({
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [selectedJobUrl, setSelectedJobUrl] = useState("");
+  const breakpoints = useBreakpoint();
 
   const openModal = () => {
     setIsModalOpen(true);
@@ -56,12 +58,11 @@ function JobListingPage({
   }, []);
 
   return (
-    <div className="jobListingPage">
       <Flex
         gap="56px"
         style={{
           background: "var(--white, #FFF)",
-          padding: "44px 68px",
+          padding:breakpoints.xs ? "30px 15px" : "44px 68px" ,
           height:"100%"
         }}
         vertical
@@ -95,7 +96,7 @@ function JobListingPage({
                   <Content>
                     <Flex
                       gap="16px"
-                      style={{ position: "relative" }}
+                      style={{ position: "relative" , flexDirection: !breakpoints.md && "column"}}
                       align="flex-start"
                     >
                       <Title
@@ -112,7 +113,7 @@ function JobListingPage({
                       <Flex
                         gap={"24px"}
                         align="flex-start"
-                        style={{ position: "relative", display: "inline-flex" }}
+                        style={{ position: "relative", display: "inline-flex", flexDirection: breakpoints.xs && "column"}}
                       >
                         <Button
                           onClick={() =>
@@ -159,9 +160,10 @@ function JobListingPage({
           tailorCV={tailorCV}
           showTailorCVButton={selectedJobUrl !== ""} // Pass the condition to show the button
         />
+         {loading ? <LoadingCircle /> : ""}
       </Flex>
-      {loading ? <LoadingCircle /> : ""}
-    </div>
+     
+
   );
 }
 
