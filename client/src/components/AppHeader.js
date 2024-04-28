@@ -7,8 +7,8 @@ const { useBreakpoint } = Grid;
 const AppHeader = () => {
     const breakpoints = useBreakpoint();
     return (
-        <Header style={{ backgroundColor: "rgba(250, 250, 250, 1)" }} >
-            <Flex align="baseline"  justify= "left" gap={!breakpoints.md ?"24px": "52px"}>
+        <Header style={{ backgroundColor: "rgba(250, 250, 250, 1)", padding:breakpoints.xs && "0"}} >
+            <Flex align="baseline"  justify= {breakpoints.xs ? "center" :"left"} gap={!breakpoints.md ?"24px": "52px"}>
                 <Title level={1}>ApplySmart</Title>
               {!breakpoints.xs &&
                 <Image
