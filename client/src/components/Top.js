@@ -2,13 +2,15 @@ import { useState } from "react";
 import { Link } from "react-router-dom";
 import UploadFile from "./UploadFile";
 import SubmitText from "./SubmitText";
-import { Flex, Space, Dropdown, Button, Typography } from "antd";
+import { Flex, Space, Dropdown, Button, Typography, Grid } from "antd";
 import { DownOutlined } from '@ant-design/icons';
 const { Title, Paragraph, } = Typography;
+const { useBreakpoint } = Grid;
 
 function Top({ handleFileUpload,
     handleTextSubmit }) {
     const [uploadOption, setUploadOption] = useState(null);
+    const breakpoints = useBreakpoint();
 
     const renderUploadForm = () => {
         switch (uploadOption) {
@@ -33,12 +35,12 @@ function Top({ handleFileUpload,
     ];
 
     return (
-        <Flex justify="end" vertical>
-            <Flex justify="space-between">
-                <Title level={2} size={"medium"}>Tailor CV</Title>
-                <Space>
+        <Flex justify="end" gap="8px" vertical>
+            <Flex justify="space-between" style={{flexDirection: !breakpoints.md && "column"}} >
+                <Title level={2} size={"medium"} style={{margin:"0"}}>Tailor CV</Title>
+                <Space direction={breakpoints.xs &&"vertical"}>
                     <Link to="/">
-                        <Button type="link" size="medium" title="Update your CV">Update your CV</Button>
+                        <Button type="link" size="medium" title="Update your CV" style={{paddingLeft: !breakpoints.md && 0 }}>Update your CV</Button>
                     </Link>
                     <Dropdown
                         menu={{
@@ -46,7 +48,7 @@ function Top({ handleFileUpload,
                         }}
                         trigger={['click']}
                     >
-                        <Button type="link" onClick={(e) => setUploadOption(null)}>
+                        <Button type="link" style={{paddingLeft: !breakpoints.md && 0 }} onClick={(e) => setUploadOption(null) }>
                             <Space>
                                 Tailor CV for a specific job
                                 <DownOutlined />
