@@ -1,11 +1,12 @@
 import React, { useState } from "react";
-import { Button, Input, Flex } from 'antd';
+import { Button, Input, Flex, Grid } from 'antd';
+const { useBreakpoint } = Grid;
 
 const { TextArea } = Input;
 
 function SubmitText({ onTextSubmit, fileType }) {
   const [text, setText] = useState("");
-
+  const breakpoints = useBreakpoint();
   const handleTextChange = (e) => {
     setText(e.target.value);
   };
@@ -38,7 +39,7 @@ function SubmitText({ onTextSubmit, fileType }) {
         placeholder="Please insert your CV here"
       />
       <Flex align="flex-start" justify="end">
-        <Button title="Submit" onClick={handleSubmitText} type="primary" size="large" shape="normal" state  >Submit</Button>
+        <Button title="Submit" onClick={handleSubmitText} type="primary" size="large" shape="normal" state  style={{width:breakpoints.xs && "100%"}} >Submit</Button>
       </Flex>
     </Flex>
   );

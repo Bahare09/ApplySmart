@@ -1,10 +1,11 @@
 import React from "react";
-import { Layout, Flex, Divider, Button, Typography, } from "antd";
-
+import { Layout, Flex, Divider, Button, Typography,Grid} from "antd";
 const { Text } = Typography;
 const { Footer } = Layout;
+const { useBreakpoint } = Grid;
 
 const AppFooter = () => {
+  const breakpoints = useBreakpoint();
   const layoutStyle = {
     backgroundColor: "rgba(255, 255, 255, 1)",
     gap: "26px"
@@ -25,7 +26,10 @@ const AppFooter = () => {
   return (
     <Layout style={layoutStyle}>
       <Flex justify="center" align="center" vertical>
+         {!breakpoints.xs ?
         <Divider >  We'd like to hear what you think about your experience.</Divider>
+        :<Divider >  We'd like to hear what you think<br/>
+         about your experience.</Divider>}
         <Button onClick={openGoogleForm}>
           Send us feedback
         </Button>
